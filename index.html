@@ -179,10 +179,22 @@
       background:transparent;
       overflow:hidden;
     }
-    /* ─── THREE.JS STATS CANVAS ─── */
+    /* ─── THREE.JS STATS BAR CHART ─── */
     #three-stats {
-      position:absolute;right:-60px;top:50%;transform:translateY(-50%);
-      width:340px;height:340px;pointer-events:none;opacity:.55;
+      width:100%;height:320px;display:block;
+      margin-bottom:0;
+    }
+    .stats-3d-wrap {
+      padding:60px 60px 0;
+      max-width:1240px;margin:0 auto;
+    }
+    .stats-3d-label {
+      font-size:.58rem;letter-spacing:2.5px;text-transform:uppercase;
+      color:rgba(255,255,255,.22);font-weight:500;
+      display:flex;justify-content:space-between;
+      padding:0 0 8px;
+      border-bottom:1px solid var(--rule);
+      margin-bottom:0;
     }
 
     /* ─── MARQUEE ─── */
@@ -243,6 +255,9 @@
     .svc:hover { background:rgba(184,151,90,.03); }
     .svc:hover::after { width:100%; }
     .svc-icon { width:40px;height:40px;margin-bottom:28px;opacity:.7; }
+    /* 3D service canvases */
+    .svc-canvas-wrap { width:72px;height:72px;margin-bottom:22px;position:relative; }
+    .svc-canvas-wrap canvas { width:72px!important;height:72px!important;display:block; }
     .svc-n { font-size:.58rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:8px; }
     .svc-rule { width:28px;height:1px;background:var(--gold);margin-bottom:24px;transition:width .35s; }
     .svc:hover .svc-rule { width:56px; }
@@ -336,44 +351,6 @@
     .ft-col a:hover { color:var(--gold); }
     .ft-bot { display:flex;justify-content:space-between;align-items:center;padding-top:22px; }
     .ft-copy { font-size:.68rem;color:rgba(255,255,255,.16); }
-
-    /* ─── SCROLL ANIMATION CLASSES ─── */
-    .g-up   { opacity:0;transform:translateY(32px); }
-    .g-fade { opacity:0; }
-    .g-left { opacity:0;transform:translateX(-28px); }
-
-    /* ─── PREFERS REDUCED MOTION ─── */
-    @media (prefers-reduced-motion:reduce) {
-      *,*::before,*::after { animation-duration:.01ms!important;transition-duration:.01ms!important; }
-    }
-
-    /* ─── RESPONSIVE ─── */
-    @media(max-width:1024px){
-      .hero{grid-template-columns:1fr;gap:48px;}
-      .hero-card-wrap{display:none;}
-      .process-grid{grid-template-columns:1fr 1fr;}
-      .svc-grid{grid-template-columns:1fr;}
-      .t-grid{grid-template-columns:1fr;}
-      .stats-grid{grid-template-columns:1fr 1fr;}
-      .p-grid{grid-template-columns:1fr;border:none;}
-      .pc{border-right:none;border-bottom:1px solid #ddd5c9;}
-      .ft-grid{grid-template-columns:1fr 1fr;}
-    }
-    @media(max-width:768px){
-      nav{padding:0 22px;}
-      .nav-r a:not(.nav-cta){display:none;}
-      .hero{padding:120px 22px 80px;}
-      .sw{padding:72px 22px;}
-      h2{font-size:2.2rem;}
-      .process-grid{grid-template-columns:1fr;}
-      .stats-grid{grid-template-columns:1fr 1fr;}
-      footer{padding:48px 22px 36px;}
-      .ft-grid{grid-template-columns:1fr;gap:32px;}
-      .ft-bot{flex-direction:column;gap:8px;text-align:center;}
-      #cur,#cur-ring{display:none;}
-      body{cursor:auto;}
-      a,button{cursor:pointer;}
-    }
   </style>
 </head>
 <body>
@@ -517,7 +494,7 @@
       <div style="height:52px;"></div>
       <div class="svc-grid">
         <div class="svc">
-          <svg class="svc-icon" viewBox="0 0 40 40" fill="none"><rect x="4" y="8" width="32" height="22" rx="1.5" stroke="rgba(184,151,90,.7)" stroke-width="1.5"/><path d="M14 34h12M20 30v4" stroke="rgba(184,151,90,.7)" stroke-width="1.5" stroke-linecap="round"/><path d="M8 20h6M8 24h4" stroke="rgba(184,151,90,.4)" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <div class="svc-canvas-wrap"><canvas id="svc3d-0"></canvas></div>
           <div class="svc-n">01 — Websites</div>
           <div class="svc-rule"></div>
           <h3>Premium Business Website</h3>
@@ -525,7 +502,7 @@
           <a href="pages/services.html" class="svc-link">Learn More →</a>
         </div>
         <div class="svc">
-          <svg class="svc-icon" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="14" stroke="rgba(184,151,90,.7)" stroke-width="1.5"/><path d="M15 20c0-2.76 2.24-5 5-5s5 2.24 5 5-2.24 5-5 5" stroke="rgba(184,151,90,.7)" stroke-width="1.5" stroke-linecap="round"/><circle cx="20" cy="20" r="2" fill="rgba(184,151,90,.7)"/><path d="M20 8v3M20 29v3M8 20h3M29 20h3" stroke="rgba(184,151,90,.4)" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <div class="svc-canvas-wrap"><canvas id="svc3d-1"></canvas></div>
           <div class="svc-n">02 — AI Receptionist</div>
           <div class="svc-rule"></div>
           <h3>24/7 AI Receptionist</h3>
@@ -533,7 +510,7 @@
           <a href="pages/services.html" class="svc-link">Learn More →</a>
         </div>
         <div class="svc">
-          <svg class="svc-icon" viewBox="0 0 40 40" fill="none"><path d="M20 6l3.09 9.26H32l-7.27 5.27 2.73 8.47L20 24l-7.46 5 2.73-8.47L8 15.26h8.91L20 6z" stroke="rgba(184,151,90,.7)" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          <div class="svc-canvas-wrap"><canvas id="svc3d-2"></canvas></div>
           <div class="svc-n">03 — Local SEO</div>
           <div class="svc-rule"></div>
           <h3>Local SEO & Google Presence</h3>
@@ -548,7 +525,12 @@
 <!-- ═══ STATS ═══ -->
 <section class="s-stats">
   <div class="si">
-    <canvas id="three-stats"></canvas>
+    <div class="stats-3d-wrap">
+      <div class="stats-3d-label">
+        <span>Monthly Leads</span><span>Site Traffic</span><span>Response Rate</span><span>Uptime</span>
+      </div>
+      <canvas id="three-stats"></canvas>
+    </div>
     <div class="stats-grid">
       <div class="stat-cell g-up"><div class="stat-n"><sup>$</sup>0</div><div class="stat-l">To see your preview</div></div>
       <div class="stat-cell g-up"><div class="stat-n">48<sup>h</sup></div><div class="stat-l">Average delivery time</div></div>
@@ -727,7 +709,7 @@
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
-/* ─── THREE.JS HERO SCENE ─── */
+/* ─── THREE.JS HERO — 3D BUILDING WIREFRAME ─── */
 (function initHeroThree() {
   const canvas = document.getElementById('three-hero');
   if (!canvas || !window.THREE) return;
@@ -736,69 +718,111 @@ gsap.registerPlugin(ScrollTrigger);
   renderer.setClearColor(0x000000, 0);
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-  camera.position.set(0, 0, 5);
+  const camera = new THREE.PerspectiveCamera(45, 2, 0.1, 200);
+  camera.position.set(0, 2, 14);
+  camera.lookAt(0, 0, 0);
 
-  const gold = new THREE.Color(0xb8975a);
-  const matWire = new THREE.MeshBasicMaterial({ color: gold, wireframe: true, transparent: true, opacity: 0.18 });
-  const matLine = new THREE.LineBasicMaterial({ color: gold, transparent: true, opacity: 0.55 });
+  const GOLD = 0xb8975a;
+  const GOLD_DIM = 0x5a4a2c;
+  const wireMat = (op) => new THREE.LineBasicMaterial({ color: GOLD, transparent: true, opacity: op });
 
-  // large icosahedron wireframe
-  const icoGeo = new THREE.IcosahedronGeometry(1.55, 1);
-  const ico = new THREE.Mesh(icoGeo, matWire);
-  scene.add(ico);
-
-  // inner solid icosahedron (very dark gold)
-  const icoSolid = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(1.44, 1),
-    new THREE.MeshPhongMaterial({ color: 0x1a1410, transparent: true, opacity: 0.85, shininess: 60 })
-  );
-  scene.add(icoSolid);
-
-  // torus knot floating beside
-  const tkGeo = new THREE.TorusKnotGeometry(0.5, 0.12, 120, 16, 2, 3);
-  const tk = new THREE.Mesh(tkGeo, new THREE.MeshPhongMaterial({ color: 0xb8975a, transparent: true, opacity: 0.7, shininess: 120, wireframe: false }));
-  tk.position.set(3.2, -0.4, 0);
-  scene.add(tk);
-
-  // torus knot wireframe shell
-  const tkWire = new THREE.Mesh(tkGeo, new THREE.MeshBasicMaterial({ color: 0xd4af7a, wireframe: true, transparent: true, opacity: 0.22 }));
-  tkWire.position.copy(tk.position);
-  scene.add(tkWire);
-
-  // small orbiting sphere
-  const orb = new THREE.Mesh(
-    new THREE.SphereGeometry(0.12, 16, 16),
-    new THREE.MeshBasicMaterial({ color: 0xd4af7a })
-  );
-  scene.add(orb);
-
-  // lights
-  scene.add(new THREE.AmbientLight(0xffffff, 0.3));
-  const pLight = new THREE.PointLight(0xb8975a, 2.5, 12);
-  pLight.position.set(3, 3, 3);
-  scene.add(pLight);
-  const pLight2 = new THREE.PointLight(0xffffff, 0.8, 10);
-  pLight2.position.set(-3, -2, 2);
-  scene.add(pLight2);
-
-  // floating particles (small dots)
-  const pCount = 60;
-  const pGeo = new THREE.BufferGeometry();
-  const pPos = new Float32Array(pCount * 3);
-  for (let i = 0; i < pCount; i++) {
-    pPos[i*3]   = (Math.random()-0.5)*9;
-    pPos[i*3+1] = (Math.random()-0.5)*7;
-    pPos[i*3+2] = (Math.random()-0.5)*4;
+  function makeBox(w, h, d, x, y, z, op) {
+    const geo = new THREE.EdgesGeometry(new THREE.BoxGeometry(w, h, d));
+    const mesh = new THREE.LineSegments(geo, wireMat(op));
+    mesh.position.set(x, y, z);
+    scene.add(mesh);
+    return mesh;
   }
-  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-  const pMat = new THREE.PointsMaterial({ color: 0xb8975a, size: 0.035, transparent: true, opacity: 0.5 });
-  scene.add(new THREE.Points(pGeo, pMat));
+
+  // Ground floor — wide base
+  const base    = makeBox(6.0, 0.12, 3.2,  0,  -2.06, 0, 0.35);
+  // Main building body
+  const body    = makeBox(3.6, 4.0, 2.0,  0,   0.0,  0, 0.22);
+  // Left wing
+  const wingL   = makeBox(1.6, 2.6, 2.0, -2.6, -0.7, 0, 0.18);
+  // Right wing
+  const wingR   = makeBox(1.6, 2.6, 2.0,  2.6, -0.7, 0, 0.18);
+  // Roof panel
+  const roof    = makeBox(3.8, 0.1, 2.2,  0,   2.05, 0, 0.30);
+  // Penthouse
+  const pent    = makeBox(1.8, 0.8, 1.4,  0,   2.5,  0, 0.25);
+
+  // Window grid on main body — 3 cols × 4 rows
+  const winMat = new THREE.MeshBasicMaterial({ color: GOLD, transparent: true, opacity: 0.09, wireframe: false });
+  const windowGrp = new THREE.Group();
+  for (let r = 0; r < 4; r++) {
+    for (let c = 0; c < 3; c++) {
+      const win = new THREE.Mesh(new THREE.PlaneGeometry(0.55, 0.55), winMat.clone());
+      win.position.set(-0.9 + c * 0.9, 0.9 - r * 0.85, 1.01);
+      win.userData.baseOp = 0.04 + Math.random() * 0.12;
+      win.userData.phase  = Math.random() * Math.PI * 2;
+      windowGrp.add(win);
+    }
+  }
+  // Windows on wings
+  for (let r = 0; r < 3; r++) {
+    [-2.6, 2.6].forEach(xp => {
+      const win = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 0.5), winMat.clone());
+      win.position.set(xp, 0.3 - r * 0.75, 1.01);
+      win.userData.baseOp = 0.04 + Math.random() * 0.1;
+      win.userData.phase  = Math.random() * Math.PI * 2;
+      windowGrp.add(win);
+    });
+  }
+  scene.add(windowGrp);
+
+  // Ground plane grid
+  const gridMat = new THREE.LineBasicMaterial({ color: GOLD_DIM, transparent: true, opacity: 0.12 });
+  const gridGrp = new THREE.Group();
+  for (let i = -5; i <= 5; i++) {
+    const hLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-5,0,i), new THREE.Vector3(5,0,i)]), gridMat);
+    const vLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(i,0,-5), new THREE.Vector3(i,0,5)]), gridMat);
+    gridGrp.add(hLine, vLine);
+  }
+  gridGrp.position.y = -2.06;
+  scene.add(gridGrp);
+
+  // Ambient + directional light (for window glow reference)
+  scene.add(new THREE.AmbientLight(0xffffff, 0.15));
+  const dLight = new THREE.DirectionalLight(0xb8975a, 0.8);
+  dLight.position.set(4, 6, 5);
+  scene.add(dLight);
 
   let mouse3 = { x: 0, y: 0 };
   window.addEventListener('mousemove', e => {
-    mouse3.x = (e.clientX / window.innerWidth - 0.5) * 2;
-    mouse3.y = -(e.clientY / window.innerHeight - 0.5) * 2;
+    mouse3.x = (e.clientX / window.innerWidth - 0.5);
+    mouse3.y = -(e.clientY / window.innerHeight - 0.5);
+  });
+
+  // Build-in animation: parts start below and rise
+  const parts = [base, body, wingL, wingR, roof, pent];
+  parts.forEach((p, i) => {
+    const origY = p.position.y;
+    p.position.y = origY - 6;
+    setTimeout(() => {
+      const start = performance.now();
+      const duration = 1200 + i * 180;
+      function rise(now) {
+        const t = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 3);
+        p.position.y = (origY - 6) + 6 * ease;
+        if (t < 1) requestAnimationFrame(rise);
+      }
+      requestAnimationFrame(rise);
+    }, 300 + i * 160);
+  });
+  // Windows fade in after building rises
+  windowGrp.children.forEach((w, i) => {
+    w.material.opacity = 0;
+    setTimeout(() => {
+      const start = performance.now();
+      function fadeIn(now) {
+        const t = Math.min((now - start) / 600, 1);
+        w.material.opacity = w.userData.baseOp * t;
+        if (t < 1) requestAnimationFrame(fadeIn);
+      }
+      requestAnimationFrame(fadeIn);
+    }, 1800 + i * 60);
   });
 
   function resize3Hero() {
@@ -810,83 +834,159 @@ gsap.registerPlugin(ScrollTrigger);
   resize3Hero();
   window.addEventListener('resize', resize3Hero);
 
-  let t = 0;
+  const buildingGrp = new THREE.Group();
+  [base, body, wingL, wingR, roof, pent, windowGrp, gridGrp].forEach(m => buildingGrp.add(m));
+  // Move everything into one group for rotation
+  // (already added to scene directly, so just rotate the whole scene group)
+
+  let targetRotY = 0;
+  let t3 = 0;
   function animate() {
     requestAnimationFrame(animate);
-    t += 0.006;
-    // slow mouse parallax on main ico
-    ico.rotation.x += (mouse3.y * 0.3 - ico.rotation.x) * 0.025;
-    ico.rotation.y += (mouse3.x * 0.3 - ico.rotation.y) * 0.025;
-    icoSolid.rotation.copy(ico.rotation);
-    // continuous slow spin
-    ico.rotation.y += 0.004;
-    icoSolid.rotation.y += 0.004;
-    // torus knot
-    tk.rotation.x = t * 0.7;
-    tk.rotation.y = t * 0.5;
-    tkWire.rotation.copy(tk.rotation);
-    // orbiting sphere
-    orb.position.x = Math.cos(t * 1.2) * 2.2;
-    orb.position.y = Math.sin(t * 0.9) * 1.4;
-    orb.position.z = Math.sin(t * 1.1) * 1.0;
+    t3 += 0.01;
+    // Subtle mouse-driven Y rotation
+    targetRotY += (mouse3.x * 0.18 - targetRotY) * 0.03;
+    scene.rotation.y = targetRotY;
+    // Gentle float
+    scene.position.y = Math.sin(t3 * 0.4) * 0.08;
+    // Window flicker — subtle, like lights inside
+    windowGrp.children.forEach(w => {
+      const flicker = Math.sin(t3 * 1.2 + w.userData.phase) * 0.015;
+      w.material.opacity = Math.max(0, w.userData.baseOp + flicker);
+    });
     renderer.render(scene, camera);
   }
   animate();
 })();
 
-/* ─── THREE.JS STATS GLOBE ─── */
+/* ─── THREE.JS STATS — 3D ANIMATED BAR CHART ─── */
 (function initStatsThree() {
   const canvas = document.getElementById('three-stats');
   if (!canvas || !window.THREE) return;
+
+  const W = canvas.clientWidth || canvas.offsetWidth || 800;
+  const H = 320;
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setClearColor(0x000000, 0);
-  renderer.setSize(340, 340, false);
+  renderer.setSize(W, H, false);
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
-  camera.position.set(0, 0, 4);
+  const camera = new THREE.PerspectiveCamera(38, W / H, 0.1, 100);
+  camera.position.set(0, 3.5, 10);
+  camera.lookAt(0, 0, 0);
 
-  // globe wireframe
-  const globeMat = new THREE.MeshBasicMaterial({ color: 0xb8975a, wireframe: true, transparent: true, opacity: 0.14 });
-  const globe = new THREE.Mesh(new THREE.SphereGeometry(1.2, 18, 12), globeMat);
-  scene.add(globe);
+  // Lighting
+  scene.add(new THREE.AmbientLight(0xffffff, 0.25));
+  const key = new THREE.DirectionalLight(0xb8975a, 1.8);
+  key.position.set(4, 8, 6);
+  scene.add(key);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.3);
+  fill.position.set(-4, 2, 4);
+  scene.add(fill);
 
-  // octahedron inside
-  const oct = new THREE.Mesh(
-    new THREE.OctahedronGeometry(0.7, 0),
-    new THREE.MeshPhongMaterial({ color: 0xb8975a, transparent: true, opacity: 0.5, wireframe: false, shininess: 80 })
-  );
-  scene.add(oct);
-  const octWire = new THREE.Mesh(
-    new THREE.OctahedronGeometry(0.72, 0),
-    new THREE.MeshBasicMaterial({ color: 0xd4af7a, wireframe: true, transparent: true, opacity: 0.3 })
-  );
-  scene.add(octWire);
+  // Data: represents real metrics
+  const bars = [
+    { label: 'Monthly Leads',  value: 0.72, color: 0xb8975a },
+    { label: 'Site Traffic',   value: 0.88, color: 0xc9a86c },
+    { label: 'Response Rate',  value: 0.95, color: 0xb8975a },
+    { label: 'Uptime',         value: 1.00, color: 0xd4af7a },
+  ];
 
-  scene.add(new THREE.AmbientLight(0xffffff, 0.4));
-  const pl = new THREE.PointLight(0xb8975a, 3, 10);
-  pl.position.set(2, 2, 2);
-  scene.add(pl);
+  const MAX_H = 4.2;
+  const BAR_W = 1.0;
+  const GAP   = 0.55;
+  const totalW = bars.length * BAR_W + (bars.length - 1) * GAP;
+  const startX = -totalW / 2 + BAR_W / 2;
+  const FLOOR_Y = -2.1;
 
-  let t2 = 0;
-  function animate2() {
-    requestAnimationFrame(animate2);
-    t2 += 0.008;
-    globe.rotation.y = t2 * 0.4;
-    globe.rotation.x = t2 * 0.15;
-    oct.rotation.y = -t2 * 0.6;
-    oct.rotation.x = t2 * 0.4;
-    octWire.rotation.copy(oct.rotation);
+  const barMeshes = [];
+  const barTargets = [];
+  const barCurrent = [];
+
+  bars.forEach((b, i) => {
+    const targetH = b.value * MAX_H;
+    const x = startX + i * (BAR_W + GAP);
+
+    // Bar geometry — starts at height 0, animates up
+    const geo = new THREE.BoxGeometry(BAR_W, 0.01, BAR_W * 0.65);
+    const mat = new THREE.MeshPhongMaterial({ color: b.color, shininess: 90, transparent: true, opacity: 0.88 });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(x, FLOOR_Y, 0);
+    scene.add(mesh);
+
+    // Wireframe cap on top
+    const capGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(BAR_W, 0.04, BAR_W * 0.65));
+    const capMat = new THREE.LineBasicMaterial({ color: 0xd4af7a, transparent: true, opacity: 0.6 });
+    const cap = new THREE.LineSegments(capGeo, capMat);
+    cap.position.set(x, FLOOR_Y, 0);
+    scene.add(cap);
+
+    // Floor dot
+    const dot = new THREE.Mesh(
+      new THREE.CylinderGeometry(BAR_W * 0.52, BAR_W * 0.52, 0.04, 6),
+      new THREE.MeshBasicMaterial({ color: b.color, transparent: true, opacity: 0.25 })
+    );
+    dot.position.set(x, FLOOR_Y - 0.04, 0);
+    scene.add(dot);
+
+    barMeshes.push({ mesh, cap, x });
+    barTargets.push(targetH);
+    barCurrent.push(0);
+  });
+
+  // Floor grid lines
+  const gridMat = new THREE.LineBasicMaterial({ color: 0x3a3028, transparent: true, opacity: 0.55 });
+  for (let g = 0; g <= 4; g++) {
+    const y = FLOOR_Y + (g / 4) * MAX_H;
+    const line = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-totalW/2-0.3, y, 0), new THREE.Vector3(totalW/2+0.3, y, 0)]),
+      gridMat.clone()
+    );
+    line.material.opacity = g === 0 ? 0.7 : 0.2;
+    scene.add(line);
+  }
+
+  // Animate bars in when section enters viewport
+  let animated = false;
+  const observer = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting && !animated) {
+      animated = true;
+      const start = performance.now();
+      const dur = 1400;
+      function growBars(now) {
+        const t = Math.min((now - start) / dur, 1);
+        const ease = 1 - Math.pow(1 - t, 3);
+        barMeshes.forEach(({ mesh, cap, x }, i) => {
+          const h = Math.max(0.01, barTargets[i] * ease);
+          mesh.scale.y = h / 0.01;
+          mesh.position.y = FLOOR_Y + h / 2;
+          cap.position.y = FLOOR_Y + h;
+        });
+        if (t < 1) requestAnimationFrame(growBars);
+      }
+      requestAnimationFrame(growBars);
+    }
+  }, { threshold: 0.2 });
+  observer.observe(canvas);
+
+  let t4 = 0;
+  function animate4() {
+    requestAnimationFrame(animate4);
+    t4 += 0.008;
+    // gentle camera sway — like inspecting a real chart
+    camera.position.x = Math.sin(t4 * 0.25) * 0.6;
+    camera.lookAt(0, 0.5, 0);
     renderer.render(scene, camera);
   }
-  animate2();
+  animate4();
 
-  // Only show when stats section in view
-  const observer = new IntersectionObserver(entries => {
-    canvas.style.opacity = entries[0].isIntersecting ? '0.55' : '0';
-  }, { threshold: 0.1 });
-  observer.observe(canvas.parentElement);
+  window.addEventListener('resize', () => {
+    const nW = canvas.clientWidth || 800;
+    renderer.setSize(nW, H, false);
+    camera.aspect = nW / H;
+    camera.updateProjectionMatrix();
+  });
 })();
 
 /* ─── CANVAS PARTICLE FIELD ─── */
@@ -995,6 +1095,371 @@ window.addEventListener('scroll', ()=>{
   const h1 = document.getElementById('h1');
   if(h1 && y < window.innerHeight) h1.style.transform = `translateY(${y * 0.12}px)`;
 });
+
+/* ─── THREE.JS SERVICE ICONS ─── */
+(function initServiceIcons() {
+  if (!window.THREE) return;
+
+  // Shared renderer-per-canvas approach
+  function makeIconScene(canvasId, buildFn) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
+    renderer.setSize(72, 72, false);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 50);
+    camera.position.set(0, 0, 3.8);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.3));
+    const key = new THREE.DirectionalLight(0xb8975a, 2.2);
+    key.position.set(2, 3, 3);
+    scene.add(key);
+    const rim = new THREE.DirectionalLight(0xffffff, 0.4);
+    rim.position.set(-2, -1, 2);
+    scene.add(rim);
+
+    const { mesh, tick } = buildFn(scene);
+
+    // Hover speed-up
+    let hovered = false;
+    const card = canvas.closest('.svc');
+    if (card) {
+      card.addEventListener('mouseenter', () => hovered = true);
+      card.addEventListener('mouseleave', () => hovered = false);
+    }
+
+    let t = Math.random() * 100;
+    function loop() {
+      requestAnimationFrame(loop);
+      t += hovered ? 0.035 : 0.008;
+      tick(mesh, t);
+      renderer.render(scene, camera);
+    }
+    loop();
+  }
+
+  /* Icon 0: 3D monitor — represents Website */
+  makeIconScene('svc3d-0', (scene) => {
+    const GOLD = 0xb8975a;
+    const mat  = new THREE.MeshPhongMaterial({ color: GOLD, shininess: 110, transparent: true, opacity: 0.9 });
+    const wireM = new THREE.LineBasicMaterial({ color: 0xd4af7a, transparent: true, opacity: 0.45 });
+    const grp = new THREE.Group();
+
+    // Screen body
+    const screen = new THREE.Mesh(new THREE.BoxGeometry(1.6, 1.1, 0.08), mat.clone());
+    grp.add(screen);
+    grp.add(new THREE.LineSegments(new THREE.EdgesGeometry(screen.geometry), wireM.clone()));
+
+    // Screen inset (darker face — the "display")
+    const display = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.3, 0.82),
+      new THREE.MeshBasicMaterial({ color: 0x0d0b09, transparent: true, opacity: 0.85 })
+    );
+    display.position.z = 0.042;
+    grp.add(display);
+
+    // Scanlines on display (3 thin bars = code/content)
+    [0.22, 0, -0.22].forEach((y, i) => {
+      const bar = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.9 - i * 0.2, 0.06),
+        new THREE.MeshBasicMaterial({ color: GOLD, transparent: true, opacity: 0.55 })
+      );
+      bar.position.set(-0.15 + i * 0.05, y, 0.043);
+      grp.add(bar);
+    });
+
+    // Stand neck
+    const neck = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.28, 0.08), mat.clone());
+    neck.position.y = -0.68;
+    grp.add(neck);
+    // Stand base
+    const standBase = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.08, 0.22), mat.clone());
+    standBase.position.y = -0.84;
+    grp.add(standBase);
+    grp.add(new THREE.LineSegments(new THREE.EdgesGeometry(standBase.geometry), wireM.clone()).translateY(-0.84));
+
+    scene.add(grp);
+    return {
+      mesh: grp,
+      tick: (g, t) => {
+        g.rotation.y = Math.sin(t * 0.6) * 0.28;
+        g.rotation.x = Math.sin(t * 0.4) * 0.08;
+      }
+    };
+  });
+
+  /* Icon 1: 3D phone handset — represents AI Receptionist */
+  makeIconScene('svc3d-1', (scene) => {
+    const GOLD = 0xb8975a;
+    const mat  = new THREE.MeshPhongMaterial({ color: GOLD, shininess: 120 });
+    const wireM = new THREE.LineBasicMaterial({ color: 0xd4af7a, transparent: true, opacity: 0.4 });
+    const grp = new THREE.Group();
+
+    // Phone body — rounded box approximated with BoxGeometry
+    const body = new THREE.Mesh(new THREE.BoxGeometry(0.55, 1.1, 0.12), mat.clone());
+    grp.add(body);
+    grp.add(new THREE.LineSegments(new THREE.EdgesGeometry(body.geometry), wireM.clone()));
+
+    // Screen face
+    const face = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.42, 0.72),
+      new THREE.MeshBasicMaterial({ color: 0x0d0b09, transparent: true, opacity: 0.9 })
+    );
+    face.position.z = 0.062;
+    grp.add(face);
+
+    // AI waveform — 5 bars of varying height on screen
+    [0.08, 0.18, 0.28, 0.18, 0.08].forEach((h, i) => {
+      const bar = new THREE.Mesh(
+        new THREE.BoxGeometry(0.045, h, 0.01),
+        new THREE.MeshBasicMaterial({ color: GOLD, transparent: true, opacity: 0.8 })
+      );
+      bar.position.set(-0.14 + i * 0.07, 0.04, 0.065);
+      bar.userData.baseH = h;
+      bar.userData.phase = i * 0.7;
+      grp.add(bar);
+    });
+
+    // Home button circle
+    const btn = new THREE.Mesh(
+      new THREE.CircleGeometry(0.055, 16),
+      new THREE.MeshBasicMaterial({ color: GOLD, transparent: true, opacity: 0.5 })
+    );
+    btn.position.set(0, -0.46, 0.065);
+    grp.add(btn);
+
+    scene.add(grp);
+    // Store wave bars ref
+    const waveBars = grp.children.slice(3, 8);
+    return {
+      mesh: grp,
+      tick: (g, t) => {
+        g.rotation.y = Math.sin(t * 0.55) * 0.32;
+        g.rotation.x = Math.sin(t * 0.3) * 0.06;
+        // animate waveform bars
+        waveBars.forEach((b, i) => {
+          if (!b.userData.baseH) return;
+          const s = 0.7 + Math.abs(Math.sin(t * 2.2 + b.userData.phase)) * 0.9;
+          b.scale.y = s;
+        });
+      }
+    };
+  });
+
+  /* Icon 2: 3D location pin — represents Local SEO */
+  makeIconScene('svc3d-2', (scene) => {
+    const GOLD = 0xb8975a;
+    const mat  = new THREE.MeshPhongMaterial({ color: GOLD, shininess: 130 });
+    const wireM = new THREE.LineBasicMaterial({ color: 0xd4af7a, transparent: true, opacity: 0.5 });
+    const grp = new THREE.Group();
+
+    // Pin head (sphere)
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.52, 20, 16), mat.clone());
+    head.position.y = 0.42;
+    grp.add(head);
+    grp.add(new THREE.LineSegments(
+      new THREE.EdgesGeometry(new THREE.SphereGeometry(0.54, 10, 8)),
+      wireM.clone()
+    ).translateY(0.42));
+
+    // Inner circle (the "dot" of the pin)
+    const inner = new THREE.Mesh(
+      new THREE.SphereGeometry(0.22, 16, 12),
+      new THREE.MeshBasicMaterial({ color: 0x0d0b09, transparent: true, opacity: 0.9 })
+    );
+    inner.position.set(0, 0.42, 0.35);
+    grp.add(inner);
+
+    // Pin tail (cone pointing down)
+    const tail = new THREE.Mesh(
+      new THREE.ConeGeometry(0.22, 0.9, 12),
+      mat.clone()
+    );
+    tail.position.y = -0.4;
+    tail.rotation.z = Math.PI;
+    grp.add(tail);
+    grp.add(new THREE.LineSegments(
+      new THREE.EdgesGeometry(new THREE.ConeGeometry(0.23, 0.92, 8)),
+      wireM.clone()
+    ).translateY(-0.4).rotateZ(Math.PI));
+
+    // Shadow ring on ground
+    const shadow = new THREE.Mesh(
+      new THREE.RingGeometry(0.18, 0.32, 24),
+      new THREE.MeshBasicMaterial({ color: GOLD, transparent: true, opacity: 0.22, side: THREE.DoubleSide })
+    );
+    shadow.rotation.x = -Math.PI / 2;
+    shadow.position.y = -0.9;
+    grp.add(shadow);
+
+    scene.add(grp);
+    return {
+      mesh: grp,
+      tick: (g, t) => {
+        // Gentle bob up and down — like a pin dropping
+        g.position.y = Math.sin(t * 0.9) * 0.1;
+        g.rotation.y = t * 0.25;
+      }
+    };
+  });
+})();
+
+/* ─── SCROLL ANIMATION CLASSES ─── */
+    .g-up   { opacity:0;transform:translateY(32px); }
+    .g-fade { opacity:0; }
+    .g-left { opacity:0;transform:translateX(-28px); }
+
+    /* ─── PREFERS REDUCED MOTION ─── */
+    @media (prefers-reduced-motion:reduce) {
+      *,*::before,*::after { animation-duration:.01ms!important;transition-duration:.01ms!important; }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:1024px){
+      .hero{grid-template-columns:1fr;gap:48px;}
+      .hero-card-wrap{display:none;}
+      .process-grid{grid-template-columns:1fr 1fr;}
+      .svc-grid{grid-template-columns:1fr;}
+      .t-grid{grid-template-columns:1fr;}
+      .stats-grid{grid-template-columns:1fr 1fr;}
+      .p-grid{grid-template-columns:1fr;border:none;}
+      .pc{border-right:none;border-bottom:1px solid #ddd5c9;}
+      .ft-grid{grid-template-columns:1fr 1fr;}
+    }
+    @media(max-width:768px){
+      nav{padding:0 22px;}
+      .nav-r a:not(.nav-cta){display:none;}
+      .hero{padding:120px 22px 80px;}
+      .sw{padding:72px 22px;}
+      h2{font-size:2.2rem;}
+      .process-grid{grid-template-columns:1fr;}
+      .stats-grid{grid-template-columns:1fr 1fr;}
+      footer{padding:48px 22px 36px;}
+      .ft-grid{grid-template-columns:1fr;gap:32px;}
+      .ft-bot{flex-direction:column;gap:8px;text-align:center;}
+      #cur,#cur-ring{display:none;}
+      body{cursor:auto;}
+      a,button{cursor:pointer;}
+    }
+
+/* ─── THREE.JS SERVICE ICONS ─── */
+(function initServiceIcons() {
+  if (!window.THREE) return;
+
+  function makeIconScene(canvasId, buildFn) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
+    renderer.setSize(72, 72, false);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 50);
+    camera.position.set(0, 0, 3.8);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.3));
+    const key = new THREE.DirectionalLight(0xb8975a, 2.2);
+    key.position.set(2, 3, 3); scene.add(key);
+    const rim = new THREE.DirectionalLight(0xffffff, 0.4);
+    rim.position.set(-2, -1, 2); scene.add(rim);
+    const { mesh, tick } = buildFn(scene);
+    let hovered = false;
+    const card = canvas.closest('.svc');
+    if (card) {
+      card.addEventListener('mouseenter', () => hovered = true);
+      card.addEventListener('mouseleave', () => hovered = false);
+    }
+    let t = Math.random() * 100;
+    (function loop() {
+      requestAnimationFrame(loop);
+      t += hovered ? 0.035 : 0.008;
+      tick(mesh, t);
+      renderer.render(scene, camera);
+    })();
+  }
+
+  /* Icon 0: 3D Monitor — Website */
+  makeIconScene('svc3d-0', (scene) => {
+    const GOLD = 0xb8975a;
+    const mat  = new THREE.MeshPhongMaterial({ color: GOLD, shininess: 110, transparent: true, opacity: 0.9 });
+    const wireM = new THREE.LineBasicMaterial({ color: 0xd4af7a, transparent: true, opacity: 0.45 });
+    const grp = new THREE.Group();
+    const screen = new THREE.Mesh(new THREE.BoxGeometry(1.6, 1.1, 0.08), mat.clone());
+    grp.add(screen);
+    grp.add(new THREE.LineSegments(new THREE.EdgesGeometry(screen.geometry), wireM.clone()));
+    const display = new THREE.Mesh(new THREE.PlaneGeometry(1.3, 0.82),
+      new THREE.MeshBasicMaterial({ color: 0x0d0b09, transparent: true, opacity: 0.85 }));
+    display.position.z = 0.042; grp.add(display);
+    [0.22, 0, -0.22].forEach((y, i) => {
+      const bar = new THREE.Mesh(new THREE.PlaneGeometry(0.9 - i * 0.2, 0.06),
+        new THREE.MeshBasicMaterial({ color: GOLD, transparent: true, opacity: 0.55 }));
+      bar.position.set(-0.15 + i * 0.05, y, 0.043); grp.add(bar);
+    });
+    const neck = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.28, 0.08), mat.clone());
+    neck.position.y = -0.68; grp.add(neck);
+    const base = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.08, 0.22), mat.clone());
+    base.position.y = -0.84; grp.add(base);
+    scene.add(grp);
+    return { mesh: grp, tick: (g, t) => { g.rotation.y = Math.sin(t * 0.6) * 0.28; g.rotation.x = Math.sin(t * 0.4) * 0.08; } };
+  });
+
+  /* Icon 1: 3D Phone with AI waveform — AI Receptionist */
+  makeIconScene('svc3d-1', (scene) => {
+    const GOLD = 0xb8975a;
+    const mat  = new THREE.MeshPhongMaterial({ color: GOLD, shininess: 120 });
+    const wireM = new THREE.LineBasicMaterial({ color: 0xd4af7a, transparent: true, opacity: 0.4 });
+    const grp = new THREE.Group();
+    const body = new THREE.Mesh(new THREE.BoxGeometry(0.55, 1.1, 0.12), mat.clone());
+    grp.add(body);
+    grp.add(new THREE.LineSegments(new THREE.EdgesGeometry(body.geometry), wireM.clone()));
+    const face = new THREE.Mesh(new THREE.PlaneGeometry(0.42, 0.72),
+      new THREE.MeshBasicMaterial({ color: 0x0d0b09, transparent: true, opacity: 0.9 }));
+    face.position.z = 0.062; grp.add(face);
+    const waveBars = [];
+    [0.08, 0.18, 0.28, 0.18, 0.08].forEach((h, i) => {
+      const bar = new THREE.Mesh(new THREE.BoxGeometry(0.045, h, 0.01),
+        new THREE.MeshBasicMaterial({ color: GOLD, transparent: true, opacity: 0.8 }));
+      bar.position.set(-0.14 + i * 0.07, 0.04, 0.065);
+      bar.userData.baseH = h; bar.userData.phase = i * 0.7;
+      grp.add(bar); waveBars.push(bar);
+    });
+    const btn = new THREE.Mesh(new THREE.CircleGeometry(0.055, 16),
+      new THREE.MeshBasicMaterial({ color: GOLD, transparent: true, opacity: 0.5 }));
+    btn.position.set(0, -0.46, 0.065); grp.add(btn);
+    scene.add(grp);
+    return { mesh: grp, tick: (g, t) => {
+      g.rotation.y = Math.sin(t * 0.55) * 0.32;
+      g.rotation.x = Math.sin(t * 0.3) * 0.06;
+      waveBars.forEach(b => { b.scale.y = 0.7 + Math.abs(Math.sin(t * 2.2 + b.userData.phase)) * 0.9; });
+    }};
+  });
+
+  /* Icon 2: 3D Location Pin — Local SEO */
+  makeIconScene('svc3d-2', (scene) => {
+    const GOLD = 0xb8975a;
+    const mat  = new THREE.MeshPhongMaterial({ color: GOLD, shininess: 130 });
+    const wireM = new THREE.LineBasicMaterial({ color: 0xd4af7a, transparent: true, opacity: 0.5 });
+    const grp = new THREE.Group();
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.52, 20, 16), mat.clone());
+    head.position.y = 0.42; grp.add(head);
+    grp.add(Object.assign(new THREE.LineSegments(
+      new THREE.EdgesGeometry(new THREE.SphereGeometry(0.54, 10, 8)), wireM.clone()), { position: { y: 0.42 } }));
+    const inner = new THREE.Mesh(new THREE.SphereGeometry(0.22, 16, 12),
+      new THREE.MeshBasicMaterial({ color: 0x0d0b09, transparent: true, opacity: 0.9 }));
+    inner.position.set(0, 0.42, 0.35); grp.add(inner);
+    const tail = new THREE.Mesh(new THREE.ConeGeometry(0.22, 0.9, 12), mat.clone());
+    tail.position.y = -0.4; tail.rotation.z = Math.PI; grp.add(tail);
+    const shadow = new THREE.Mesh(new THREE.RingGeometry(0.18, 0.32, 24),
+      new THREE.MeshBasicMaterial({ color: GOLD, transparent: true, opacity: 0.22, side: THREE.DoubleSide }));
+    shadow.rotation.x = -Math.PI / 2; shadow.position.y = -0.9; grp.add(shadow);
+    scene.add(grp);
+    return { mesh: grp, tick: (g, t) => {
+      g.position.y = Math.sin(t * 0.9) * 0.1;
+      g.rotation.y = t * 0.25;
+    }};
+  });
+})();
+
 </script>
-</body>
-</html>
