@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Privacy Policy — Welden Works</title>
+<meta name="description" content="Welden Works privacy policy — how we collect, use, and protect your information."/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0d0b09;--ink-2:#1a1714;--soft:#6b6459;
+  --cream:#faf9f7;--gold:#b8975a;--gold-l:#d4af7a;
+  --rule:rgba(184,151,90,.14);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--cream);overflow-x:hidden;cursor:none}
+
+/* CURSOR */
+#cur{position:fixed;top:0;left:0;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;opacity:0;will-change:transform}
+#cur-ring{position:fixed;top:0;left:0;width:36px;height:36px;border:1px solid rgba(184,151,90,.5);border-radius:50%;pointer-events:none;z-index:9998;opacity:0;will-change:transform;transition:width .25s,height .25s}
+body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:76px;display:flex;justify-content:space-between;align-items:center;padding:0 60px;background:rgba(13,11,9,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--rule)}
+.logo{text-decoration:none;line-height:1}
+.logo-name{display:block;font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:600;color:var(--cream);letter-spacing:.3px}
+.logo-tag{display:block;font-size:.55rem;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);margin-top:2px}
+.nav-links{display:flex;align-items:center;gap:2px}
+.nav-links a{color:rgba(255,255,255,.45);text-decoration:none;font-size:.7rem;letter-spacing:1.8px;text-transform:uppercase;font-weight:500;padding:10px 16px;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-cta{border:1px solid rgba(184,151,90,.4)!important;color:var(--gold)!important;margin-left:10px;transition:all .25s!important}
+.nav-cta:hover{background:var(--gold)!important;color:var(--ink)!important}
+
+/* PAGE HEADER */
+.page-header{padding:140px 60px 72px;border-bottom:1px solid var(--rule)}
+.page-header-inner{max-width:800px;margin:0 auto}
+.eyebrow{display:inline-flex;align-items:center;gap:12px;font-size:.58rem;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:18px}
+.eyebrow::before{content:'';width:24px;height:1px;background:var(--gold);flex-shrink:0}
+.page-header h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,4vw,3.6rem);font-weight:600;color:var(--cream);line-height:1.1;margin-bottom:12px}
+.page-header .sub{font-size:.8rem;color:rgba(255,255,255,.3);font-weight:300}
+
+/* CONTENT */
+.content{padding:72px 60px 120px}
+.content-inner{max-width:800px;margin:0 auto}
+
+.content-inner h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.5rem;font-weight:600;color:var(--cream);
+  margin:52px 0 14px;padding-bottom:12px;
+  border-bottom:1px solid var(--rule);
+}
+.content-inner h2:first-child{margin-top:0}
+
+.content-inner p{
+  font-size:.88rem;color:rgba(255,255,255,.45);
+  line-height:1.95;font-weight:300;margin-bottom:16px;
+}
+.content-inner ul{
+  list-style:none;margin:0 0 20px;
+}
+.content-inner ul li{
+  font-size:.88rem;color:rgba(255,255,255,.45);
+  line-height:1.85;font-weight:300;
+  padding:7px 0 7px 20px;position:relative;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.content-inner ul li::before{
+  content:'—';color:var(--gold);
+  position:absolute;left:0;
+}
+.content-inner a{color:var(--gold);text-decoration:none}
+.content-inner a:hover{text-decoration:underline}
+
+.highlight-box{
+  background:rgba(184,151,90,.05);
+  border:1px solid var(--rule);
+  padding:24px 28px;
+  margin:24px 0;
+  font-size:.84rem;color:rgba(255,255,255,.5);
+  line-height:1.85;font-weight:300;
+}
+.highlight-box strong{color:var(--gold);font-weight:500}
+
+/* FOOTER */
+footer{background:rgba(255,255,255,.015);border-top:1px solid var(--rule);padding:48px 60px}
+.ft-bot{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.ft-copy{font-size:.68rem;color:rgba(255,255,255,.18)}
+.ft-links{display:flex;gap:20px}
+.ft-links a{font-size:.68rem;color:rgba(255,255,255,.25);text-decoration:none;transition:color .2s}
+.ft-links a:hover{color:var(--gold)}
+
+@media(max-width:768px){
+  nav{padding:0 24px}
+  .nav-links a:not(.nav-cta){display:none}
+  .page-header{padding:110px 24px 56px}
+  .content{padding:48px 24px 80px}
+  footer{padding:36px 24px}
+  .ft-bot{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<nav>
+  <a href="../index.html" class="logo">
+    <span class="logo-name">Welden Works</span>
+    <span class="logo-tag">Digital Agency</span>
+  </a>
+  <div class="nav-links">
+    <a href="services.html">Services</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="contact.html" class="nav-cta">Get Started</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="eyebrow">Legal</div>
+    <h1>Privacy Policy</h1>
+    <p class="sub">Last updated: June 23, 2026 &nbsp;·&nbsp; Welden Works LLC</p>
+  </div>
+</div>
+
+<div class="content">
+  <div class="content-inner">
+
+    <div class="highlight-box">
+      <strong>The short version:</strong> We collect only what we need to build your website and communicate with you. We don't sell your data. We don't spam you. We treat your information with the same care we bring to every site we build.
+    </div>
+
+    <h2>1. Who We Are</h2>
+    <p>Welden Works LLC ("Welden Works," "we," "us," or "our") is a digital agency providing website design, AI receptionist, and local SEO services to local businesses, primarily in Florida. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or engage our services.</p>
+    <p>If you have questions about this policy, contact us at: <a href="mailto:hello@weldenworks.com">hello@weldenworks.com</a></p>
+
+    <h2>2. Information We Collect</h2>
+    <p>We collect information in the following ways:</p>
+
+    <p><strong style="color:rgba(255,255,255,.7);font-weight:500">Information you give us directly:</strong></p>
+    <ul>
+      <li>Name, business name, and contact information (phone, email, address) submitted via our contact or inquiry forms</li>
+      <li>Details about your business that you share during onboarding or discovery calls</li>
+      <li>Payment information processed securely through our third-party payment processor (we never store full card numbers)</li>
+      <li>Communications you send us — emails, messages, or form submissions</li>
+    </ul>
+
+    <p><strong style="color:rgba(255,255,255,.7);font-weight:500">Information collected automatically:</strong></p>
+    <ul>
+      <li>IP address, browser type, and device information when you visit our website</li>
+      <li>Pages visited, time spent on pages, and referring URLs (via standard web analytics)</li>
+      <li>Cookies and similar tracking technologies (see Section 6)</li>
+    </ul>
+
+    <h2>3. How We Use Your Information</h2>
+    <p>We use the information we collect to:</p>
+    <ul>
+      <li>Build, deliver, and maintain your website and any related services</li>
+      <li>Communicate with you about your project, invoices, and updates</li>
+      <li>Send you your site preview link and onboarding materials</li>
+      <li>Process payments and maintain billing records as required by law</li>
+      <li>Improve our own website and understand how visitors use it</li>
+      <li>Respond to inquiries and provide customer support</li>
+      <li>Comply with legal obligations</li>
+    </ul>
+    <p>We do <strong style="color:rgba(255,255,255,.7)">not</strong> sell, rent, or share your personal information with third parties for their own marketing purposes.</p>
+
+    <h2>4. How We Share Your Information</h2>
+    <p>We share information only in the following limited circumstances:</p>
+    <ul>
+      <li><strong style="color:rgba(255,255,255,.6)">Service providers:</strong> Trusted vendors who help us operate (e.g., hosting providers, payment processors, email platforms). They are contractually bound to keep your data secure and may not use it for any other purpose.</li>
+      <li><strong style="color:rgba(255,255,255,.6)">Legal compliance:</strong> If required by law, subpoena, or other legal process — or to protect the safety and rights of our clients or the public.</li>
+      <li><strong style="color:rgba(255,255,255,.6)">Business transfers:</strong> In the event of a merger, acquisition, or sale of assets, your information may be transferred as part of that transaction. We will notify you via email or prominent notice on our website.</li>
+    </ul>
+
+    <h2>5. Data Retention</h2>
+    <p>We retain your personal information for as long as your account or business relationship is active, and for a reasonable period afterward to fulfill legal and contractual obligations (typically 3–5 years for financial records).</p>
+    <p>You may request deletion of your data at any time by contacting <a href="mailto:hello@weldenworks.com">hello@weldenworks.com</a>. We will honor deletion requests except where retention is required by law.</p>
+
+    <h2>6. Cookies &amp; Tracking</h2>
+    <p>Our website uses standard cookies and analytics tools to understand how visitors interact with our site. These may include:</p>
+    <ul>
+      <li><strong style="color:rgba(255,255,255,.6)">Essential cookies:</strong> Required for the site to function (session management, security).</li>
+      <li><strong style="color:rgba(255,255,255,.6)">Analytics cookies:</strong> Help us understand traffic patterns and improve our content (e.g., Google Analytics). Data is aggregated and anonymized where possible.</li>
+    </ul>
+    <p>You can disable cookies in your browser settings at any time. Note that some site features may not function properly without them.</p>
+
+    <h2>7. Data Security</h2>
+    <p>We implement commercially reasonable technical and organizational measures to protect your information — including HTTPS encryption, access controls, and secure hosting. However, no method of transmission over the internet is 100% secure, and we cannot guarantee absolute security.</p>
+    <p>We encourage you to use strong passwords and to contact us immediately if you suspect any unauthorized access to your account or information.</p>
+
+    <h2>8. Your Rights</h2>
+    <p>Depending on your location, you may have the following rights regarding your personal data:</p>
+    <ul>
+      <li><strong style="color:rgba(255,255,255,.6)">Access:</strong> Request a copy of the personal data we hold about you.</li>
+      <li><strong style="color:rgba(255,255,255,.6)">Correction:</strong> Request that we correct inaccurate or incomplete data.</li>
+      <li><strong style="color:rgba(255,255,255,.6)">Deletion:</strong> Request that we delete your personal data, subject to legal retention requirements.</li>
+      <li><strong style="color:rgba(255,255,255,.6)">Portability:</strong> Request a machine-readable copy of your data.</li>
+      <li><strong style="color:rgba(255,255,255,.6)">Opt-out of marketing:</strong> Unsubscribe from any marketing communications at any time via the unsubscribe link in our emails.</li>
+    </ul>
+    <p>To exercise any of these rights, email us at <a href="mailto:hello@weldenworks.com">hello@weldenworks.com</a>. We will respond within 30 days.</p>
+
+    <h2>9. Children's Privacy</h2>
+    <p>Our services are intended for business owners and are not directed at children under 13. We do not knowingly collect personal information from children. If we become aware that we have inadvertently collected such information, we will delete it promptly.</p>
+
+    <h2>10. Third-Party Links</h2>
+    <p>Our website may contain links to third-party websites (e.g., Google Maps, social media profiles). We are not responsible for the privacy practices of those sites and encourage you to review their policies independently.</p>
+
+    <h2>11. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time to reflect changes in our practices or applicable law. When we do, we will revise the "Last updated" date at the top of this page. For material changes, we will provide more prominent notice (such as an email notification).</p>
+    <p>Your continued use of our website or services after changes become effective constitutes your acceptance of the updated policy.</p>
+
+    <h2>12. Contact Us</h2>
+    <p>If you have any questions, concerns, or requests regarding this Privacy Policy or how we handle your data, please contact us:</p>
+    <div class="highlight-box">
+      <strong>Welden Works LLC</strong><br/>
+      Email: <a href="mailto:hello@weldenworks.com">hello@weldenworks.com</a><br/>
+      Website: <a href="https://weldenworks.com">weldenworks.com</a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="ft-bot">
+    <span class="ft-copy">© 2026 Welden Works LLC. All rights reserved.</span>
+    <div class="ft-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const cur  = document.getElementById('cur');
+const ring = document.getElementById('cur-ring');
+let cx = -200, cy = -200, rx = -200, ry = -200;
+window.addEventListener('mousemove', e => {
+  cx = e.clientX; cy = e.clientY;
+  document.body.classList.add('has-cursor');
+}, { passive: true });
+(function loop() {
+  rx += (cx - rx) * 0.12; ry += (cy - ry) * 0.12;
+  cur.style.transform  = `translate(${cx - 5}px, ${cy - 5}px)`;
+  ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => { cur.style.width='16px';cur.style.height='16px'; });
+  el.addEventListener('mouseleave', () => { cur.style.width='10px';cur.style.height='10px'; });
+});
+window.addEventListener('scroll', () => document.getElementById('nav').classList.toggle('scrolled', scrollY > 50));
+</script>
+</body>
+</html>
