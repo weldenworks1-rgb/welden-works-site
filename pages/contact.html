@@ -135,16 +135,16 @@ body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
           <div id="formWrap">
             <form onsubmit="handleSubmit(event)" novalidate>
               <div class="form-row">
-                <div class="form-group"><label class="form-label">Your Name</label><input type="text" placeholder="John Smith" required/></div>
-                <div class="form-group"><label class="form-label">Business Name</label><input type="text" placeholder="Smith Roofing LLC" required/></div>
+                <div class="form-group"><label class="form-label">Your Name</label><input type="text" name="name" placeholder="John Smith" required/></div>
+                <div class="form-group"><label class="form-label">Business Name</label><input type="text" name="business" placeholder="Smith Roofing LLC" required/></div>
               </div>
               <div class="form-row">
-                <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" placeholder="(555) 000-0000" required/></div>
-                <div class="form-group"><label class="form-label">Email Address</label><input type="email" placeholder="john@example.com" required/></div>
+                <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" name="phone" placeholder="(555) 000-0000" required/></div>
+                <div class="form-group"><label class="form-label">Email Address</label><input type="email" name="email" placeholder="john@example.com" required/></div>
               </div>
               <div class="form-group">
                 <label class="form-label">Interested In</label>
-                <select>
+                <select name="service">
                   <option value="">Select a plan...</option>
                   <option>Starter Website — $497 setup + $99/mo</option>
                   <option>Advanced Website — $997 setup + $199/mo</option>
@@ -157,7 +157,7 @@ body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
               </div>
               <div class="form-group">
                 <label class="form-label">Tell Us About Your Business</label>
-                <textarea placeholder="What do you do, where are you located, and what's your biggest challenge right now?"></textarea>
+                <textarea name="message" placeholder="What do you do, where are you located, and what's your biggest challenge right now?"></textarea>
               </div>
               <button type="submit" class="form-submit">Send My Free Preview Request</button>
               <p class="form-note">No spam. No pressure. Just a preview and a conversation.</p>
@@ -183,7 +183,40 @@ body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
 </div>
 <footer><div class="footer-inner"><div class="footer-brand">Welden Works</div><p>© 2026 Welden Works. All rights reserved.</p></div></footer>
 <script>
-  function handleSubmit(e){e.preventDefault();document.getElementById('formWrap').style.display='none';document.getElementById('successState').style.display='block';}
+  const WEBHOOK = 'https://hook.us2.make.com/u8162a3x4uid92w81ocedsrcuo5mx1lc';
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const btn = document.querySelector('.form-submit');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+
+    const form = e.target;
+    const data = {
+      name:     form.querySelector('[name="name"]').value,
+      email:    form.querySelector('[name="email"]').value,
+      phone:    form.querySelector('[name="phone"]')?.value || '',
+      business: form.querySelector('[name="business"]').value,
+      service:  form.querySelector('[name="service"]').value,
+      message:  form.querySelector('[name="message"]')?.value || '',
+      source:   'weldenworks.com/contact',
+      submitted_at: new Date().toISOString()
+    };
+
+    try {
+      await fetch(WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+    } catch(err) {
+      // Still show success — don't block the user on network issues
+      console.warn('Webhook error:', err);
+    }
+
+    document.getElementById('formWrap').style.display = 'none';
+    document.getElementById('successState').style.display = 'block';
+  }
   const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target);}}),{threshold:.1,rootMargin:'0px 0px -40px 0px'});
   document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 </script>
