@@ -8,13 +8,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/SplitText.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --off-white: #faf9f7;
-      --warm-white: #f5f3ef;
-      --parchment: #ede8df;
       --ink: #1a1714;
       --ink-mid: #3d3830;
       --ink-soft: #6b6459;
@@ -22,162 +19,192 @@
       --gold-dark: #9a7d46;
       --gold-pale: #f7f1e6;
       --rule: #ddd8cf;
-      --white: #ffffff;
     }
     html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', sans-serif; color: var(--ink); background: var(--off-white); overflow-x: hidden; }
+    body { font-family: 'Inter', sans-serif; color: var(--ink); background: #0e0c0a; overflow-x: hidden; }
 
-    /* NAV */
+    /* ── CANVAS BACKGROUND ── */
+    #bgCanvas {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 0; pointer-events: none;
+    }
+
+    /* ── NAV ── */
     nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       height: 76px; display: flex; justify-content: space-between; align-items: center;
       padding: 0 64px;
-      background: rgba(250,249,247,0.96); backdrop-filter: blur(12px);
+      background: rgba(14,12,10,0.7); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(184,151,90,0.12);
+      transition: all 0.4s ease;
+    }
+    nav.light {
+      background: rgba(250,249,247,0.95);
       border-bottom: 1px solid var(--rule);
-      transition: box-shadow 0.4s;
     }
-    nav.scrolled { box-shadow: 0 2px 32px rgba(26,23,20,0.08); }
-    .nav-logo { text-decoration: none; display: flex; flex-direction: column; line-height: 1; }
-    .nav-logo-main { font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 600; color: var(--ink); letter-spacing: 0.5px; }
-    .nav-logo-sub { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-top: 2px; }
+    .nav-logo { text-decoration: none; }
+    .nav-logo-main { font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 600; color: white; display: block; letter-spacing: 0.5px; transition: color 0.4s; }
+    nav.light .nav-logo-main { color: var(--ink); }
+    .nav-logo-sub { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); font-weight: 500; display: block; }
     .nav-links { display: flex; align-items: center; }
-    .nav-links a { color: var(--ink-soft); text-decoration: none; font-size: 0.78rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500; padding: 10px 18px; transition: color 0.2s; }
-    .nav-links a:hover { color: var(--ink); }
-    .nav-cta { margin-left: 16px; border: 1px solid var(--ink); color: var(--ink) !important; padding: 10px 24px !important; transition: background 0.25s, color 0.25s !important; }
-    .nav-cta:hover { background: var(--ink) !important; color: var(--off-white) !important; }
+    .nav-links a { color: rgba(255,255,255,0.55); text-decoration: none; font-size: 0.78rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500; padding: 10px 18px; transition: color 0.2s; }
+    nav.light .nav-links a { color: var(--ink-soft); }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta { margin-left: 12px; border: 1px solid rgba(184,151,90,0.5); color: var(--gold) !important; padding: 10px 24px !important; transition: all 0.25s !important; }
+    .nav-cta:hover { background: var(--gold) !important; color: white !important; border-color: var(--gold) !important; }
+    nav.light .nav-cta { border-color: var(--ink) !important; color: var(--ink) !important; }
+    nav.light .nav-cta:hover { background: var(--ink) !important; color: var(--off-white) !important; }
 
-    /* HERO */
-    .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 76px; }
-    .hero-left {
-      background: var(--ink); padding: 100px 80px 80px 64px;
-      display: flex; flex-direction: column; justify-content: center;
-      position: relative; overflow: hidden;
+    /* ── HERO ── */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh; display: flex; align-items: center;
+      padding: 140px 64px 100px;
     }
-    .hero-left::after {
-      content: ''; position: absolute; bottom: -60px; right: -60px;
-      width: 300px; height: 300px; border-radius: 50%;
-      border: 1px solid rgba(184,151,90,0.1); pointer-events: none;
-    }
+    .hero-inner { max-width: 1160px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
     .hero-eyebrow {
-      font-size: 0.65rem; letter-spacing: 3.5px; text-transform: uppercase;
-      color: var(--gold); font-weight: 500; margin-bottom: 32px;
+      font-size: 0.62rem; letter-spacing: 3.5px; text-transform: uppercase;
+      color: var(--gold); font-weight: 500; margin-bottom: 28px;
       display: flex; align-items: center; gap: 12px; opacity: 0;
     }
-    .hero-eyebrow::before { content: ''; width: 0; height: 1px; background: var(--gold); transition: width 0.6s; }
+    .hero-eyebrow-line { width: 0; height: 1px; background: var(--gold); transition: width 0.8s ease; }
     .hero-h1 {
-      font-family: 'Cormorant Garamond', serif; font-size: 5rem; font-weight: 600;
-      color: var(--white); line-height: 1.05; letter-spacing: -0.5px; margin-bottom: 32px;
-      overflow: hidden;
+      font-family: 'Cormorant Garamond', serif; font-size: 5.5rem; font-weight: 600;
+      color: white; line-height: 1.02; letter-spacing: -0.5px; margin-bottom: 32px;
     }
     .hero-h1 em { font-style: italic; color: var(--gold); }
-    .hero-body { font-size: 0.92rem; color: rgba(255,255,255,0.45); line-height: 1.9; max-width: 380px; margin-bottom: 52px; font-weight: 300; opacity: 0; }
-    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; opacity: 0; }
-    .btn-gold { background: var(--gold); color: var(--white); padding: 16px 36px; font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; text-decoration: none; transition: background 0.25s, transform 0.25s; display: inline-block; }
-    .btn-gold:hover { background: var(--gold-dark); transform: translateY(-2px); }
-    .btn-ghost-light { background: transparent; color: rgba(255,255,255,0.6); padding: 16px 36px; font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); transition: color 0.25s, border-color 0.25s, transform 0.25s; }
-    .btn-ghost-light:hover { color: white; border-color: rgba(255,255,255,0.5); transform: translateY(-2px); }
-    .hero-right { background: var(--warm-white); display: flex; align-items: center; justify-content: center; border-left: 1px solid var(--rule); }
-    .hero-card { width: 100%; max-width: 380px; margin: 40px; background: var(--white); border: 1px solid var(--rule); box-shadow: 0 20px 60px rgba(26,23,20,0.08); opacity: 0; transform: translateY(24px); }
-    .hc-top { padding: 24px 28px; border-bottom: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; }
-    .hc-top-label { font-size: 0.62rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink-soft); font-weight: 500; }
-    .hc-badge { font-size: 0.65rem; font-weight: 600; color: #15803d; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 3px 10px; display: flex; align-items: center; gap: 5px; }
-    .hc-dot { width: 5px; height: 5px; background: #22c55e; border-radius: 50%; }
-    .hc-body { padding: 24px 28px; }
-    .hc-metric { margin-bottom: 22px; }
-    .hc-metric-label { font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-soft); font-weight: 500; margin-bottom: 8px; }
-    .hc-metric-row { display: flex; align-items: center; gap: 10px; }
-    .hc-num { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 600; color: var(--ink); line-height: 1; width: 52px; flex-shrink: 0; }
-    .hc-bar-wrap { flex: 1; height: 2px; background: var(--parchment); }
-    .hc-bar { height: 100%; background: var(--gold); width: 0; transition: width 1.2s ease; }
-    .hc-delta { font-size: 0.65rem; font-weight: 600; color: #15803d; width: 36px; text-align: right; }
-    .hc-divider { height: 1px; background: var(--rule); margin: 20px 0; }
-    .hc-stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); }
-    .hc-stat { background: var(--white); padding: 18px; }
-    .hc-stat-num { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 600; color: var(--ink); }
-    .hc-stat-label { font-size: 0.6rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-soft); margin-top: 4px; }
+    .hero-h1 .word { display: inline-block; overflow: hidden; }
+    .hero-h1 .word-inner { display: inline-block; transform: translateY(110%); }
+    .hero-body { font-size: 0.92rem; color: rgba(255,255,255,0.4); line-height: 1.9; max-width: 400px; margin-bottom: 48px; font-weight: 300; opacity: 0; }
+    .hero-actions { display: flex; gap: 16px; opacity: 0; }
+    .btn-gold { background: var(--gold); color: white; padding: 16px 36px; font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; text-decoration: none; transition: all 0.3s; display: inline-block; position: relative; overflow: hidden; }
+    .btn-gold::after { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.12); transform: translateX(-100%); transition: transform 0.4s ease; }
+    .btn-gold:hover::after { transform: translateX(0); }
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(184,151,90,0.35); }
+    .btn-ghost { background: transparent; color: rgba(255,255,255,0.6); padding: 16px 36px; font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; text-decoration: none; border: 1px solid rgba(255,255,255,0.15); transition: all 0.3s; display: inline-block; }
+    .btn-ghost:hover { color: white; border-color: rgba(255,255,255,0.4); transform: translateY(-2px); }
 
-    /* STRIP */
-    .strip { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: var(--white); padding: 20px 64px; display: flex; align-items: center; overflow: hidden; }
-    .strip-label { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--ink-soft); font-weight: 500; white-space: nowrap; padding-right: 36px; border-right: 1px solid var(--rule); margin-right: 36px; flex-shrink: 0; }
-    .strip-items { display: flex; gap: 36px; align-items: center; flex-wrap: wrap; }
-    .strip-item { font-size: 0.72rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-soft); font-weight: 400; }
+    /* ── HERO CARD (right side) ── */
+    .hero-visual { position: relative; }
+    .hero-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(184,151,90,0.2);
+      backdrop-filter: blur(12px);
+      padding: 0; overflow: hidden;
+      opacity: 0; transform: translateY(32px);
+    }
+    .hc-header { padding: 20px 28px; border-bottom: 1px solid rgba(184,151,90,0.12); display: flex; justify-content: space-between; align-items: center; }
+    .hc-title { font-size: 0.62rem; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.4); font-weight: 500; }
+    .hc-live { display: flex; align-items: center; gap: 6px; font-size: 0.65rem; font-weight: 600; color: #4ade80; }
+    .hc-dot { width: 6px; height: 6px; background: #4ade80; border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.3); } }
+    .hc-body { padding: 28px; }
+    .hc-metric { margin-bottom: 24px; }
+    .hc-metric-label { font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 10px; }
+    .hc-metric-row { display: flex; align-items: center; gap: 12px; }
+    .hc-num { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 600; color: white; width: 56px; flex-shrink: 0; }
+    .hc-bar-track { flex: 1; height: 2px; background: rgba(255,255,255,0.08); }
+    .hc-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold-dark), var(--gold)); width: 0; transition: width 1.4s cubic-bezier(0.25,1,0.5,1); }
+    .hc-delta { font-size: 0.65rem; font-weight: 600; color: #4ade80; width: 40px; text-align: right; }
+    .hc-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 20px 0; }
+    .hc-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.07); }
+    .hc-stat { background: rgba(255,255,255,0.03); padding: 20px; }
+    .hc-stat-n { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 600; color: white; }
+    .hc-stat-l { font-size: 0.6rem; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 4px; }
 
-    /* SECTIONS */
+    /* floating orbs behind card */
+    .hero-orb { position: absolute; border-radius: 50%; pointer-events: none; }
+    .hero-orb-1 { width: 300px; height: 300px; right: -80px; top: -80px; background: radial-gradient(circle, rgba(184,151,90,0.08) 0%, transparent 70%); }
+    .hero-orb-2 { width: 200px; height: 200px; right: 60px; bottom: -60px; background: radial-gradient(circle, rgba(184,151,90,0.06) 0%, transparent 70%); }
+
+    /* ── MARQUEE STRIP ── */
+    .marquee-wrap { position: relative; z-index: 1; border-top: 1px solid rgba(184,151,90,0.12); border-bottom: 1px solid rgba(184,151,90,0.12); background: rgba(255,255,255,0.02); padding: 18px 0; overflow: hidden; }
+    .marquee-track { display: flex; gap: 0; white-space: nowrap; animation: marquee 30s linear infinite; }
+    .marquee-item { display: inline-flex; align-items: center; gap: 24px; padding: 0 40px; font-size: 0.7rem; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.3); font-weight: 500; }
+    .marquee-dot { width: 3px; height: 3px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── LIGHT SECTIONS ── */
+    .section-light { position: relative; z-index: 1; background: var(--off-white); }
+    .section-dark { position: relative; z-index: 1; background: #0e0c0a; }
+    .section-mid { position: relative; z-index: 1; background: #141210; }
     .sw { padding: 110px 64px; }
     .si { max-width: 1160px; margin: 0 auto; }
+
+    /* ── EYEBROW ── */
     .eyebrow { font-size: 0.62rem; letter-spacing: 3.5px; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
     .eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--gold); }
-    h2 { font-family: 'Cormorant Garamond', serif; font-size: 3.2rem; font-weight: 600; color: var(--ink); line-height: 1.12; letter-spacing: -0.3px; margin-bottom: 18px; }
-    .body-text { font-size: 0.9rem; color: var(--ink-soft); line-height: 1.9; max-width: 480px; margin-bottom: 56px; font-weight: 300; }
+    .eyebrow.dark { color: var(--gold); }
 
-    /* PROCESS */
-    .process-bg { background: var(--white); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
-    .process-grid { display: grid; grid-template-columns: repeat(4,1fr); border-left: 1px solid var(--rule); }
-    .process-step { padding: 52px 40px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); cursor: default; }
-    .process-step:hover { background: var(--gold-pale); }
-    .process-num { font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 400; color: var(--parchment); line-height: 1; margin-bottom: 24px; transition: color 0.4s; }
-    .process-step:hover .process-num { color: rgba(184,151,90,0.5); }
-    .process-step h3 { font-size: 0.78rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
-    .process-step p { font-size: 0.84rem; color: var(--ink-soft); line-height: 1.75; font-weight: 300; }
+    /* ── PROCESS ── */
+    .process-grid { display: grid; grid-template-columns: repeat(4,1fr); border-left: 1px solid rgba(184,151,90,0.15); margin-top: 56px; }
+    .process-step { padding: 48px 36px; border-right: 1px solid rgba(184,151,90,0.15); border-bottom: 1px solid rgba(184,151,90,0.15); position: relative; overflow: hidden; cursor: default; }
+    .process-step::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(184,151,90,0.06), transparent); opacity: 0; transition: opacity 0.4s; }
+    .process-step:hover::before { opacity: 1; }
+    .process-num { font-family: 'Cormorant Garamond', serif; font-size: 5rem; font-weight: 400; color: rgba(255,255,255,0.05); line-height: 1; margin-bottom: 24px; transition: color 0.4s; }
+    .process-step:hover .process-num { color: rgba(184,151,90,0.15); }
+    .process-step h3 { font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; color: rgba(255,255,255,0.7); margin-bottom: 12px; }
+    .process-step p { font-size: 0.84rem; color: rgba(255,255,255,0.3); line-height: 1.75; font-weight: 300; }
 
-    /* SERVICES DARK */
-    .services-dark { background: var(--ink); }
-    .services-dark h2 { color: white; }
-    .services-dark .eyebrow { color: var(--gold); }
-    .services-dark .body-text { color: rgba(255,255,255,0.4); }
-    .services-grid { display: grid; grid-template-columns: repeat(3,1fr); border-top: 1px solid rgba(255,255,255,0.08); border-left: 1px solid rgba(255,255,255,0.08); }
-    .service-card { padding: 52px 44px; border-right: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.35s; }
-    .service-card:hover { background: rgba(184,151,90,0.07); }
-    .service-num { font-size: 0.62rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 28px; }
-    .service-rule { width: 32px; height: 1px; background: var(--gold); margin-bottom: 28px; transition: width 0.4s; }
-    .service-card:hover .service-rule { width: 60px; }
-    .service-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; color: white; margin-bottom: 16px; }
-    .service-card p { font-size: 0.84rem; color: rgba(255,255,255,0.4); line-height: 1.8; font-weight: 300; }
-    .service-link { display: inline-flex; align-items: center; gap: 8px; font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); text-decoration: none; margin-top: 28px; font-weight: 500; transition: gap 0.25s; }
-    .service-link:hover { gap: 14px; }
+    /* ── SERVICES ── */
+    h2 { font-family: 'Cormorant Garamond', serif; font-size: 3.2rem; font-weight: 600; line-height: 1.1; letter-spacing: -0.3px; }
+    .h2-light { color: white; }
+    .h2-dark { color: var(--ink); }
+    .body-text { font-size: 0.9rem; line-height: 1.9; max-width: 480px; margin-bottom: 56px; font-weight: 300; }
+    .bt-light { color: rgba(255,255,255,0.4); }
+    .bt-dark { color: var(--ink-soft); }
+    .services-grid { display: grid; grid-template-columns: repeat(3,1fr); border-top: 1px solid rgba(184,151,90,0.12); border-left: 1px solid rgba(184,151,90,0.12); }
+    .svc { padding: 52px 44px; border-right: 1px solid rgba(184,151,90,0.12); border-bottom: 1px solid rgba(184,151,90,0.12); position: relative; overflow: hidden; transition: background 0.4s; }
+    .svc::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px; background: var(--gold); transition: width 0.5s ease; }
+    .svc:hover { background: rgba(184,151,90,0.04); }
+    .svc:hover::after { width: 100%; }
+    .svc-n { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 28px; }
+    .svc-rule { width: 32px; height: 1px; background: var(--gold); margin-bottom: 28px; transition: width 0.4s; }
+    .svc:hover .svc-rule { width: 64px; }
+    .svc h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.65rem; font-weight: 600; color: white; margin-bottom: 16px; }
+    .svc p { font-size: 0.84rem; color: rgba(255,255,255,0.38); line-height: 1.8; font-weight: 300; }
+    .svc-link { display: inline-flex; align-items: center; gap: 8px; font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); text-decoration: none; margin-top: 28px; font-weight: 500; transition: gap 0.25s; }
+    .svc-link:hover { gap: 14px; }
 
-    /* TESTIMONIALS */
-    .t-section { background: var(--parchment); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
-    .t-grid { display: grid; grid-template-columns: repeat(3,1fr); border-left: 1px solid var(--rule); }
-    .t-card { padding: 52px 44px; border-right: 1px solid var(--rule); background: var(--parchment); transition: background 0.3s; }
-    .t-card:hover { background: var(--warm-white); }
-    .t-stars { color: var(--gold); font-size: 0.7rem; letter-spacing: 3px; margin-bottom: 24px; }
-    .t-quote { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 400; font-style: italic; color: var(--ink); line-height: 1.65; margin-bottom: 28px; }
-    .t-rule { width: 28px; height: 1px; background: var(--gold); margin-bottom: 14px; }
-    .t-author { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-soft); font-weight: 500; }
+    /* ── STATS ── */
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); border-left: 1px solid rgba(184,151,90,0.12); }
+    .stat { padding: 56px 44px; border-right: 1px solid rgba(184,151,90,0.12); }
+    .stat-n { font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 600; color: white; line-height: 1; letter-spacing: -1px; }
+    .stat-n sup { font-size: 1.4rem; vertical-align: super; color: var(--gold); }
+    .stat-l { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 8px; }
 
-    /* STATS */
-    .stats-bg { background: var(--white); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
-    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); border-left: 1px solid var(--rule); }
-    .stat-item { padding: 56px 44px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
-    .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 600; color: var(--ink); line-height: 1; letter-spacing: -1px; }
-    .stat-num sup { font-size: 1.4rem; vertical-align: super; color: var(--gold); }
-    .stat-label { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-soft); margin-top: 8px; font-weight: 500; }
+    /* ── TESTIMONIALS ── */
+    .t-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-top: 56px; }
+    .t-card { background: var(--off-white); padding: 52px 44px; transition: background 0.3s; }
+    .t-card:hover { background: var(--gold-pale); }
+    .t-stars { color: var(--gold); font-size: 0.75rem; letter-spacing: 4px; margin-bottom: 24px; }
+    .t-q { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 400; font-style: italic; color: var(--ink); line-height: 1.65; margin-bottom: 28px; }
+    .t-line { width: 28px; height: 1px; background: var(--gold); margin-bottom: 14px; }
+    .t-who { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-soft); font-weight: 500; }
 
-    /* PRICING */
-    .pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); border: 1px solid var(--rule); }
-    .price-card { padding: 48px 40px; border-right: 1px solid var(--rule); position: relative; transition: background 0.3s; }
-    .price-card:last-child { border-right: none; }
-    .price-card:hover { background: var(--warm-white); }
-    .price-card.featured { background: var(--ink); }
-    .price-card.featured:hover { background: var(--ink-mid); }
-    .price-tag { position: absolute; top: 24px; right: 24px; font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold); padding: 3px 10px; font-weight: 500; }
-    .price-tier { font-size: 0.62rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink-soft); font-weight: 500; margin-bottom: 16px; }
-    .price-card.featured .price-tier { color: rgba(255,255,255,0.4); }
-    .price-setup { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 600; color: var(--ink); line-height: 1; }
-    .price-card.featured .price-setup { color: white; }
-    .price-mo { font-size: 0.8rem; color: var(--gold-dark); font-weight: 600; margin-top: 4px; margin-bottom: 4px; }
-    .price-card.featured .price-mo { color: var(--gold); }
-    .price-rule { height: 1px; background: var(--rule); margin: 24px 0; }
-    .price-card.featured .price-rule { background: rgba(255,255,255,0.1); }
-    .price-desc { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.8; margin-bottom: 24px; font-weight: 300; }
-    .price-card.featured .price-desc { color: rgba(255,255,255,0.45); }
-    .price-list { list-style: none; margin-bottom: 36px; }
-    .price-list li { font-size: 0.8rem; color: var(--ink-soft); padding: 9px 0; border-bottom: 1px solid var(--rule); display: flex; gap: 10px; font-weight: 300; }
-    .price-card.featured .price-list li { color: rgba(255,255,255,0.6); border-bottom-color: rgba(255,255,255,0.08); }
-    .price-list li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
-    .pbtn { display: block; text-align: center; padding: 14px; font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; text-decoration: none; transition: background 0.25s, transform 0.2s; }
-    .pbtn:hover { transform: translateY(-2px); }
+    /* ── PRICING ── */
+    .pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); border: 1px solid var(--rule); margin-top: 56px; }
+    .pc { padding: 48px 40px; border-right: 1px solid var(--rule); position: relative; transition: background 0.3s; }
+    .pc:last-child { border-right: none; }
+    .pc:hover { background: var(--gold-pale); }
+    .pc.featured { background: var(--ink); }
+    .pc.featured:hover { background: var(--ink-mid); }
+    .pc-tag { position: absolute; top: 24px; right: 24px; font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold); padding: 3px 10px; font-weight: 500; }
+    .pc-tier { font-size: 0.62rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink-soft); font-weight: 500; margin-bottom: 16px; }
+    .pc.featured .pc-tier { color: rgba(255,255,255,0.4); }
+    .pc-price { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 600; color: var(--ink); line-height: 1; }
+    .pc.featured .pc-price { color: white; }
+    .pc-mo { font-size: 0.8rem; color: var(--gold-dark); font-weight: 600; margin-top: 4px; }
+    .pc.featured .pc-mo { color: var(--gold); }
+    .pc-rule { height: 1px; background: var(--rule); margin: 24px 0; }
+    .pc.featured .pc-rule { background: rgba(255,255,255,0.1); }
+    .pc-desc { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.8; margin-bottom: 24px; font-weight: 300; }
+    .pc.featured .pc-desc { color: rgba(255,255,255,0.45); }
+    .pc-list { list-style: none; margin-bottom: 36px; }
+    .pc-list li { font-size: 0.8rem; color: var(--ink-soft); padding: 9px 0; border-bottom: 1px solid var(--rule); display: flex; gap: 10px; font-weight: 300; }
+    .pc.featured .pc-list li { color: rgba(255,255,255,0.6); border-bottom-color: rgba(255,255,255,0.08); }
+    .pc-list li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
+    .pbtn { display: block; text-align: center; padding: 14px; font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; text-decoration: none; transition: all 0.25s; }
     .pbtn-dark { background: var(--ink); color: var(--off-white); }
     .pbtn-dark:hover { background: var(--ink-mid); }
     .pbtn-gold { background: var(--gold); color: white; }
@@ -185,72 +212,71 @@
     .pbtn-outline { border: 1px solid var(--ink); color: var(--ink); }
     .pbtn-outline:hover { background: var(--ink); color: var(--off-white); }
 
-    /* FAQ */
-    .faq-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 100px; align-items: start; }
-    .faq-list { border-top: 1px solid var(--rule); }
-    .faq-item { border-bottom: 1px solid var(--rule); }
-    .faq-q { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; cursor: pointer; font-size: 0.85rem; font-weight: 500; color: var(--ink); transition: color 0.2s; user-select: none; gap: 16px; }
-    .faq-q:hover { color: var(--gold); }
-    .faq-tog { font-size: 1.2rem; color: var(--gold); transition: transform 0.35s; flex-shrink: 0; }
-    .faq-item.open .faq-tog { transform: rotate(45deg); }
-    .faq-a { font-size: 0.84rem; color: var(--ink-soft); line-height: 1.85; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; font-weight: 300; }
-    .faq-item.open .faq-a { max-height: 300px; padding-bottom: 20px; }
+    /* ── CTA ── */
+    .cta-wrap { position: relative; z-index: 1; background: #0e0c0a; border-top: 1px solid rgba(184,151,90,0.12); }
+    .cta-inner { max-width: 1160px; margin: 0 auto; padding: 130px 64px; text-align: center; }
+    .cta-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(184,151,90,0.06) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+    .cta-inner h2 { color: white; max-width: 560px; margin: 0 auto 18px; position: relative; }
+    .cta-inner p { color: rgba(255,255,255,0.38); font-size: 0.9rem; max-width: 420px; margin: 0 auto 52px; line-height: 1.85; font-weight: 300; position: relative; }
 
-    /* CTA */
-    .cta-section { background: var(--ink); padding: 130px 64px; text-align: center; position: relative; overflow: hidden; }
-    .cta-section::before { content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; border-radius: 50%; border: 1px solid rgba(184,151,90,0.07); }
-    .cta-section::after { content: ''; position: absolute; top: -30px; left: 50%; transform: translateX(-50%); width: 380px; height: 380px; border-radius: 50%; border: 1px solid rgba(184,151,90,0.05); }
-    .cta-section h2 { color: white; max-width: 580px; margin: 0 auto 18px; position: relative; z-index: 1; }
-    .cta-section p { color: rgba(255,255,255,0.4); font-size: 0.9rem; max-width: 420px; margin: 0 auto 52px; line-height: 1.85; font-weight: 300; position: relative; z-index: 1; }
-
-    /* FOOTER */
-    footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.07); padding: 64px; }
-    .fi { max-width: 1160px; margin: 0 auto; }
-    .ft { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 60px; padding-bottom: 52px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    /* ── FOOTER ── */
+    footer { position: relative; z-index: 1; background: #0a0907; border-top: 1px solid rgba(184,151,90,0.1); padding: 64px; }
+    .ft { max-width: 1160px; margin: 0 auto; }
+    .ft-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 60px; padding-bottom: 52px; border-bottom: 1px solid rgba(255,255,255,0.06); }
     .fb-name { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; color: white; margin-bottom: 4px; }
     .fb-tag { font-size: 0.6rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 16px; }
-    .fb-desc { font-size: 0.82rem; color: rgba(255,255,255,0.3); line-height: 1.8; font-weight: 300; }
-    .fc h4 { font-size: 0.6rem; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.3); font-weight: 500; margin-bottom: 18px; }
-    .fc a { display: block; font-size: 0.82rem; color: rgba(255,255,255,0.4); text-decoration: none; margin-bottom: 10px; transition: color 0.2s; font-weight: 300; }
-    .fc a:hover { color: white; }
-    .fb-bot { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; }
-    .fb-copy { font-size: 0.72rem; color: rgba(255,255,255,0.2); }
+    .fb-desc { font-size: 0.82rem; color: rgba(255,255,255,0.25); line-height: 1.8; font-weight: 300; }
+    .fc h4 { font-size: 0.6rem; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.25); font-weight: 500; margin-bottom: 18px; }
+    .fc a { display: block; font-size: 0.82rem; color: rgba(255,255,255,0.35); text-decoration: none; margin-bottom: 10px; transition: color 0.2s; font-weight: 300; }
+    .fc a:hover { color: var(--gold); }
+    .ft-bot { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; }
+    .ft-copy { font-size: 0.72rem; color: rgba(255,255,255,0.18); }
 
-    /* GSAP init states */
-    .gsap-fade { opacity: 0; }
-    .gsap-up { opacity: 0; transform: translateY(32px); }
-    .gsap-left { opacity: 0; transform: translateX(-24px); }
+    /* ── GSAP init ── */
+    .g-up { opacity: 0; transform: translateY(36px); }
+    .g-fade { opacity: 0; }
+
+    /* ── CURSOR ── */
+    .cursor { position: fixed; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform 0.1s, width 0.3s, height 0.3s, opacity 0.3s; mix-blend-mode: screen; }
+    .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(184,151,90,0.5); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: transform 0.12s, width 0.3s, height 0.3s, opacity 0.3s; }
+    .cursor.hovered { width: 16px; height: 16px; }
+    .cursor-ring.hovered { width: 56px; height: 56px; border-color: rgba(184,151,90,0.25); }
 
     @media (max-width: 1024px) {
-      .hero { grid-template-columns: 1fr; }
-      .hero-right { display: none; }
-      .hero-left { min-height: 90vh; padding: 100px 40px 80px; }
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
       .process-grid { grid-template-columns: 1fr 1fr; }
       .services-grid { grid-template-columns: 1fr; }
       .t-grid { grid-template-columns: 1fr; }
-      .pricing-grid { grid-template-columns: 1fr; border: none; }
-      .price-card { border-right: none; border-bottom: 1px solid var(--rule); }
       .stats-grid { grid-template-columns: 1fr 1fr; }
-      .faq-grid { grid-template-columns: 1fr; gap: 48px; }
-      .ft { grid-template-columns: 1fr 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; border: none; }
+      .pc { border-right: none; border-bottom: 1px solid var(--rule); }
+      .ft-top { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 768px) {
       nav { padding: 0 24px; }
       .nav-links a:not(.nav-cta) { display: none; }
-      .hero-left { padding: 100px 24px 60px; }
-      .hero-h1 { font-size: 3.2rem; }
+      .hero { padding: 120px 24px 80px; }
+      .hero-h1 { font-size: 3.4rem; }
       .sw { padding: 72px 24px; }
       h2 { font-size: 2.4rem; }
       .process-grid { grid-template-columns: 1fr; }
       .stats-grid { grid-template-columns: 1fr 1fr; }
       footer { padding: 48px 24px; }
-      .ft { grid-template-columns: 1fr; gap: 32px; }
-      .fb-bot { flex-direction: column; gap: 10px; text-align: center; }
-      .strip { padding: 18px 24px; }
+      .ft-top { grid-template-columns: 1fr; gap: 32px; }
+      .ft-bot { flex-direction: column; gap: 10px; }
+      .cursor, .cursor-ring { display: none; }
     }
   </style>
 </head>
 <body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Animated canvas background -->
+<canvas id="bgCanvas"></canvas>
 
 <nav id="mainNav">
   <a href="index.html" class="nav-logo">
@@ -268,371 +294,422 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-left">
-    <div class="hero-eyebrow" id="heroEyebrow">Websites &amp; AI Receptionists</div>
-    <h1 class="hero-h1" id="heroH1">Your Business,<br/><em>Elevated.</em><br/>Your Leads,<br/>Captured.</h1>
-    <p class="hero-body" id="heroBody">Welden Works builds premium websites and installs AI receptionists for local businesses — so you look world-class online and never miss a customer again.</p>
-    <div class="hero-actions" id="heroActions">
-      <a href="pages/contact.html" class="btn-gold">Request Free Preview</a>
-      <a href="pages/services.html" class="btn-ghost-light">Our Services</a>
-    </div>
-  </div>
-  <div class="hero-right">
-    <div class="hero-card" id="heroCard">
-      <div class="hc-top">
-        <span class="hc-top-label">Business Dashboard</span>
-        <span class="hc-badge"><span class="hc-dot"></span> Live</span>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow" id="heroEyebrow">
+        <span class="hero-eyebrow-line" id="eyebrowLine"></span>
+        Websites &amp; AI Receptionists
       </div>
-      <div class="hc-body">
-        <div class="hc-metric">
-          <div class="hc-metric-label">Monthly Leads Captured</div>
-          <div class="hc-metric-row">
-            <span class="hc-num">47</span>
-            <div class="hc-bar-wrap"><div class="hc-bar" data-width="82%"></div></div>
-            <span class="hc-delta">+34%</span>
-          </div>
+      <h1 class="hero-h1" id="heroH1">
+        <span class="word"><span class="word-inner">Your</span></span>
+        <span class="word"><span class="word-inner"> Business,</span></span><br/>
+        <span class="word"><span class="word-inner"><em>Elevated.</em></span></span><br/>
+        <span class="word"><span class="word-inner">Your Leads,</span></span><br/>
+        <span class="word"><span class="word-inner">Captured.</span></span>
+      </h1>
+      <p class="hero-body" id="heroBody">Welden Works builds premium websites and installs AI receptionists for local businesses — so you look world-class online and never miss a customer again.</p>
+      <div class="hero-actions" id="heroActions">
+        <a href="pages/contact.html" class="btn-gold">Request Free Preview</a>
+        <a href="pages/services.html" class="btn-ghost">Our Services</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-orb hero-orb-1"></div>
+      <div class="hero-orb hero-orb-2"></div>
+      <div class="hero-card" id="heroCard">
+        <div class="hc-header">
+          <span class="hc-title">Business Dashboard</span>
+          <span class="hc-live"><span class="hc-dot"></span>Live</span>
         </div>
-        <div class="hc-metric">
-          <div class="hc-metric-label">Google Visibility Score</div>
-          <div class="hc-metric-row">
-            <span class="hc-num">84</span>
-            <div class="hc-bar-wrap"><div class="hc-bar" data-width="84%"></div></div>
-            <span class="hc-delta">↑ 12</span>
+        <div class="hc-body">
+          <div class="hc-metric">
+            <div class="hc-metric-label">Monthly Leads Captured</div>
+            <div class="hc-metric-row">
+              <span class="hc-num">47</span>
+              <div class="hc-bar-track"><div class="hc-bar-fill" data-w="82%"></div></div>
+              <span class="hc-delta">+34%</span>
+            </div>
           </div>
-        </div>
-        <div class="hc-metric">
-          <div class="hc-metric-label">AI Receptionist Uptime</div>
-          <div class="hc-metric-row">
-            <span class="hc-num">100</span>
-            <div class="hc-bar-wrap"><div class="hc-bar" data-width="100%"></div></div>
-            <span class="hc-delta">24/7</span>
+          <div class="hc-metric">
+            <div class="hc-metric-label">Google Visibility Score</div>
+            <div class="hc-metric-row">
+              <span class="hc-num">84</span>
+              <div class="hc-bar-track"><div class="hc-bar-fill" data-w="84%"></div></div>
+              <span class="hc-delta">↑12</span>
+            </div>
           </div>
-        </div>
-        <div class="hc-divider"></div>
-        <div class="hc-stat-row">
-          <div class="hc-stat"><div class="hc-stat-num">$0</div><div class="hc-stat-label">To preview your site</div></div>
-          <div class="hc-stat"><div class="hc-stat-num">48h</div><div class="hc-stat-label">Average delivery</div></div>
+          <div class="hc-metric">
+            <div class="hc-metric-label">AI Receptionist Uptime</div>
+            <div class="hc-metric-row">
+              <span class="hc-num">100</span>
+              <div class="hc-bar-track"><div class="hc-bar-fill" data-w="100%"></div></div>
+              <span class="hc-delta">24/7</span>
+            </div>
+          </div>
+          <div class="hc-divider"></div>
+          <div class="hc-bottom">
+            <div class="hc-stat"><div class="hc-stat-n">$0</div><div class="hc-stat-l">To preview your site</div></div>
+            <div class="hc-stat"><div class="hc-stat-n">48h</div><div class="hc-stat-l">Average delivery</div></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- STRIP -->
-<div class="strip">
-  <span class="strip-label">Serving</span>
-  <div class="strip-items">
-    <span class="strip-item">Contractors</span>
-    <span class="strip-item">Home Builders</span>
-    <span class="strip-item">Roofers & Plumbers</span>
-    <span class="strip-item">HVAC Companies</span>
-    <span class="strip-item">Medical Offices</span>
-    <span class="strip-item">Service Businesses</span>
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Contractors<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Home Builders<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Roofers<span class="marquee-dot"></span></span>
+    <span class="marquee-item">HVAC Companies<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Plumbers<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Medical Offices<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Landscapers<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Service Businesses<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Contractors<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Home Builders<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Roofers<span class="marquee-dot"></span></span>
+    <span class="marquee-item">HVAC Companies<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Plumbers<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Medical Offices<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Landscapers<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Service Businesses<span class="marquee-dot"></span></span>
   </div>
 </div>
 
-<!-- PROCESS -->
-<div class="process-bg">
+<!-- PROCESS (dark) -->
+<div class="section-mid">
   <div class="sw">
     <div class="si">
-      <div class="eyebrow gsap-fade">The Process</div>
-      <h2 class="gsap-up">From Nothing to Live<br/>in Under a Week</h2>
-      <p class="body-text gsap-up">No lengthy onboarding. No confusing contracts. We handle everything — you say yes, we deliver.</p>
+      <div class="eyebrow g-fade">The Process</div>
+      <h2 class="h2-light g-up">From Nothing to Live<br/>in Under a Week</h2>
+      <p class="body-text bt-light g-up">No lengthy onboarding. No confusing contracts. We handle everything.</p>
       <div class="process-grid">
-        <div class="process-step gsap-up"><div class="process-num">01</div><h3>We Research You</h3><p>We find your business, study what you do, and build a custom site before you've agreed to anything.</p></div>
-        <div class="process-step gsap-up"><div class="process-num">02</div><h3>You See It First</h3><p>We send a live preview link at no cost. You see the finished product before spending a dollar.</p></div>
-        <div class="process-step gsap-up"><div class="process-num">03</div><h3>We Go Live</h3><p>Once approved, we launch on your domain and activate your AI receptionist within 48 hours.</p></div>
-        <div class="process-step gsap-up"><div class="process-num">04</div><h3>You Get Customers</h3><p>Your site attracts leads. Your AI handles every call. You focus on doing the work.</p></div>
+        <div class="process-step g-up"><div class="process-num">01</div><h3>We Research You</h3><p>We find your business, study what you do, and build a custom site before you've agreed to anything.</p></div>
+        <div class="process-step g-up"><div class="process-num">02</div><h3>You See It First</h3><p>We send a live preview link at no cost. See the product before spending a dollar.</p></div>
+        <div class="process-step g-up"><div class="process-num">03</div><h3>We Go Live</h3><p>Once approved, we launch on your domain and activate your AI receptionist within 48 hours.</p></div>
+        <div class="process-step g-up"><div class="process-num">04</div><h3>You Get Customers</h3><p>Your site attracts leads. Your AI handles every call. You focus on doing the work.</p></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SERVICES -->
-<div class="services-dark">
+<!-- SERVICES (dark) -->
+<div class="section-dark" style="border-top:1px solid rgba(184,151,90,0.1);">
   <div class="sw">
     <div class="si">
-      <div class="eyebrow gsap-fade">What We Do</div>
-      <h2 class="gsap-up">Three Services.<br/>One Complete System.</h2>
-      <p class="body-text gsap-up">Everything a local business needs to dominate its market — designed to work together.</p>
+      <div class="eyebrow g-fade">What We Do</div>
+      <h2 class="h2-light g-up">Three Services.<br/>One Complete System.</h2>
+      <p class="body-text bt-light g-up">Everything a local business needs to dominate its market.</p>
       <div class="services-grid">
-        <div class="service-card gsap-up">
-          <div class="service-num">01 — Websites</div>
-          <div class="service-rule"></div>
+        <div class="svc g-up">
+          <div class="svc-n">01 — Websites</div>
+          <div class="svc-rule"></div>
           <h3>Premium Business Website</h3>
-          <p>Custom-built, mobile-first websites that make your business look world-class and convert visitors into paying customers. Not a template — built for you.</p>
-          <a href="pages/services.html" class="service-link">Learn More →</a>
+          <p>Custom-built, mobile-first websites that make your business look world-class and convert visitors into customers.</p>
+          <a href="pages/services.html" class="svc-link">Learn More →</a>
         </div>
-        <div class="service-card gsap-up">
-          <div class="service-num">02 — AI Receptionist</div>
-          <div class="service-rule"></div>
+        <div class="svc g-up">
+          <div class="svc-n">02 — AI Receptionist</div>
+          <div class="svc-rule"></div>
           <h3>24/7 AI Receptionist</h3>
-          <p>Answers every call, qualifies leads, books appointments, and sends follow-ups — around the clock, even when you're on a job site at 2am.</p>
-          <a href="pages/services.html" class="service-link">Learn More →</a>
+          <p>Answers every call, qualifies leads, books appointments, and sends follow-ups — around the clock, every day.</p>
+          <a href="pages/services.html" class="svc-link">Learn More →</a>
         </div>
-        <div class="service-card gsap-up">
-          <div class="service-num">03 — Visibility</div>
-          <div class="service-rule"></div>
+        <div class="svc g-up">
+          <div class="svc-n">03 — Visibility</div>
+          <div class="svc-rule"></div>
           <h3>Local SEO & Google Presence</h3>
-          <p>We optimize your site and Google Business Profile so customers searching for your services find you first — not your competitors.</p>
-          <a href="pages/services.html" class="service-link">Learn More →</a>
+          <p>Optimize your site and Google Business Profile so customers find you first — not your competitors.</p>
+          <a href="pages/services.html" class="svc-link">Learn More →</a>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- TESTIMONIALS -->
-<div class="t-section">
-  <div class="sw">
-    <div class="si">
-      <div class="eyebrow gsap-fade">Client Results</div>
-      <h2 class="gsap-up">What Our Clients Say</h2>
-      <div class="t-grid" style="margin-top:48px;">
-        <div class="t-card gsap-up">
-          <div class="t-stars">★ ★ ★ ★ ★</div>
-          <div class="t-quote">"We went from zero online presence to 12 new quote requests in our first month. The site looks more professional than companies ten times our size."</div>
-          <div class="t-rule"></div>
-          <div class="t-author">Mike T. — Roofing Contractor, Florida</div>
-        </div>
-        <div class="t-card gsap-up">
-          <div class="t-stars">★ ★ ★ ★ ★</div>
-          <div class="t-quote">"I was missing calls every single time I was on a job site. The AI receptionist changed everything — it books appointments better than I could myself."</div>
-          <div class="t-rule"></div>
-          <div class="t-author">Sandra L. — Custom Home Builder, Florida</div>
-        </div>
-        <div class="t-card gsap-up">
-          <div class="t-stars">★ ★ ★ ★ ★</div>
-          <div class="t-quote">"They sent me a full preview before I agreed to a dollar. The quality was so far beyond what I expected that I signed up on the spot."</div>
-          <div class="t-rule"></div>
-          <div class="t-author">Carlos V. — HVAC Company, Florida</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- STATS -->
-<div class="stats-bg">
+<!-- STATS (dark) -->
+<div class="section-mid" style="border-top:1px solid rgba(184,151,90,0.1);border-bottom:1px solid rgba(184,151,90,0.1);">
   <div class="si" style="max-width:1160px;margin:0 auto;">
     <div class="stats-grid">
-      <div class="stat-item gsap-up"><div class="stat-num"><sup>$</sup>0</div><div class="stat-label">Cost to see your preview</div></div>
-      <div class="stat-item gsap-up"><div class="stat-num">48<sup>h</sup></div><div class="stat-label">Average delivery time</div></div>
-      <div class="stat-item gsap-up"><div class="stat-num">24<sup>/7</sup></div><div class="stat-label">AI receptionist uptime</div></div>
-      <div class="stat-item gsap-up"><div class="stat-num">100<sup>%</sup></div><div class="stat-label">Custom — never a template</div></div>
+      <div class="stat g-up"><div class="stat-n"><sup>$</sup>0</div><div class="stat-l">Cost to see your preview</div></div>
+      <div class="stat g-up"><div class="stat-n">48<sup>h</sup></div><div class="stat-l">Average delivery time</div></div>
+      <div class="stat g-up"><div class="stat-n">24<sup>/7</sup></div><div class="stat-l">AI receptionist uptime</div></div>
+      <div class="stat g-up"><div class="stat-n">100<sup>%</sup></div><div class="stat-l">Custom — never a template</div></div>
     </div>
   </div>
 </div>
 
-<!-- PRICING -->
-<div class="sw">
-  <div class="si">
-    <div class="eyebrow gsap-fade">Investment</div>
-    <h2 class="gsap-up">Clear, Honest Pricing</h2>
-    <p class="body-text gsap-up">Setup fee + monthly retainer. Six plans — or <a href="pages/pricing.html" style="color:var(--gold);text-decoration:none;">see the full breakdown →</a></p>
-    <div class="pricing-grid">
-      <div class="price-card gsap-up">
-        <div class="price-tier">Starter Website</div>
-        <div class="price-setup">$497</div>
-        <div class="price-mo">+ $99 / month</div>
-        <div class="price-rule"></div>
-        <div class="price-desc">A clean, professional website that establishes your presence and starts generating leads immediately.</div>
-        <ul class="price-list">
-          <li>Custom 5-page website</li>
-          <li>Mobile-first design</li>
-          <li>Quote & contact forms</li>
-          <li>Google Maps integration</li>
-          <li>SEO foundation</li>
-        </ul>
-        <a href="pages/contact.html" class="pbtn pbtn-dark">Get Started</a>
-      </div>
-      <div class="price-card featured gsap-up">
-        <div class="price-tag">Best Value</div>
-        <div class="price-tier">Growth Package</div>
-        <div class="price-setup" style="color:white;">$1,997</div>
-        <div class="price-mo">+ $399 / month</div>
-        <div class="price-rule"></div>
-        <div class="price-desc" style="color:rgba(255,255,255,0.45);">Starter Website + AI Receptionist. The complete system for businesses serious about growth.</div>
-        <ul class="price-list">
-          <li>Custom 5-page website</li>
-          <li>AI receptionist (24/7)</li>
-          <li>Lead qualification & booking</li>
-          <li>Website chat integration</li>
-          <li>Hosting & maintenance</li>
-        </ul>
-        <a href="pages/contact.html" class="pbtn pbtn-gold">Get Started</a>
-      </div>
-      <div class="price-card gsap-up">
-        <div class="price-tier">Pro Package</div>
-        <div class="price-setup">$2,497</div>
-        <div class="price-mo">+ $499 / month</div>
-        <div class="price-rule"></div>
-        <div class="price-desc">Advanced Website + AI Receptionist + SMS. Full-service dominance for businesses ready to own their market.</div>
-        <ul class="price-list">
-          <li>Advanced 10-page website</li>
-          <li>AI receptionist + SMS</li>
-          <li>Advanced SEO & content</li>
-          <li>Google Ads management</li>
-          <li>Dedicated account manager</li>
-        </ul>
-        <a href="pages/contact.html" class="pbtn pbtn-outline">Get Started</a>
+<!-- TESTIMONIALS (light) -->
+<div class="section-light">
+  <div class="sw">
+    <div class="si">
+      <div class="eyebrow g-fade" style="color:var(--gold-dark);">Client Results</div>
+      <h2 class="h2-dark g-up">What Our Clients Say</h2>
+      <div class="t-grid">
+        <div class="t-card g-up"><div class="t-stars">★ ★ ★ ★ ★</div><div class="t-q">"We went from zero online presence to 12 new quote requests in our first month. The site looks more professional than companies ten times our size."</div><div class="t-line"></div><div class="t-who">Mike T. — Roofing Contractor, FL</div></div>
+        <div class="t-card g-up"><div class="t-stars">★ ★ ★ ★ ★</div><div class="t-q">"I was missing calls every time I was on a job site. The AI receptionist changed everything — it books appointments better than I could myself."</div><div class="t-line"></div><div class="t-who">Sandra L. — Custom Home Builder, FL</div></div>
+        <div class="t-card g-up"><div class="t-stars">★ ★ ★ ★ ★</div><div class="t-q">"They sent me a full preview before I agreed to a dollar. The quality was so far beyond what I expected that I signed up on the spot."</div><div class="t-line"></div><div class="t-who">Carlos V. — HVAC Company, FL</div></div>
       </div>
     </div>
-    <p style="text-align:center;margin-top:24px;font-size:.82rem;color:var(--ink-soft);" class="gsap-fade">View all 6 plans — <a href="pages/pricing.html" style="color:var(--gold);text-decoration:none;">full pricing breakdown →</a></p>
   </div>
 </div>
 
-<!-- FAQ -->
-<div class="sw" style="background:var(--warm-white);border-top:1px solid var(--rule);">
-  <div class="si">
-    <div class="faq-grid">
-      <div>
-        <div class="eyebrow gsap-fade">FAQ</div>
-        <h2 class="gsap-up">Common Questions</h2>
-        <p class="body-text gsap-up">Still unsure? Reach out — no pressure, no sales pitch.</p>
-        <a href="pages/contact.html" class="btn-gold gsap-up" style="display:inline-block;">Talk to Us</a>
-      </div>
-      <div class="faq-list gsap-up">
-        <div class="faq-item open"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Do I need to do anything to get started? <span class="faq-tog">+</span></div><div class="faq-a">Nothing. We research your business, build a complete site preview, and send you a live link — before you commit to anything.</div></div>
-        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What does the AI receptionist do? <span class="faq-tog">+</span></div><div class="faq-a">It answers every inbound call professionally, qualifies leads, books appointments, and sends automated SMS follow-ups — 24 hours a day, including weekends.</div></div>
-        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How quickly can I be live? <span class="faq-tog">+</span></div><div class="faq-a">Most websites go live within 48 hours of approval. The AI receptionist is activated within 1–2 business days after that.</div></div>
-        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Are there long-term contracts? <span class="faq-tog">+</span></div><div class="faq-a">No. Monthly retainers cancel anytime with 30 days notice. We earn your business every month through results.</div></div>
-        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Do I own my website? <span class="faq-tog">+</span></div><div class="faq-a">Yes — completely. Your site, your domain, your files. No lock-in of any kind.</div></div>
+<!-- PRICING (light) -->
+<div class="section-light" style="border-top:1px solid var(--rule);">
+  <div class="sw">
+    <div class="si">
+      <div class="eyebrow g-fade" style="color:var(--gold-dark);">Investment</div>
+      <h2 class="h2-dark g-up">Clear, Honest Pricing</h2>
+      <p class="body-text bt-dark g-up">Setup fee + monthly retainer. <a href="pages/pricing.html" style="color:var(--gold);text-decoration:none;">See all 6 plans →</a></p>
+      <div class="pricing-grid">
+        <div class="pc g-up">
+          <div class="pc-tier">Starter Website</div>
+          <div class="pc-price">$497</div>
+          <div class="pc-mo">+ $99 / month</div>
+          <div class="pc-rule"></div>
+          <div class="pc-desc">A clean, professional website that establishes your presence and starts generating leads.</div>
+          <ul class="pc-list"><li>Custom 5-page website</li><li>Mobile-first design</li><li>Quote & contact forms</li><li>Google Maps integration</li><li>SEO foundation</li></ul>
+          <a href="pages/contact.html" class="pbtn pbtn-dark">Get Started</a>
+        </div>
+        <div class="pc featured g-up">
+          <div class="pc-tag">Best Value</div>
+          <div class="pc-tier">Growth Package</div>
+          <div class="pc-price" style="color:white;">$1,997</div>
+          <div class="pc-mo">+ $399 / month</div>
+          <div class="pc-rule"></div>
+          <div class="pc-desc" style="color:rgba(255,255,255,.45);">Starter Website + AI Receptionist. The complete system for growth.</div>
+          <ul class="pc-list"><li>Custom 5-page website</li><li>AI receptionist (24/7)</li><li>Lead qualification & booking</li><li>Website chat integration</li><li>Hosting & maintenance</li></ul>
+          <a href="pages/contact.html" class="pbtn pbtn-gold">Get Started</a>
+        </div>
+        <div class="pc g-up">
+          <div class="pc-tier">Pro Package</div>
+          <div class="pc-price">$2,497</div>
+          <div class="pc-mo">+ $499 / month</div>
+          <div class="pc-rule"></div>
+          <div class="pc-desc">Advanced Website + AI Receptionist + SMS. Full-service digital dominance.</div>
+          <ul class="pc-list"><li>Advanced 10-page website</li><li>AI receptionist + SMS</li><li>Advanced SEO & content</li><li>Google Ads management</li><li>Dedicated account manager</li></ul>
+          <a href="pages/contact.html" class="pbtn pbtn-outline">Get Started</a>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <!-- CTA -->
-<div class="cta-section">
-  <div class="eyebrow gsap-fade" style="justify-content:center;">Get Started</div>
-  <h2 class="gsap-up">See What Your Business<br/>Could Look Like Online</h2>
-  <p class="gsap-up">We build a custom site preview for your business — completely free, zero obligation.</p>
-  <a href="pages/contact.html" class="btn-gold gsap-up" style="position:relative;z-index:1;">Request Your Free Preview</a>
+<div class="cta-wrap">
+  <div class="cta-glow"></div>
+  <div class="cta-inner">
+    <div class="eyebrow g-fade" style="justify-content:center;">Get Started</div>
+    <h2 class="g-up">See What Your Business<br/>Could Look Like Online</h2>
+    <p class="g-up">We build a custom site preview for your business — completely free, zero obligation.</p>
+    <a href="pages/contact.html" class="btn-gold g-up" style="position:relative;z-index:1;">Request Your Free Preview</a>
+  </div>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <div class="fi">
-    <div class="ft">
+  <div class="ft">
+    <div class="ft-top">
       <div><div class="fb-name">Welden Works</div><div class="fb-tag">Digital Agency</div><div class="fb-desc">Premium websites and AI receptionists for local businesses across Florida and beyond.</div></div>
       <div class="fc"><h4>Services</h4><a href="pages/services.html">Business Websites</a><a href="pages/services.html">AI Receptionist</a><a href="pages/services.html">Local SEO</a></div>
       <div class="fc"><h4>Company</h4><a href="pages/about.html">About Us</a><a href="pages/pricing.html">Pricing</a><a href="pages/contact.html">Contact</a></div>
       <div class="fc"><h4>Get Started</h4><a href="pages/contact.html">Free Preview</a><a href="pages/contact.html">Book a Call</a></div>
     </div>
-    <div class="fb-bot"><span class="fb-copy">© 2026 Welden Works. All rights reserved.</span><span class="fb-copy">Built for local businesses.</span></div>
+    <div class="ft-bot"><span class="ft-copy">© 2026 Welden Works. All rights reserved.</span><span class="ft-copy">Built for local businesses.</span></div>
   </div>
 </footer>
 
 <script>
-  gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 
-  // Nav scroll
-  window.addEventListener('scroll', () => document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 40));
+/* ── CANVAS PARTICLE FIELD ── */
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [], mouse = { x: -999, y: -999 };
 
-  // HERO animations
-  const tl = gsap.timeline({ delay: 0.2 });
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
 
-  // Eyebrow line grows then text fades in
-  tl.to('#heroEyebrow', { opacity: 1, duration: 0.6, ease: 'power2.out' })
-    .from('#heroEyebrow::before', { width: 0, duration: 0.4 }, '-=0.4');
+// Gold color palette for particles
+const COLORS = ['rgba(184,151,90,', 'rgba(154,125,70,', 'rgba(247,241,230,'];
 
-  // H1 lines stagger up
-  tl.from('#heroH1', {
-    y: 40, opacity: 0, duration: 1, ease: 'power3.out'
-  }, '-=0.2');
+class Particle {
+  constructor() { this.reset(true); }
+  reset(init) {
+    this.x = Math.random() * W;
+    this.y = init ? Math.random() * H : H + 10;
+    this.size = Math.random() * 1.5 + 0.3;
+    this.speedY = -(Math.random() * 0.4 + 0.1);
+    this.speedX = (Math.random() - 0.5) * 0.15;
+    this.opacity = Math.random() * 0.5 + 0.1;
+    this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    this.life = 0;
+    this.maxLife = Math.random() * 400 + 200;
+  }
+  update() {
+    // Mouse repulsion
+    const dx = this.x - mouse.x, dy = this.y - mouse.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    if (dist < 120) {
+      const force = (120 - dist) / 120;
+      this.x += (dx/dist) * force * 1.5;
+      this.y += (dy/dist) * force * 1.5;
+    }
+    this.x += this.speedX;
+    this.y += this.speedY;
+    this.life++;
+    const lifeFrac = this.life / this.maxLife;
+    this.currentOpacity = lifeFrac < 0.1 ? lifeFrac * 10 * this.opacity
+      : lifeFrac > 0.8 ? (1 - (lifeFrac - 0.8) / 0.2) * this.opacity
+      : this.opacity;
+    if (this.life > this.maxLife || this.y < -10) this.reset(false);
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = this.color + this.currentOpacity + ')';
+    ctx.fill();
+  }
+}
 
-  // Body + buttons
-  tl.to('#heroBody', { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.4')
-    .to('#heroActions', { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.3');
+for (let i = 0; i < 120; i++) particles.push(new Particle());
 
-  // Hero card slides in
-  tl.to('#heroCard', {
-    opacity: 1, y: 0, duration: 0.9, ease: 'power3.out'
-  }, '-=0.5');
-
-  // Animate bars after card appears
-  tl.call(() => {
-    document.querySelectorAll('.hc-bar').forEach(bar => {
-      bar.style.width = bar.dataset.width;
-    });
-  }, null, '-=0.2');
-
-  // SCROLL animations — batch all .gsap-up and .gsap-fade
-  gsap.utils.toArray('.gsap-up').forEach(el => {
-    gsap.fromTo(el,
-      { opacity: 0, y: 36 },
-      {
-        opacity: 1, y: 0, duration: 0.85, ease: 'power3.out',
-        scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+// Connection lines between nearby particles
+function drawConnections() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 80) {
+        const alpha = (1 - dist/80) * 0.08;
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(184,151,90,${alpha})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
       }
-    );
-  });
+    }
+  }
+}
 
-  gsap.utils.toArray('.gsap-fade').forEach(el => {
-    gsap.fromTo(el,
-      { opacity: 0 },
-      {
-        opacity: 1, duration: 0.7, ease: 'power2.out',
-        scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
-      }
-    );
-  });
+function animate() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(p => { p.update(); p.draw(); });
+  drawConnections();
+  requestAnimationFrame(animate);
+}
+animate();
 
-  // Stagger process steps
-  gsap.utils.toArray('.process-step').forEach((el, i) => {
-    gsap.fromTo(el,
-      { opacity: 0, y: 28 },
-      {
-        opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: i * 0.1,
-        scrollTrigger: { trigger: '.process-grid', start: 'top 80%', toggleActions: 'play none none none' }
-      }
-    );
-  });
+window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
 
-  // Stagger service cards
-  gsap.utils.toArray('.service-card').forEach((el, i) => {
-    gsap.fromTo(el,
-      { opacity: 0, y: 32 },
-      {
-        opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: i * 0.12,
-        scrollTrigger: { trigger: '.services-grid', start: 'top 82%', toggleActions: 'play none none none' }
-      }
-    );
-  });
+/* ── CUSTOM CURSOR ── */
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+let cursorX = 0, cursorY = 0, ringX = 0, ringY = 0;
 
-  // Stagger testimonials
-  gsap.utils.toArray('.t-card').forEach((el, i) => {
-    gsap.fromTo(el,
-      { opacity: 0, y: 24 },
-      {
-        opacity: 1, y: 0, duration: 0.75, ease: 'power2.out', delay: i * 0.15,
-        scrollTrigger: { trigger: '.t-grid', start: 'top 82%', toggleActions: 'play none none none' }
-      }
-    );
-  });
+window.addEventListener('mousemove', e => { cursorX = e.clientX; cursorY = e.clientY; });
 
-  // Stats count up
-  gsap.utils.toArray('.stat-item').forEach((el, i) => {
-    gsap.fromTo(el,
-      { opacity: 0, y: 20 },
-      {
-        opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', delay: i * 0.1,
-        scrollTrigger: { trigger: '.stats-grid', start: 'top 85%', toggleActions: 'play none none none' }
-      }
-    );
-  });
+function animateCursor() {
+  ringX += (cursorX - ringX) * 0.12;
+  ringY += (cursorY - ringY) * 0.12;
+  cursor.style.left = cursorX + 'px';
+  cursor.style.top = cursorY + 'px';
+  cursorRing.style.left = ringX + 'px';
+  cursorRing.style.top = ringY + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
 
-  // Pricing cards stagger
-  gsap.utils.toArray('.price-card').forEach((el, i) => {
-    gsap.fromTo(el,
-      { opacity: 0, y: 28 },
-      {
-        opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: i * 0.15,
-        scrollTrigger: { trigger: '.pricing-grid', start: 'top 82%', toggleActions: 'play none none none' }
-      }
-    );
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.classList.add('hovered'); cursorRing.classList.add('hovered'); });
+  el.addEventListener('mouseleave', () => { cursor.classList.remove('hovered'); cursorRing.classList.remove('hovered'); });
+});
+
+/* ── NAV SCROLL STATE ── */
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').classList.toggle('light', window.scrollY > window.innerHeight * 0.85);
+});
+
+/* ── HERO ANIMATION ── */
+const tl = gsap.timeline({ delay: 0.3 });
+
+tl.to('#heroEyebrow', { opacity: 1, duration: 0.6, ease: 'power2.out' })
+  .to('#eyebrowLine', { width: '28px', duration: 0.5, ease: 'power2.out' }, '-=0.3')
+  .to('.word-inner', { y: '0%', duration: 1, stagger: 0.1, ease: 'power4.out' }, '-=0.2')
+  .to('#heroBody', { opacity: 1, duration: 0.7, ease: 'power2.out' }, '-=0.4')
+  .to('#heroActions', { opacity: 1, duration: 0.6, ease: 'power2.out' }, '-=0.3')
+  .to('#heroCard', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '-=0.5')
+  .call(() => {
+    document.querySelectorAll('.hc-bar-fill').forEach(b => { b.style.width = b.dataset.w; });
+  }, null, '-=0.3');
+
+/* ── SCROLL ANIMATIONS ── */
+gsap.utils.toArray('.g-up').forEach(el => {
+  gsap.fromTo(el, { opacity: 0, y: 36 }, {
+    opacity: 1, y: 0, duration: 0.85, ease: 'power3.out',
+    scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
   });
+});
+gsap.utils.toArray('.g-fade').forEach(el => {
+  gsap.fromTo(el, { opacity: 0 }, {
+    opacity: 1, duration: 0.7, ease: 'power2.out',
+    scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+  });
+});
+
+// Stagger process steps
+gsap.utils.toArray('.process-step').forEach((el, i) => {
+  gsap.fromTo(el, { opacity: 0, y: 28 }, {
+    opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: i * 0.1,
+    scrollTrigger: { trigger: '.process-grid', start: 'top 80%', toggleActions: 'play none none none' }
+  });
+});
+
+// Stagger service cards
+gsap.utils.toArray('.svc').forEach((el, i) => {
+  gsap.fromTo(el, { opacity: 0, y: 32 }, {
+    opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: i * 0.15,
+    scrollTrigger: { trigger: '.services-grid', start: 'top 82%', toggleActions: 'play none none none' }
+  });
+});
+
+// Stagger stats
+gsap.utils.toArray('.stat').forEach((el, i) => {
+  gsap.fromTo(el, { opacity: 0, y: 20 }, {
+    opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', delay: i * 0.1,
+    scrollTrigger: { trigger: '.stats-grid', start: 'top 85%', toggleActions: 'play none none none' }
+  });
+});
+
+// Stagger testimonials
+gsap.utils.toArray('.t-card').forEach((el, i) => {
+  gsap.fromTo(el, { opacity: 0, y: 24 }, {
+    opacity: 1, y: 0, duration: 0.75, ease: 'power2.out', delay: i * 0.15,
+    scrollTrigger: { trigger: '.t-grid', start: 'top 82%', toggleActions: 'play none none none' }
+  });
+});
+
+// Stagger pricing cards
+gsap.utils.toArray('.pc').forEach((el, i) => {
+  gsap.fromTo(el, { opacity: 0, y: 28 }, {
+    opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: i * 0.15,
+    scrollTrigger: { trigger: '.pricing-grid', start: 'top 82%', toggleActions: 'play none none none' }
+  });
+});
+
+// FAQ toggle
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => q.parentElement.classList.toggle('open'));
+});
 </script>
 </body>
 </html>
