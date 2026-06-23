@@ -61,9 +61,18 @@
     .footer-brand{font-family:'Cormorant Garamond',serif;color:white;font-size:1.2rem;font-weight:600;}
     footer p{color:rgba(255,255,255,.2);font-size:.75rem;}
     @media(max-width:768px){nav{padding:0 24px;}.nav-links a:not(.nav-cta){display:none;}.page-header{padding:120px 24px 60px;}.page-header h1{font-size:2.6rem;}.section-wrap{padding:64px 24px;}.svc-block{grid-template-columns:1fr;gap:48px;}.svc-block.flip .svc-visual{order:0;}footer{padding:32px 24px;}.footer-inner{flex-direction:column;gap:12px;text-align:center;}}
+  
+/* CURSOR */
+#cur{position:fixed;top:0;left:0;width:10px;height:10px;background:#b8975a;border-radius:50%;pointer-events:none;z-index:9999;opacity:0;will-change:transform}
+#cur-ring{position:fixed;top:0;left:0;width:36px;height:36px;border:1px solid rgba(184,151,90,.5);border-radius:50%;pointer-events:none;z-index:9998;opacity:0;will-change:transform;transition:width .25s,height .25s}
+body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
+    body{cursor:none}
   </style>
 </head>
 <body>
+<!-- Cursor -->
+<div id="cur"></div>
+<div id="cur-ring"></div>
 <nav>
   <a href="../index.html" class="nav-logo"><span class="nav-logo-main">Welden Works</span><span class="nav-logo-sub">Digital Agency</span></a>
   <div class="nav-links">
@@ -179,6 +188,26 @@
 <script>
   const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target);}}),{threshold:.1,rootMargin:'0px 0px -40px 0px'});
   document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+<script>
+/* CURSOR */
+const cur  = document.getElementById('cur');
+const ring = document.getElementById('cur-ring');
+let cx = -200, cy = -200, rx = -200, ry = -200;
+window.addEventListener('mousemove', e => {
+  cx = e.clientX; cy = e.clientY;
+  document.body.classList.add('has-cursor');
+}, { passive: true });
+(function loop() {
+  rx += (cx - rx) * 0.12; ry += (cy - ry) * 0.12;
+  cur.style.transform  = `translate(${cx - 5}px, ${cy - 5}px)`;
+  ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a, button, .faq-q, .nav-cta').forEach(el => {
+  el.addEventListener('mouseenter', () => { cur.style.width='16px'; cur.style.height='16px'; ring.style.width='54px'; ring.style.height='54px'; });
+  el.addEventListener('mouseleave', () => { cur.style.width='10px'; cur.style.height='10px'; ring.style.width='36px'; ring.style.height='36px'; });
+});
 </script>
 </body>
 </html>
