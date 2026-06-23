@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welden Works — Websites & AI Receptionists for Local Businesses</title>
+  <meta name="description" content="Welden Works builds premium websites and AI receptionists for local businesses. Never miss a lead again.">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/SplitText.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --off-white: #faf9f7;
+      --warm-white: #f5f3ef;
+      --parchment: #ede8df;
+      --ink: #1a1714;
+      --ink-mid: #3d3830;
+      --ink-soft: #6b6459;
+      --gold: #b8975a;
+      --gold-dark: #9a7d46;
+      --gold-pale: #f7f1e6;
+      --rule: #ddd8cf;
+      --white: #ffffff;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; color: var(--ink); background: var(--off-white); overflow-x: hidden; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: 76px; display: flex; justify-content: space-between; align-items: center;
+      padding: 0 64px;
+      background: rgba(250,249,247,0.96); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--rule);
+      transition: box-shadow 0.4s;
+    }
+    nav.scrolled { box-shadow: 0 2px 32px rgba(26,23,20,0.08); }
+    .nav-logo { text-decoration: none; display: flex; flex-direction: column; line-height: 1; }
+    .nav-logo-main { font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 600; color: var(--ink); letter-spacing: 0.5px; }
+    .nav-logo-sub { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-top: 2px; }
+    .nav-links { display: flex; align-items: center; }
+    .nav-links a { color: var(--ink-soft); text-decoration: none; font-size: 0.78rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500; padding: 10px 18px; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta { margin-left: 16px; border: 1px solid var(--ink); color: var(--ink) !important; padding: 10px 24px !important; transition: background 0.25s, color 0.25s !important; }
+    .nav-cta:hover { background: var(--ink) !important; color: var(--off-white) !important; }
+
+    /* HERO */
+    .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 76px; }
+    .hero-left {
+      background: var(--ink); padding: 100px 80px 80px 64px;
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .hero-left::after {
+      content: ''; position: absolute; bottom: -60px; right: -60px;
+      width: 300px; height: 300px; border-radius: 50%;
+      border: 1px solid rgba(184,151,90,0.1); pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-size: 0.65rem; letter-spacing: 3.5px; text-transform: uppercase;
+      color: var(--gold); font-weight: 500; margin-bottom: 32px;
+      display: flex; align-items: center; gap: 12px; opacity: 0;
+    }
+    .hero-eyebrow::before { content: ''; width: 0; height: 1px; background: var(--gold); transition: width 0.6s; }
+    .hero-h1 {
+      font-family: 'Cormorant Garamond', serif; font-size: 5rem; font-weight: 600;
+      color: var(--white); line-height: 1.05; letter-spacing: -0.5px; margin-bottom: 32px;
+      overflow: hidden;
+    }
+    .hero-h1 em { font-style: italic; color: var(--gold); }
+    .hero-body { font-size: 0.92rem; color: rgba(255,255,255,0.45); line-height: 1.9; max-width: 380px; margin-bottom: 52px; font-weight: 300; opacity: 0; }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; opacity: 0; }
+    .btn-gold { background: var(--gold); color: var(--white); padding: 16px 36px; font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; text-decoration: none; transition: background 0.25s, transform 0.25s; display: inline-block; }
+    .btn-gold:hover { background: var(--gold-dark); transform: translateY(-2px); }
+    .btn-ghost-light { background: transparent; color: rgba(255,255,255,0.6); padding: 16px 36px; font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); transition: color 0.25s, border-color 0.25s, transform 0.25s; }
+    .btn-ghost-light:hover { color: white; border-color: rgba(255,255,255,0.5); transform: translateY(-2px); }
+    .hero-right { background: var(--warm-white); display: flex; align-items: center; justify-content: center; border-left: 1px solid var(--rule); }
+    .hero-card { width: 100%; max-width: 380px; margin: 40px; background: var(--white); border: 1px solid var(--rule); box-shadow: 0 20px 60px rgba(26,23,20,0.08); opacity: 0; transform: translateY(24px); }
+    .hc-top { padding: 24px 28px; border-bottom: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; }
+    .hc-top-label { font-size: 0.62rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink-soft); font-weight: 500; }
+    .hc-badge { font-size: 0.65rem; font-weight: 600; color: #15803d; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 3px 10px; display: flex; align-items: center; gap: 5px; }
+    .hc-dot { width: 5px; height: 5px; background: #22c55e; border-radius: 50%; }
+    .hc-body { padding: 24px 28px; }
+    .hc-metric { margin-bottom: 22px; }
+    .hc-metric-label { font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-soft); font-weight: 500; margin-bottom: 8px; }
+    .hc-metric-row { display: flex; align-items: center; gap: 10px; }
+    .hc-num { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 600; color: var(--ink); line-height: 1; width: 52px; flex-shrink: 0; }
+    .hc-bar-wrap { flex: 1; height: 2px; background: var(--parchment); }
+    .hc-bar { height: 100%; background: var(--gold); width: 0; transition: width 1.2s ease; }
+    .hc-delta { font-size: 0.65rem; font-weight: 600; color: #15803d; width: 36px; text-align: right; }
+    .hc-divider { height: 1px; background: var(--rule); margin: 20px 0; }
+    .hc-stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); }
+    .hc-stat { background: var(--white); padding: 18px; }
+    .hc-stat-num { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 600; color: var(--ink); }
+    .hc-stat-label { font-size: 0.6rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-soft); margin-top: 4px; }
+
+    /* STRIP */
+    .strip { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: var(--white); padding: 20px 64px; display: flex; align-items: center; overflow: hidden; }
+    .strip-label { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--ink-soft); font-weight: 500; white-space: nowrap; padding-right: 36px; border-right: 1px solid var(--rule); margin-right: 36px; flex-shrink: 0; }
+    .strip-items { display: flex; gap: 36px; align-items: center; flex-wrap: wrap; }
+    .strip-item { font-size: 0.72rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-soft); font-weight: 400; }
+
+    /* SECTIONS */
+    .sw { padding: 110px 64px; }
+    .si { max-width: 1160px; margin: 0 auto; }
+    .eyebrow { font-size: 0.62rem; letter-spacing: 3.5px; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+    .eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--gold); }
+    h2 { font-family: 'Cormorant Garamond', serif; font-size: 3.2rem; font-weight: 600; color: var(--ink); line-height: 1.12; letter-spacing: -0.3px; margin-bottom: 18px; }
+    .body-text { font-size: 0.9rem; color: var(--ink-soft); line-height: 1.9; max-width: 480px; margin-bottom: 56px; font-weight: 300; }
+
+    /* PROCESS */
+    .process-bg { background: var(--white); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+    .process-grid { display: grid; grid-template-columns: repeat(4,1fr); border-left: 1px solid var(--rule); }
+    .process-step { padding: 52px 40px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); cursor: default; }
+    .process-step:hover { background: var(--gold-pale); }
+    .process-num { font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 400; color: var(--parchment); line-height: 1; margin-bottom: 24px; transition: color 0.4s; }
+    .process-step:hover .process-num { color: rgba(184,151,90,0.5); }
+    .process-step h3 { font-size: 0.78rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
+    .process-step p { font-size: 0.84rem; color: var(--ink-soft); line-height: 1.75; font-weight: 300; }
+
+    /* SERVICES DARK */
+    .services-dark { background: var(--ink); }
+    .services-dark h2 { color: white; }
+    .services-dark .eyebrow { color: var(--gold); }
+    .services-dark .body-text { color: rgba(255,255,255,0.4); }
+    .services-grid { display: grid; grid-template-columns: repeat(3,1fr); border-top: 1px solid rgba(255,255,255,0.08); border-left: 1px solid rgba(255,255,255,0.08); }
+    .service-card { padding: 52px 44px; border-right: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.35s; }
+    .service-card:hover { background: rgba(184,151,90,0.07); }
+    .service-num { font-size: 0.62rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 28px; }
+    .service-rule { width: 32px; height: 1px; background: var(--gold); margin-bottom: 28px; transition: width 0.4s; }
+    .service-card:hover .service-rule { width: 60px; }
+    .service-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; color: white; margin-bottom: 16px; }
+    .service-card p { font-size: 0.84rem; color: rgba(255,255,255,0.4); line-height: 1.8; font-weight: 300; }
+    .service-link { display: inline-flex; align-items: center; gap: 8px; font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); text-decoration: none; margin-top: 28px; font-weight: 500; transition: gap 0.25s; }
+    .service-link:hover { gap: 14px; }
+
+    /* TESTIMONIALS */
+    .t-section { background: var(--parchment); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+    .t-grid { display: grid; grid-template-columns: repeat(3,1fr); border-left: 1px solid var(--rule); }
+    .t-card { padding: 52px 44px; border-right: 1px solid var(--rule); background: var(--parchment); transition: background 0.3s; }
+    .t-card:hover { background: var(--warm-white); }
+    .t-stars { color: var(--gold); font-size: 0.7rem; letter-spacing: 3px; margin-bottom: 24px; }
+    .t-quote { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 400; font-style: italic; color: var(--ink); line-height: 1.65; margin-bottom: 28px; }
+    .t-rule { width: 28px; height: 1px; background: var(--gold); margin-bottom: 14px; }
+    .t-author { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-soft); font-weight: 500; }
+
+    /* STATS */
+    .stats-bg { background: var(--white); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); border-left: 1px solid var(--rule); }
+    .stat-item { padding: 56px 44px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+    .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 600; color: var(--ink); line-height: 1; letter-spacing: -1px; }
+    .stat-num sup { font-size: 1.4rem; vertical-align: super; color: var(--gold); }
+    .stat-label { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-soft); margin-top: 8px; font-weight: 500; }
+
+    /* PRICING */
+    .pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); border: 1px solid var(--rule); }
+    .price-card { padding: 48px 40px; border-right: 1px solid var(--rule); position: relative; transition: background 0.3s; }
+    .price-card:last-child { border-right: none; }
+    .price-card:hover { background: var(--warm-white); }
+    .price-card.featured { background: var(--ink); }
+    .price-card.featured:hover { background: var(--ink-mid); }
+    .price-tag { position: absolute; top: 24px; right: 24px; font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold); padding: 3px 10px; font-weight: 500; }
+    .price-tier { font-size: 0.62rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink-soft); font-weight: 500; margin-bottom: 16px; }
+    .price-card.featured .price-tier { color: rgba(255,255,255,0.4); }
+    .price-setup { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 600; color: var(--ink); line-height: 1; }
+    .price-card.featured .price-setup { color: white; }
+    .price-mo { font-size: 0.8rem; color: var(--gold-dark); font-weight: 600; margin-top: 4px; margin-bottom: 4px; }
+    .price-card.featured .price-mo { color: var(--gold); }
+    .price-rule { height: 1px; background: var(--rule); margin: 24px 0; }
+    .price-card.featured .price-rule { background: rgba(255,255,255,0.1); }
+    .price-desc { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.8; margin-bottom: 24px; font-weight: 300; }
+    .price-card.featured .price-desc { color: rgba(255,255,255,0.45); }
+    .price-list { list-style: none; margin-bottom: 36px; }
+    .price-list li { font-size: 0.8rem; color: var(--ink-soft); padding: 9px 0; border-bottom: 1px solid var(--rule); display: flex; gap: 10px; font-weight: 300; }
+    .price-card.featured .price-list li { color: rgba(255,255,255,0.6); border-bottom-color: rgba(255,255,255,0.08); }
+    .price-list li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
+    .pbtn { display: block; text-align: center; padding: 14px; font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; text-decoration: none; transition: background 0.25s, transform 0.2s; }
+    .pbtn:hover { transform: translateY(-2px); }
+    .pbtn-dark { background: var(--ink); color: var(--off-white); }
+    .pbtn-dark:hover { background: var(--ink-mid); }
+    .pbtn-gold { background: var(--gold); color: white; }
+    .pbtn-gold:hover { background: var(--gold-dark); }
+    .pbtn-outline { border: 1px solid var(--ink); color: var(--ink); }
+    .pbtn-outline:hover { background: var(--ink); color: var(--off-white); }
+
+    /* FAQ */
+    .faq-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 100px; align-items: start; }
+    .faq-list { border-top: 1px solid var(--rule); }
+    .faq-item { border-bottom: 1px solid var(--rule); }
+    .faq-q { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; cursor: pointer; font-size: 0.85rem; font-weight: 500; color: var(--ink); transition: color 0.2s; user-select: none; gap: 16px; }
+    .faq-q:hover { color: var(--gold); }
+    .faq-tog { font-size: 1.2rem; color: var(--gold); transition: transform 0.35s; flex-shrink: 0; }
+    .faq-item.open .faq-tog { transform: rotate(45deg); }
+    .faq-a { font-size: 0.84rem; color: var(--ink-soft); line-height: 1.85; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; font-weight: 300; }
+    .faq-item.open .faq-a { max-height: 300px; padding-bottom: 20px; }
+
+    /* CTA */
+    .cta-section { background: var(--ink); padding: 130px 64px; text-align: center; position: relative; overflow: hidden; }
+    .cta-section::before { content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; border-radius: 50%; border: 1px solid rgba(184,151,90,0.07); }
+    .cta-section::after { content: ''; position: absolute; top: -30px; left: 50%; transform: translateX(-50%); width: 380px; height: 380px; border-radius: 50%; border: 1px solid rgba(184,151,90,0.05); }
+    .cta-section h2 { color: white; max-width: 580px; margin: 0 auto 18px; position: relative; z-index: 1; }
+    .cta-section p { color: rgba(255,255,255,0.4); font-size: 0.9rem; max-width: 420px; margin: 0 auto 52px; line-height: 1.85; font-weight: 300; position: relative; z-index: 1; }
+
+    /* FOOTER */
+    footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.07); padding: 64px; }
+    .fi { max-width: 1160px; margin: 0 auto; }
+    .ft { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 60px; padding-bottom: 52px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .fb-name { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; color: white; margin-bottom: 4px; }
+    .fb-tag { font-size: 0.6rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 16px; }
+    .fb-desc { font-size: 0.82rem; color: rgba(255,255,255,0.3); line-height: 1.8; font-weight: 300; }
+    .fc h4 { font-size: 0.6rem; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.3); font-weight: 500; margin-bottom: 18px; }
+    .fc a { display: block; font-size: 0.82rem; color: rgba(255,255,255,0.4); text-decoration: none; margin-bottom: 10px; transition: color 0.2s; font-weight: 300; }
+    .fc a:hover { color: white; }
+    .fb-bot { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; }
+    .fb-copy { font-size: 0.72rem; color: rgba(255,255,255,0.2); }
+
+    /* GSAP init states */
+    .gsap-fade { opacity: 0; }
+    .gsap-up { opacity: 0; transform: translateY(32px); }
+    .gsap-left { opacity: 0; transform: translateX(-24px); }
+
+    @media (max-width: 1024px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-left { min-height: 90vh; padding: 100px 40px 80px; }
+      .process-grid { grid-template-columns: 1fr 1fr; }
+      .services-grid { grid-template-columns: 1fr; }
+      .t-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; border: none; }
+      .price-card { border-right: none; border-bottom: 1px solid var(--rule); }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .faq-grid { grid-template-columns: 1fr; gap: 48px; }
+      .ft { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0 24px; }
+      .nav-links a:not(.nav-cta) { display: none; }
+      .hero-left { padding: 100px 24px 60px; }
+      .hero-h1 { font-size: 3.2rem; }
+      .sw { padding: 72px 24px; }
+      h2 { font-size: 2.4rem; }
+      .process-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      footer { padding: 48px 24px; }
+      .ft { grid-template-columns: 1fr; gap: 32px; }
+      .fb-bot { flex-direction: column; gap: 10px; text-align: center; }
+      .strip { padding: 18px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav id="mainNav">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-main">Welden Works</span>
+    <span class="nav-logo-sub">Digital Agency</span>
+  </a>
+  <div class="nav-links">
+    <a href="pages/services.html">Services</a>
+    <a href="pages/pricing.html">Pricing</a>
+    <a href="pages/about.html">About</a>
+    <a href="pages/contact.html">Contact</a>
+    <a href="pages/contact.html" class="nav-cta">Get Started</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow" id="heroEyebrow">Websites &amp; AI Receptionists</div>
+    <h1 class="hero-h1" id="heroH1">Your Business,<br/><em>Elevated.</em><br/>Your Leads,<br/>Captured.</h1>
+    <p class="hero-body" id="heroBody">Welden Works builds premium websites and installs AI receptionists for local businesses — so you look world-class online and never miss a customer again.</p>
+    <div class="hero-actions" id="heroActions">
+      <a href="pages/contact.html" class="btn-gold">Request Free Preview</a>
+      <a href="pages/services.html" class="btn-ghost-light">Our Services</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-card" id="heroCard">
+      <div class="hc-top">
+        <span class="hc-top-label">Business Dashboard</span>
+        <span class="hc-badge"><span class="hc-dot"></span> Live</span>
+      </div>
+      <div class="hc-body">
+        <div class="hc-metric">
+          <div class="hc-metric-label">Monthly Leads Captured</div>
+          <div class="hc-metric-row">
+            <span class="hc-num">47</span>
+            <div class="hc-bar-wrap"><div class="hc-bar" data-width="82%"></div></div>
+            <span class="hc-delta">+34%</span>
+          </div>
+        </div>
+        <div class="hc-metric">
+          <div class="hc-metric-label">Google Visibility Score</div>
+          <div class="hc-metric-row">
+            <span class="hc-num">84</span>
+            <div class="hc-bar-wrap"><div class="hc-bar" data-width="84%"></div></div>
+            <span class="hc-delta">↑ 12</span>
+          </div>
+        </div>
+        <div class="hc-metric">
+          <div class="hc-metric-label">AI Receptionist Uptime</div>
+          <div class="hc-metric-row">
+            <span class="hc-num">100</span>
+            <div class="hc-bar-wrap"><div class="hc-bar" data-width="100%"></div></div>
+            <span class="hc-delta">24/7</span>
+          </div>
+        </div>
+        <div class="hc-divider"></div>
+        <div class="hc-stat-row">
+          <div class="hc-stat"><div class="hc-stat-num">$0</div><div class="hc-stat-label">To preview your site</div></div>
+          <div class="hc-stat"><div class="hc-stat-num">48h</div><div class="hc-stat-label">Average delivery</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="strip">
+  <span class="strip-label">Serving</span>
+  <div class="strip-items">
+    <span class="strip-item">Contractors</span>
+    <span class="strip-item">Home Builders</span>
+    <span class="strip-item">Roofers & Plumbers</span>
+    <span class="strip-item">HVAC Companies</span>
+    <span class="strip-item">Medical Offices</span>
+    <span class="strip-item">Service Businesses</span>
+  </div>
+</div>
+
+<!-- PROCESS -->
+<div class="process-bg">
+  <div class="sw">
+    <div class="si">
+      <div class="eyebrow gsap-fade">The Process</div>
+      <h2 class="gsap-up">From Nothing to Live<br/>in Under a Week</h2>
+      <p class="body-text gsap-up">No lengthy onboarding. No confusing contracts. We handle everything — you say yes, we deliver.</p>
+      <div class="process-grid">
+        <div class="process-step gsap-up"><div class="process-num">01</div><h3>We Research You</h3><p>We find your business, study what you do, and build a custom site before you've agreed to anything.</p></div>
+        <div class="process-step gsap-up"><div class="process-num">02</div><h3>You See It First</h3><p>We send a live preview link at no cost. You see the finished product before spending a dollar.</p></div>
+        <div class="process-step gsap-up"><div class="process-num">03</div><h3>We Go Live</h3><p>Once approved, we launch on your domain and activate your AI receptionist within 48 hours.</p></div>
+        <div class="process-step gsap-up"><div class="process-num">04</div><h3>You Get Customers</h3><p>Your site attracts leads. Your AI handles every call. You focus on doing the work.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<div class="services-dark">
+  <div class="sw">
+    <div class="si">
+      <div class="eyebrow gsap-fade">What We Do</div>
+      <h2 class="gsap-up">Three Services.<br/>One Complete System.</h2>
+      <p class="body-text gsap-up">Everything a local business needs to dominate its market — designed to work together.</p>
+      <div class="services-grid">
+        <div class="service-card gsap-up">
+          <div class="service-num">01 — Websites</div>
+          <div class="service-rule"></div>
+          <h3>Premium Business Website</h3>
+          <p>Custom-built, mobile-first websites that make your business look world-class and convert visitors into paying customers. Not a template — built for you.</p>
+          <a href="pages/services.html" class="service-link">Learn More →</a>
+        </div>
+        <div class="service-card gsap-up">
+          <div class="service-num">02 — AI Receptionist</div>
+          <div class="service-rule"></div>
+          <h3>24/7 AI Receptionist</h3>
+          <p>Answers every call, qualifies leads, books appointments, and sends follow-ups — around the clock, even when you're on a job site at 2am.</p>
+          <a href="pages/services.html" class="service-link">Learn More →</a>
+        </div>
+        <div class="service-card gsap-up">
+          <div class="service-num">03 — Visibility</div>
+          <div class="service-rule"></div>
+          <h3>Local SEO & Google Presence</h3>
+          <p>We optimize your site and Google Business Profile so customers searching for your services find you first — not your competitors.</p>
+          <a href="pages/services.html" class="service-link">Learn More →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="t-section">
+  <div class="sw">
+    <div class="si">
+      <div class="eyebrow gsap-fade">Client Results</div>
+      <h2 class="gsap-up">What Our Clients Say</h2>
+      <div class="t-grid" style="margin-top:48px;">
+        <div class="t-card gsap-up">
+          <div class="t-stars">★ ★ ★ ★ ★</div>
+          <div class="t-quote">"We went from zero online presence to 12 new quote requests in our first month. The site looks more professional than companies ten times our size."</div>
+          <div class="t-rule"></div>
+          <div class="t-author">Mike T. — Roofing Contractor, Florida</div>
+        </div>
+        <div class="t-card gsap-up">
+          <div class="t-stars">★ ★ ★ ★ ★</div>
+          <div class="t-quote">"I was missing calls every single time I was on a job site. The AI receptionist changed everything — it books appointments better than I could myself."</div>
+          <div class="t-rule"></div>
+          <div class="t-author">Sandra L. — Custom Home Builder, Florida</div>
+        </div>
+        <div class="t-card gsap-up">
+          <div class="t-stars">★ ★ ★ ★ ★</div>
+          <div class="t-quote">"They sent me a full preview before I agreed to a dollar. The quality was so far beyond what I expected that I signed up on the spot."</div>
+          <div class="t-rule"></div>
+          <div class="t-author">Carlos V. — HVAC Company, Florida</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bg">
+  <div class="si" style="max-width:1160px;margin:0 auto;">
+    <div class="stats-grid">
+      <div class="stat-item gsap-up"><div class="stat-num"><sup>$</sup>0</div><div class="stat-label">Cost to see your preview</div></div>
+      <div class="stat-item gsap-up"><div class="stat-num">48<sup>h</sup></div><div class="stat-label">Average delivery time</div></div>
+      <div class="stat-item gsap-up"><div class="stat-num">24<sup>/7</sup></div><div class="stat-label">AI receptionist uptime</div></div>
+      <div class="stat-item gsap-up"><div class="stat-num">100<sup>%</sup></div><div class="stat-label">Custom — never a template</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="sw">
+  <div class="si">
+    <div class="eyebrow gsap-fade">Investment</div>
+    <h2 class="gsap-up">Clear, Honest Pricing</h2>
+    <p class="body-text gsap-up">Setup fee + monthly retainer. Six plans — or <a href="pages/pricing.html" style="color:var(--gold);text-decoration:none;">see the full breakdown →</a></p>
+    <div class="pricing-grid">
+      <div class="price-card gsap-up">
+        <div class="price-tier">Starter Website</div>
+        <div class="price-setup">$497</div>
+        <div class="price-mo">+ $99 / month</div>
+        <div class="price-rule"></div>
+        <div class="price-desc">A clean, professional website that establishes your presence and starts generating leads immediately.</div>
+        <ul class="price-list">
+          <li>Custom 5-page website</li>
+          <li>Mobile-first design</li>
+          <li>Quote & contact forms</li>
+          <li>Google Maps integration</li>
+          <li>SEO foundation</li>
+        </ul>
+        <a href="pages/contact.html" class="pbtn pbtn-dark">Get Started</a>
+      </div>
+      <div class="price-card featured gsap-up">
+        <div class="price-tag">Best Value</div>
+        <div class="price-tier">Growth Package</div>
+        <div class="price-setup" style="color:white;">$1,997</div>
+        <div class="price-mo">+ $399 / month</div>
+        <div class="price-rule"></div>
+        <div class="price-desc" style="color:rgba(255,255,255,0.45);">Starter Website + AI Receptionist. The complete system for businesses serious about growth.</div>
+        <ul class="price-list">
+          <li>Custom 5-page website</li>
+          <li>AI receptionist (24/7)</li>
+          <li>Lead qualification & booking</li>
+          <li>Website chat integration</li>
+          <li>Hosting & maintenance</li>
+        </ul>
+        <a href="pages/contact.html" class="pbtn pbtn-gold">Get Started</a>
+      </div>
+      <div class="price-card gsap-up">
+        <div class="price-tier">Pro Package</div>
+        <div class="price-setup">$2,497</div>
+        <div class="price-mo">+ $499 / month</div>
+        <div class="price-rule"></div>
+        <div class="price-desc">Advanced Website + AI Receptionist + SMS. Full-service dominance for businesses ready to own their market.</div>
+        <ul class="price-list">
+          <li>Advanced 10-page website</li>
+          <li>AI receptionist + SMS</li>
+          <li>Advanced SEO & content</li>
+          <li>Google Ads management</li>
+          <li>Dedicated account manager</li>
+        </ul>
+        <a href="pages/contact.html" class="pbtn pbtn-outline">Get Started</a>
+      </div>
+    </div>
+    <p style="text-align:center;margin-top:24px;font-size:.82rem;color:var(--ink-soft);" class="gsap-fade">View all 6 plans — <a href="pages/pricing.html" style="color:var(--gold);text-decoration:none;">full pricing breakdown →</a></p>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="sw" style="background:var(--warm-white);border-top:1px solid var(--rule);">
+  <div class="si">
+    <div class="faq-grid">
+      <div>
+        <div class="eyebrow gsap-fade">FAQ</div>
+        <h2 class="gsap-up">Common Questions</h2>
+        <p class="body-text gsap-up">Still unsure? Reach out — no pressure, no sales pitch.</p>
+        <a href="pages/contact.html" class="btn-gold gsap-up" style="display:inline-block;">Talk to Us</a>
+      </div>
+      <div class="faq-list gsap-up">
+        <div class="faq-item open"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Do I need to do anything to get started? <span class="faq-tog">+</span></div><div class="faq-a">Nothing. We research your business, build a complete site preview, and send you a live link — before you commit to anything.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What does the AI receptionist do? <span class="faq-tog">+</span></div><div class="faq-a">It answers every inbound call professionally, qualifies leads, books appointments, and sends automated SMS follow-ups — 24 hours a day, including weekends.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How quickly can I be live? <span class="faq-tog">+</span></div><div class="faq-a">Most websites go live within 48 hours of approval. The AI receptionist is activated within 1–2 business days after that.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Are there long-term contracts? <span class="faq-tog">+</span></div><div class="faq-a">No. Monthly retainers cancel anytime with 30 days notice. We earn your business every month through results.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Do I own my website? <span class="faq-tog">+</span></div><div class="faq-a">Yes — completely. Your site, your domain, your files. No lock-in of any kind.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="eyebrow gsap-fade" style="justify-content:center;">Get Started</div>
+  <h2 class="gsap-up">See What Your Business<br/>Could Look Like Online</h2>
+  <p class="gsap-up">We build a custom site preview for your business — completely free, zero obligation.</p>
+  <a href="pages/contact.html" class="btn-gold gsap-up" style="position:relative;z-index:1;">Request Your Free Preview</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fi">
+    <div class="ft">
+      <div><div class="fb-name">Welden Works</div><div class="fb-tag">Digital Agency</div><div class="fb-desc">Premium websites and AI receptionists for local businesses across Florida and beyond.</div></div>
+      <div class="fc"><h4>Services</h4><a href="pages/services.html">Business Websites</a><a href="pages/services.html">AI Receptionist</a><a href="pages/services.html">Local SEO</a></div>
+      <div class="fc"><h4>Company</h4><a href="pages/about.html">About Us</a><a href="pages/pricing.html">Pricing</a><a href="pages/contact.html">Contact</a></div>
+      <div class="fc"><h4>Get Started</h4><a href="pages/contact.html">Free Preview</a><a href="pages/contact.html">Book a Call</a></div>
+    </div>
+    <div class="fb-bot"><span class="fb-copy">© 2026 Welden Works. All rights reserved.</span><span class="fb-copy">Built for local businesses.</span></div>
+  </div>
+</footer>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Nav scroll
+  window.addEventListener('scroll', () => document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 40));
+
+  // HERO animations
+  const tl = gsap.timeline({ delay: 0.2 });
+
+  // Eyebrow line grows then text fades in
+  tl.to('#heroEyebrow', { opacity: 1, duration: 0.6, ease: 'power2.out' })
+    .from('#heroEyebrow::before', { width: 0, duration: 0.4 }, '-=0.4');
+
+  // H1 lines stagger up
+  tl.from('#heroH1', {
+    y: 40, opacity: 0, duration: 1, ease: 'power3.out'
+  }, '-=0.2');
+
+  // Body + buttons
+  tl.to('#heroBody', { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.4')
+    .to('#heroActions', { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.3');
+
+  // Hero card slides in
+  tl.to('#heroCard', {
+    opacity: 1, y: 0, duration: 0.9, ease: 'power3.out'
+  }, '-=0.5');
+
+  // Animate bars after card appears
+  tl.call(() => {
+    document.querySelectorAll('.hc-bar').forEach(bar => {
+      bar.style.width = bar.dataset.width;
+    });
+  }, null, '-=0.2');
+
+  // SCROLL animations — batch all .gsap-up and .gsap-fade
+  gsap.utils.toArray('.gsap-up').forEach(el => {
+    gsap.fromTo(el,
+      { opacity: 0, y: 36 },
+      {
+        opacity: 1, y: 0, duration: 0.85, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+      }
+    );
+  });
+
+  gsap.utils.toArray('.gsap-fade').forEach(el => {
+    gsap.fromTo(el,
+      { opacity: 0 },
+      {
+        opacity: 1, duration: 0.7, ease: 'power2.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+      }
+    );
+  });
+
+  // Stagger process steps
+  gsap.utils.toArray('.process-step').forEach((el, i) => {
+    gsap.fromTo(el,
+      { opacity: 0, y: 28 },
+      {
+        opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: i * 0.1,
+        scrollTrigger: { trigger: '.process-grid', start: 'top 80%', toggleActions: 'play none none none' }
+      }
+    );
+  });
+
+  // Stagger service cards
+  gsap.utils.toArray('.service-card').forEach((el, i) => {
+    gsap.fromTo(el,
+      { opacity: 0, y: 32 },
+      {
+        opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: i * 0.12,
+        scrollTrigger: { trigger: '.services-grid', start: 'top 82%', toggleActions: 'play none none none' }
+      }
+    );
+  });
+
+  // Stagger testimonials
+  gsap.utils.toArray('.t-card').forEach((el, i) => {
+    gsap.fromTo(el,
+      { opacity: 0, y: 24 },
+      {
+        opacity: 1, y: 0, duration: 0.75, ease: 'power2.out', delay: i * 0.15,
+        scrollTrigger: { trigger: '.t-grid', start: 'top 82%', toggleActions: 'play none none none' }
+      }
+    );
+  });
+
+  // Stats count up
+  gsap.utils.toArray('.stat-item').forEach((el, i) => {
+    gsap.fromTo(el,
+      { opacity: 0, y: 20 },
+      {
+        opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', delay: i * 0.1,
+        scrollTrigger: { trigger: '.stats-grid', start: 'top 85%', toggleActions: 'play none none none' }
+      }
+    );
+  });
+
+  // Pricing cards stagger
+  gsap.utils.toArray('.price-card').forEach((el, i) => {
+    gsap.fromTo(el,
+      { opacity: 0, y: 28 },
+      {
+        opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: i * 0.15,
+        scrollTrigger: { trigger: '.pricing-grid', start: 'top 82%', toggleActions: 'play none none none' }
+      }
+    );
+  });
+</script>
+</body>
+</html>

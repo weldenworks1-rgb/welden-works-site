@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About — Welden Works</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--cream:#f9f6f1;--cream-dark:#f0ebe2;--ink:#0f0d0a;--ink-soft:#2a2420;--gold:#c9a84c;--gold-pale:#fdf6e3;--gray:#6b6459;--gray-light:#a09890;--white:#ffffff;--border:#e2dbd0;}
+    html{scroll-behavior:smooth;}body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--cream);overflow-x:hidden;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .75s ease,transform .75s ease;}.reveal.visible{opacity:1;transform:translateY(0);}
+    .rd1{transition-delay:.1s}.rd2{transition-delay:.2s}.rd3{transition-delay:.3s}
+    nav{background:rgba(249,246,241,0.92);backdrop-filter:blur(20px);padding:0 60px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;left:0;right:0;z-index:1000;height:72px;border-bottom:1px solid var(--border);}
+    .nav-logo{font-family:'Playfair Display',serif;color:var(--ink);font-size:1.45rem;font-weight:700;text-decoration:none;}.nav-logo span{color:var(--gold);}
+    .nav-links{display:flex;align-items:center;gap:6px;}
+    .nav-links a{color:var(--gray);text-decoration:none;padding:8px 14px;border-radius:8px;font-size:.88rem;font-weight:500;transition:color .2s,background .2s;}
+    .nav-links a:hover,.nav-links a.active{color:var(--ink);background:var(--cream-dark);}
+    .nav-cta{background:var(--ink)!important;color:var(--cream)!important;padding:9px 22px!important;border-radius:8px;font-weight:600!important;margin-left:10px;}
+    .page-header{padding:160px 60px 80px;background:var(--ink);background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
+    .page-header-inner{max-width:1140px;margin:0 auto;}
+    .page-eyebrow{font-size:.72rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+    .page-eyebrow::before{content:'';width:28px;height:1.5px;background:var(--gold);}
+    .page-header h1{font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:800;color:white;letter-spacing:-1px;line-height:1.1;margin-bottom:20px;animation:fadeUp .8s ease both;}
+    .page-header p{color:rgba(255,255,255,.5);font-size:1.05rem;max-width:540px;line-height:1.8;animation:fadeUp .8s .15s ease both;}
+    .section-wrap{padding:90px 60px;}.section-inner{max-width:1140px;margin:0 auto;}
+    .section-label{font-size:.72rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+    .section-label::before{content:'';width:28px;height:1.5px;background:var(--gold);}
+    h2{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:800;color:var(--ink);line-height:1.15;letter-spacing:-.5px;margin-bottom:16px;}
+    .section-sub{color:var(--gray);font-size:1rem;max-width:520px;line-height:1.8;margin-bottom:56px;}
+    /* MISSION */
+    .mission-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+    .mission-text p{color:var(--gray);font-size:1rem;line-height:1.85;margin-bottom:20px;}
+    .mission-visual{background:var(--ink);border-radius:20px;padding:48px;position:relative;overflow:hidden;}
+    .mission-visual::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;border:1px solid rgba(201,168,76,.15);}
+    .mv-stat{margin-bottom:36px;}
+    .mv-stat:last-child{margin-bottom:0;}
+    .mv-num{font-family:'Playfair Display',serif;font-size:3rem;font-weight:700;color:white;letter-spacing:-1px;line-height:1;}
+    .mv-num span{color:var(--gold);}
+    .mv-label{color:rgba(255,255,255,.4);font-size:.82rem;margin-top:6px;line-height:1.5;}
+    /* VALUES */
+    .values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border);border-radius:16px;overflow:hidden;}
+    .value-card{background:white;padding:40px 32px;transition:background .3s;}
+    .value-card:hover{background:var(--gold-pale);}
+    .value-num{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;color:rgba(201,168,76,.25);margin-bottom:16px;transition:color .3s;}
+    .value-card:hover .value-num{color:rgba(201,168,76,.6);}
+    .value-card h3{font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:10px;}
+    .value-card p{color:var(--gray);font-size:.88rem;line-height:1.7;}
+    /* DIFFERENCE */
+    .diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+    .diff-list{list-style:none;}
+    .diff-list li{padding:20px 0;border-bottom:1px solid var(--border);display:flex;gap:20px;align-items:flex-start;}
+    .diff-list li:last-child{border-bottom:none;}
+    .diff-icon{width:44px;height:44px;background:var(--gold-pale);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+    .diff-list h4{font-size:.95rem;font-weight:700;color:var(--ink);margin-bottom:6px;}
+    .diff-list p{font-size:.85rem;color:var(--gray);line-height:1.65;}
+    /* TESTIMONIALS */
+    .testimonial-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+    .testimonial-card{background:white;border:1px solid var(--border);border-radius:16px;padding:32px;transition:transform .3s,box-shadow .3s;}
+    .testimonial-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(15,13,10,.08);}
+    .stars{color:var(--gold);font-size:.8rem;margin-bottom:16px;}
+    .testimonial-card blockquote{font-family:'Playfair Display',serif;font-size:1rem;color:var(--ink-soft);line-height:1.7;font-style:italic;margin-bottom:24px;}
+    .testimonial-author{font-size:.78rem;font-weight:700;color:var(--gray-light);text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:10px;}
+    .testimonial-author::before{content:'';width:24px;height:1px;background:var(--gold);}
+    /* CTA */
+    .cta-block{background:var(--ink);background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");padding:100px 60px;text-align:center;}
+    .cta-block h2{color:white;font-size:2.8rem;margin-bottom:16px;}
+    .cta-block p{color:rgba(255,255,255,.45);font-size:1rem;margin-bottom:40px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.8;}
+    .btn-gold{background:var(--gold);color:var(--ink);padding:17px 44px;border-radius:8px;font-weight:700;font-size:.95rem;text-decoration:none;transition:transform .2s,box-shadow .2s;display:inline-block;}
+    .btn-gold:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(201,168,76,.35);}
+    footer{background:var(--ink);padding:40px 60px;border-top:1px solid rgba(255,255,255,.07);}
+    .footer-inner{max-width:1140px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+    .footer-logo{font-family:'Playfair Display',serif;color:white;font-size:1.1rem;font-weight:700;}.footer-logo span{color:var(--gold);}
+    footer p{color:rgba(255,255,255,.25);font-size:.8rem;}
+    @media(max-width:768px){nav{padding:0 20px;}.nav-links a:not(.nav-cta){display:none;}.page-header{padding:120px 24px 60px;}.page-header h1{font-size:2.4rem;}.section-wrap{padding:60px 24px;}.mission-grid,.diff-grid{grid-template-columns:1fr;gap:40px;}.values-grid,.testimonial-grid{grid-template-columns:1fr;}footer{padding:32px 24px;}.footer-inner{flex-direction:column;gap:12px;text-align:center;}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="nav-logo">Welden<span>Works</span></a>
+  <div class="nav-links">
+    <a href="services.html">Services</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="about.html" class="active">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="contact.html" class="nav-cta">Get Started</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-eyebrow">About Welden Works</div>
+    <h1>Built for the Business<br/>Owner, Not the Algorithm</h1>
+    <p>We started Welden Works because local businesses deserve better than cookie-cutter websites and missed calls. Here's who we are and why we do this.</p>
+  </div>
+</div>
+
+<!-- MISSION -->
+<section class="section-wrap">
+  <div class="section-inner">
+    <div class="mission-grid">
+      <div class="mission-text reveal">
+        <div class="section-label">Our Mission</div>
+        <h2>Giving Local Businesses<br/>an Unfair Advantage</h2>
+        <p>Most local business owners are incredible at what they do. They're not marketers, web designers, or tech experts — and they shouldn't have to be.</p>
+        <p>We built Welden Works to close that gap. We take the tools that big companies use — professional websites, AI, automation — and make them accessible and affordable for the contractor, the builder, the plumber, the roofer.</p>
+        <p>The result? A local business that looks world-class online, never misses a lead, and can compete with anyone in their market.</p>
+      </div>
+      <div class="mission-visual reveal rd2">
+        <div class="mv-stat"><div class="mv-num">$0 <span style="font-size:1.5rem">to preview</span></div><div class="mv-label">We build your site and send it before you spend a single dollar. Zero risk, zero commitment.</div></div>
+        <div class="mv-stat"><div class="mv-num">48<span style="font-size:1.5rem">hr delivery</span></div><div class="mv-label">From yes to live in under 48 hours. Most agencies take weeks. We don't.</div></div>
+        <div class="mv-stat"><div class="mv-num">100<span style="font-size:1.5rem">% custom</span></div><div class="mv-label">Every site is built from scratch for that specific business. No templates, ever.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="section-wrap" style="background:var(--cream-dark);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="section-inner">
+    <div class="section-label reveal">What We Stand For</div>
+    <h2 class="reveal rd1">Our Values</h2>
+    <p class="section-sub reveal rd2">Three principles that guide every client engagement.</p>
+    <div class="values-grid">
+      <div class="value-card reveal rd1"><div class="value-num">01</div><h3>Radical Transparency</h3><p>No jargon, no hidden fees, no surprises. You know exactly what you're getting and exactly what it costs — always.</p></div>
+      <div class="value-card reveal rd2"><div class="value-num">02</div><h3>Results Over Promises</h3><p>We don't sell potential — we deliver outcomes. Every recommendation we make is tied to real, measurable impact on your business.</p></div>
+      <div class="value-card reveal rd3"><div class="value-num">03</div><h3>Long-Term Partnership</h3><p>We're not here for a one-time transaction. We want to be the team you call every time your business needs to level up online.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY DIFFERENT -->
+<section class="section-wrap">
+  <div class="section-inner">
+    <div class="diff-grid">
+      <div>
+        <div class="section-label reveal">Why We're Different</div>
+        <h2 class="reveal rd1">Not Your Average<br/>Web Agency</h2>
+        <p class="section-sub reveal rd2">We've built our business around one type of client — local service businesses — and we've become extremely good at serving them.</p>
+      </div>
+      <ul class="diff-list reveal rd2">
+        <li><div class="diff-icon">👁️</div><div><h4>We Build Before You Buy</h4><p>We research your business and build a full site preview before you've spent anything. You see the quality firsthand, then decide.</p></div></li>
+        <li><div class="diff-icon">⚡</div><div><h4>Speed That Actually Matters</h4><p>48-hour delivery isn't a gimmick — it's our standard. Most agencies take 4–8 weeks. Your business can't afford to wait that long.</p></div></li>
+        <li><div class="diff-icon">🤖</div><div><h4>AI That Actually Works</h4><p>Our AI receptionist isn't a chatbot that frustrates customers. It's a professional system that handles calls like a real person would.</p></div></li>
+        <li><div class="diff-icon">🔒</div><div><h4>You Own Everything</h4><p>Your website, your domain, your leads — everything belongs to you. No platform lock-in, no proprietary systems.</p></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section-wrap" style="background:var(--cream-dark);border-top:1px solid var(--border);">
+  <div class="section-inner">
+    <div class="section-label reveal">Client Stories</div>
+    <h2 class="reveal rd1">What Our Clients Say</h2>
+    <p class="section-sub reveal rd2">We let results do the talking.</p>
+    <div class="testimonial-grid">
+      <div class="testimonial-card reveal rd1">
+        <div class="stars">★ ★ ★ ★ ★</div>
+        <blockquote>"We went from zero online presence to 12 new quote requests in our first month. The site looks incredible."</blockquote>
+        <div class="testimonial-author">Mike T. — Roofing Contractor</div>
+      </div>
+      <div class="testimonial-card reveal rd2">
+        <div class="stars">★ ★ ★ ★ ★</div>
+        <blockquote>"The AI receptionist answers every call professionally. I stopped missing leads while I was on job sites."</blockquote>
+        <div class="testimonial-author">Sandra L. — Home Builder</div>
+      </div>
+      <div class="testimonial-card reveal rd3">
+        <div class="stars">★ ★ ★ ★ ★</div>
+        <blockquote>"They sent me a preview before I agreed to anything. The quality was so good I signed up on the spot."</blockquote>
+        <div class="testimonial-author">Carlos V. — HVAC Company</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-block">
+  <h2 class="reveal">Ready to Work Together?</h2>
+  <p class="reveal rd1">Let's build something great for your business — starting with a free, no-obligation preview.</p>
+  <a href="contact.html" class="btn-gold reveal rd2">Get My Free Preview →</a>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Welden<span>Works</span></div>
+    <p>© 2026 Welden Works. All rights reserved.</p>
+  </div>
+</footer>
+<script>
+  const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target);}}),{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

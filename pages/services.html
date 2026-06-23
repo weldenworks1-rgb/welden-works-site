@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Services — Welden Works</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--off-white:#faf9f7;--warm-white:#f5f3ef;--parchment:#ede8df;--ink:#1a1714;--ink-mid:#3d3830;--ink-soft:#6b6459;--gold:#b8975a;--gold-dark:#9a7d46;--gold-pale:#f7f1e6;--rule:#ddd8cf;--white:#ffffff;}
+    html{scroll-behavior:smooth;}body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--off-white);overflow-x:hidden;}
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .8s ease,transform .8s ease;}.reveal.visible{opacity:1;transform:translateY(0);}
+    .rd1{transition-delay:.1s}.rd2{transition-delay:.2s}.rd3{transition-delay:.3s}
+    nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:76px;display:flex;justify-content:space-between;align-items:center;padding:0 64px;background:rgba(250,249,247,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);}
+    .nav-logo{text-decoration:none;}.nav-logo-main{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:600;color:var(--ink);letter-spacing:.5px;display:block;}.nav-logo-sub{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:500;display:block;}
+    .nav-links{display:flex;align-items:center;gap:0;}
+    .nav-links a{color:var(--ink-soft);text-decoration:none;font-size:.78rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;padding:10px 18px;transition:color .2s;}
+    .nav-links a:hover,.nav-links a.active{color:var(--ink);}
+    .nav-links .nav-cta{margin-left:16px;border:1px solid var(--ink);color:var(--ink);padding:10px 24px;transition:background .25s,color .25s;}
+    .nav-links .nav-cta:hover{background:var(--ink);color:var(--off-white);}
+    .page-header{padding:160px 64px 80px;background:var(--ink);background-image:url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23b8975a' fill-opacity='0.04'%3E%3Cpath d='M50 50v-10h-2v10h-10v2h10v10h2v-10h10v-2H50zM10 10V0H8v10H0v2h8v10h2V12h10v-2H10z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
+    .page-header-inner{max-width:1160px;margin:0 auto;}
+    .eyebrow{font-size:.62rem;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:18px;display:flex;align-items:center;gap:12px;}
+    .eyebrow::before{content:'';width:28px;height:1px;background:var(--gold);}
+    .page-header h1{font-family:'Cormorant Garamond',serif;font-size:3.8rem;font-weight:600;color:white;letter-spacing:-.5px;line-height:1.08;margin-bottom:20px;}
+    .page-header p{color:rgba(255,255,255,.45);font-size:.92rem;max-width:460px;line-height:1.9;font-weight:300;}
+    .section-wrap{padding:100px 64px;}.section-inner{max-width:1160px;margin:0 auto;}
+    h2{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:600;color:var(--ink);line-height:1.12;letter-spacing:-.3px;margin-bottom:18px;}
+    /* SERVICE BLOCKS */
+    .svc-block{display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:center;padding:80px 0;border-bottom:1px solid var(--rule);}
+    .svc-block:last-child{border-bottom:none;}
+    .svc-block.flip .svc-visual{order:-1;}
+    .svc-num{font-family:'Cormorant Garamond',serif;font-size:6rem;font-weight:400;color:var(--parchment);line-height:1;margin-bottom:4px;}
+    .svc-block h3{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:600;color:var(--ink);margin-bottom:16px;line-height:1.15;}
+    .svc-block p{font-size:.88rem;color:var(--ink-soft);line-height:1.9;margin-bottom:18px;font-weight:300;}
+    .svc-list{list-style:none;margin-bottom:36px;border-top:1px solid var(--rule);}
+    .svc-list li{font-size:.82rem;color:var(--ink-soft);padding:10px 0;border-bottom:1px solid var(--rule);display:flex;gap:12px;font-weight:300;}
+    .svc-list li::before{content:'—';color:var(--gold);flex-shrink:0;}
+    .btn-dark{background:var(--ink);color:var(--off-white);padding:14px 32px;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:500;text-decoration:none;transition:background .25s;display:inline-block;}
+    .btn-dark:hover{background:var(--ink-mid);}
+    .svc-visual{background:white;border:1px solid var(--rule);box-shadow:0 16px 60px rgba(26,23,20,.07);}
+    .sv-top{padding:24px 28px;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;}
+    .sv-top-label{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink-soft);font-weight:500;}
+    .sv-badge{font-size:.62rem;font-weight:600;color:#15803d;background:#f0fdf4;border:1px solid #bbf7d0;padding:3px 10px;}
+    .sv-body{padding:24px 28px;}
+    .sv-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--rule);}
+    .sv-row:last-child{border-bottom:none;}
+    .sv-row-label{font-size:.78rem;color:var(--ink);font-weight:500;}
+    .sv-row-sub{font-size:.7rem;color:var(--ink-soft);margin-top:2px;}
+    .sv-tag{font-size:.65rem;font-weight:600;padding:3px 10px;}
+    .sv-tag.green{background:#f0fdf4;color:#15803d;}
+    .sv-tag.gold{background:var(--gold-pale);color:var(--gold-dark);}
+    /* CTA */
+    .cta-section{background:var(--ink);padding:120px 64px;text-align:center;position:relative;overflow:hidden;}
+    .cta-section::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:500px;border-radius:50%;border:1px solid rgba(184,151,90,.08);}
+    .cta-section h2{color:white;max-width:540px;margin:0 auto 18px;}
+    .cta-section p{color:rgba(255,255,255,.4);font-size:.9rem;max-width:400px;margin:0 auto 48px;line-height:1.85;font-weight:300;}
+    .btn-gold{background:var(--gold);color:white;padding:16px 40px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;font-weight:500;text-decoration:none;transition:background .25s;display:inline-block;}
+    .btn-gold:hover{background:var(--gold-dark);}
+    footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.07);padding:40px 64px;}
+    .footer-inner{max-width:1160px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+    .footer-brand{font-family:'Cormorant Garamond',serif;color:white;font-size:1.2rem;font-weight:600;}
+    footer p{color:rgba(255,255,255,.2);font-size:.75rem;}
+    @media(max-width:768px){nav{padding:0 24px;}.nav-links a:not(.nav-cta){display:none;}.page-header{padding:120px 24px 60px;}.page-header h1{font-size:2.6rem;}.section-wrap{padding:64px 24px;}.svc-block{grid-template-columns:1fr;gap:48px;}.svc-block.flip .svc-visual{order:0;}footer{padding:32px 24px;}.footer-inner{flex-direction:column;gap:12px;text-align:center;}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="nav-logo"><span class="nav-logo-main">Welden Works</span><span class="nav-logo-sub">Digital Agency</span></a>
+  <div class="nav-links">
+    <a href="services.html" class="active">Services</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="contact.html" class="nav-cta">Get Started</a>
+  </div>
+</nav>
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="eyebrow">Our Services</div>
+    <h1>Everything Your Business<br/>Needs to Win Online</h1>
+    <p>Three services. One complete system. Built for local businesses that are serious about growth.</p>
+  </div>
+</div>
+<section class="section-wrap">
+  <div class="section-inner">
+    <div class="svc-block reveal">
+      <div>
+        <div class="svc-num">01</div>
+        <h3>Premium Business Website</h3>
+        <p>Your website is your most important salesperson — and it never takes a day off. We design and build custom, mobile-first websites that make your business look world-class and convert visitors into customers.</p>
+        <p>Not a template you piece together. Not a builder with a monthly fee you don't understand. A real, bespoke website crafted specifically for your business, your services, and your customers.</p>
+        <ul class="svc-list">
+          <li>Custom design built around your brand</li>
+          <li>Mobile-first, fully responsive layout</li>
+          <li>Quote request and contact forms</li>
+          <li>Google Maps & location integration</li>
+          <li>Fast-loading, SEO-ready from day one</li>
+          <li>You own it — no platform lock-in</li>
+        </ul>
+        <a href="contact.html" class="btn-dark">Get Your Free Preview</a>
+      </div>
+      <div class="svc-visual reveal rd2">
+        <div class="sv-top"><span class="sv-top-label">Your New Website</span><span class="sv-badge">● Live</span></div>
+        <div class="sv-body">
+          <div class="sv-row"><div><div class="sv-row-label">Mobile Responsive</div><div class="sv-row-sub">Looks great on every device</div></div><span class="sv-tag green">Active</span></div>
+          <div class="sv-row"><div><div class="sv-row-label">Page Speed</div><div class="sv-row-sub">Under 2 second load time</div></div><span class="sv-tag green">Optimized</span></div>
+          <div class="sv-row"><div><div class="sv-row-label">SEO Foundation</div><div class="sv-row-sub">Google-indexed & ready</div></div><span class="sv-tag gold">Active</span></div>
+          <div class="sv-row"><div><div class="sv-row-label">Lead Capture Forms</div><div class="sv-row-sub">Quote requests & booking</div></div><span class="sv-tag green">Live</span></div>
+          <div class="sv-row"><div><div class="sv-row-label">Custom Domain</div><div class="sv-row-sub">You own it completely</div></div><span class="sv-tag gold">Yours</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="svc-block flip reveal">
+      <div>
+        <div class="svc-num">02</div>
+        <h3>24/7 AI Receptionist</h3>
+        <p>Most local businesses miss 40–70% of inbound calls. The owner is on a job site, with a client, or simply unavailable. Every missed call is a missed job — often worth thousands.</p>
+        <p>Our AI receptionist answers every call professionally, qualifies the lead, books the appointment, and sends a follow-up message — even at midnight on a Sunday.</p>
+        <ul class="svc-list">
+          <li>Answers every inbound call, 24 hours a day</li>
+          <li>Qualifies leads by asking the right questions</li>
+          <li>Books appointments to your calendar</li>
+          <li>Automated SMS follow-ups</li>
+          <li>Website chat handled in real time</li>
+          <li>Urgent calls escalated to you instantly</li>
+        </ul>
+        <a href="contact.html" class="btn-dark">Add AI Receptionist</a>
+      </div>
+      <div class="svc-visual reveal rd2">
+        <div class="sv-top"><span class="sv-top-label">AI Receptionist — Live</span><span class="sv-badge">● Active</span></div>
+        <div class="sv-body">
+          <div class="sv-row"><div><div class="sv-row-label">Calls Answered Today</div><div class="sv-row-sub">8 inbound calls handled</div></div><span class="sv-tag green">+8</span></div>
+          <div class="sv-row"><div><div class="sv-row-label">Appointments Booked</div><div class="sv-row-sub">3 new appointments</div></div><span class="sv-tag gold">+3</span></div>
+          <div class="sv-row"><div><div class="sv-row-label">Chat Leads Captured</div><div class="sv-row-sub">5 website inquiries</div></div><span class="sv-tag green">+5</span></div>
+          <div class="sv-row"><div><div class="sv-row-label">Uptime</div><div class="sv-row-sub">365 days a year</div></div><span class="sv-tag green">100%</span></div>
+          <div class="sv-row"><div><div class="sv-row-label">SMS Follow-Ups Sent</div><div class="sv-row-sub">Automated within 5 min</div></div><span class="sv-tag gold">Auto</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="svc-block reveal">
+      <div>
+        <div class="svc-num">03</div>
+        <h3>Local SEO & Google Presence</h3>
+        <p>A beautiful website means nothing if no one can find it. Local SEO is what gets your business appearing at the top of Google when people in your area search for what you do.</p>
+        <p>We optimize your site, build out your Google Business Profile, and create content that generates consistent organic traffic — month after month.</p>
+        <ul class="svc-list">
+          <li>Local keyword research & targeting</li>
+          <li>Google Business Profile setup & optimization</li>
+          <li>On-page SEO across every page</li>
+          <li>Monthly blog content to boost rankings</li>
+          <li>Citation building across local directories</li>
+          <li>Monthly ranking & traffic reports</li>
+        </ul>
+        <a href="contact.html" class="btn-dark">Boost My Visibility</a>
+      </div>
+      <div class="svc-visual reveal rd2">
+        <div class="sv-top"><span class="sv-top-label">SEO Dashboard</span><span class="sv-badge">● Tracking</span></div>
+        <div class="sv-body">
+          <div class="sv-row"><div><div class="sv-row-label">Google Ranking</div><div class="sv-row-sub">"contractor near me" — #4</div></div><span class="sv-tag green">↑ 12</span></div>
+          <div class="sv-row"><div><div class="sv-row-label">Monthly Impressions</div><div class="sv-row-sub">Search & Maps combined</div></div><span class="sv-tag gold">2,847</span></div>
+          <div class="sv-row"><div><div class="sv-row-label">Organic Clicks</div><div class="sv-row-sub">To your site from Google</div></div><span class="sv-tag green">+34%</span></div>
+          <div class="sv-row"><div><div class="sv-row-label">Google Reviews</div><div class="sv-row-sub">Average rating</div></div><span class="sv-tag gold">4.8 ★</span></div>
+          <div class="sv-row"><div><div class="sv-row-label">Local Citations</div><div class="sv-row-sub">Directories indexed</div></div><span class="sv-tag green">42</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="cta-section">
+  <div class="eyebrow reveal" style="justify-content:center;">Get Started</div>
+  <h2 class="reveal rd1">Ready to See What's Possible?</h2>
+  <p class="reveal rd2">We build a custom site preview for your business — free, no commitment, no strings.</p>
+  <a href="contact.html" class="btn-gold reveal rd3">Request Free Preview</a>
+</div>
+<footer><div class="footer-inner"><div class="footer-brand">Welden Works</div><p>© 2026 Welden Works. All rights reserved.</p></div></footer>
+<script>
+  const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target);}}),{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
