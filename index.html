@@ -11,6 +11,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/SplitText.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -167,6 +168,22 @@
     .orb { position:absolute;border-radius:50%;pointer-events:none;filter:blur(60px); }
     .orb-1 { width:340px;height:340px;right:-100px;top:-100px;background:radial-gradient(circle,rgba(184,151,90,.07),transparent 70%); }
     .orb-2 { width:220px;height:220px;right:40px;bottom:-60px;background:radial-gradient(circle,rgba(184,151,90,.05),transparent 70%); }
+
+    /* ─── THREE.JS HERO CANVAS ─── */
+    #three-hero {
+      position:absolute;inset:0;z-index:0;pointer-events:none;
+      width:100%;height:100%;
+    }
+    .hero-section-wrap {
+      position:relative;z-index:1;
+      background:transparent;
+      overflow:hidden;
+    }
+    /* ─── THREE.JS STATS CANVAS ─── */
+    #three-stats {
+      position:absolute;right:-60px;top:50%;transform:translateY(-50%);
+      width:340px;height:340px;pointer-events:none;opacity:.55;
+    }
 
     /* ─── MARQUEE ─── */
     .marquee-strip {
@@ -384,7 +401,8 @@
 </nav>
 
 <!-- ═══ HERO ═══ -->
-<section style="position:relative;z-index:1;background:transparent;">
+<section class="hero-section-wrap">
+  <canvas id="three-hero"></canvas>
   <div class="hero">
     <div>
       <div class="eyebrow-line" id="ey">Websites &amp; AI Receptionists</div>
@@ -530,6 +548,7 @@
 <!-- ═══ STATS ═══ -->
 <section class="s-stats">
   <div class="si">
+    <canvas id="three-stats"></canvas>
     <div class="stats-grid">
       <div class="stat-cell g-up"><div class="stat-n"><sup>$</sup>0</div><div class="stat-l">To see your preview</div></div>
       <div class="stat-cell g-up"><div class="stat-n">48<sup>h</sup></div><div class="stat-l">Average delivery time</div></div>
@@ -707,6 +726,168 @@
 
 <script>
 gsap.registerPlugin(ScrollTrigger);
+
+/* ─── THREE.JS HERO SCENE ─── */
+(function initHeroThree() {
+  const canvas = document.getElementById('three-hero');
+  if (!canvas || !window.THREE) return;
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0x000000, 0);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+  camera.position.set(0, 0, 5);
+
+  const gold = new THREE.Color(0xb8975a);
+  const matWire = new THREE.MeshBasicMaterial({ color: gold, wireframe: true, transparent: true, opacity: 0.18 });
+  const matLine = new THREE.LineBasicMaterial({ color: gold, transparent: true, opacity: 0.55 });
+
+  // large icosahedron wireframe
+  const icoGeo = new THREE.IcosahedronGeometry(1.55, 1);
+  const ico = new THREE.Mesh(icoGeo, matWire);
+  scene.add(ico);
+
+  // inner solid icosahedron (very dark gold)
+  const icoSolid = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(1.44, 1),
+    new THREE.MeshPhongMaterial({ color: 0x1a1410, transparent: true, opacity: 0.85, shininess: 60 })
+  );
+  scene.add(icoSolid);
+
+  // torus knot floating beside
+  const tkGeo = new THREE.TorusKnotGeometry(0.5, 0.12, 120, 16, 2, 3);
+  const tk = new THREE.Mesh(tkGeo, new THREE.MeshPhongMaterial({ color: 0xb8975a, transparent: true, opacity: 0.7, shininess: 120, wireframe: false }));
+  tk.position.set(3.2, -0.4, 0);
+  scene.add(tk);
+
+  // torus knot wireframe shell
+  const tkWire = new THREE.Mesh(tkGeo, new THREE.MeshBasicMaterial({ color: 0xd4af7a, wireframe: true, transparent: true, opacity: 0.22 }));
+  tkWire.position.copy(tk.position);
+  scene.add(tkWire);
+
+  // small orbiting sphere
+  const orb = new THREE.Mesh(
+    new THREE.SphereGeometry(0.12, 16, 16),
+    new THREE.MeshBasicMaterial({ color: 0xd4af7a })
+  );
+  scene.add(orb);
+
+  // lights
+  scene.add(new THREE.AmbientLight(0xffffff, 0.3));
+  const pLight = new THREE.PointLight(0xb8975a, 2.5, 12);
+  pLight.position.set(3, 3, 3);
+  scene.add(pLight);
+  const pLight2 = new THREE.PointLight(0xffffff, 0.8, 10);
+  pLight2.position.set(-3, -2, 2);
+  scene.add(pLight2);
+
+  // floating particles (small dots)
+  const pCount = 60;
+  const pGeo = new THREE.BufferGeometry();
+  const pPos = new Float32Array(pCount * 3);
+  for (let i = 0; i < pCount; i++) {
+    pPos[i*3]   = (Math.random()-0.5)*9;
+    pPos[i*3+1] = (Math.random()-0.5)*7;
+    pPos[i*3+2] = (Math.random()-0.5)*4;
+  }
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+  const pMat = new THREE.PointsMaterial({ color: 0xb8975a, size: 0.035, transparent: true, opacity: 0.5 });
+  scene.add(new THREE.Points(pGeo, pMat));
+
+  let mouse3 = { x: 0, y: 0 };
+  window.addEventListener('mousemove', e => {
+    mouse3.x = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouse3.y = -(e.clientY / window.innerHeight - 0.5) * 2;
+  });
+
+  function resize3Hero() {
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  resize3Hero();
+  window.addEventListener('resize', resize3Hero);
+
+  let t = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    t += 0.006;
+    // slow mouse parallax on main ico
+    ico.rotation.x += (mouse3.y * 0.3 - ico.rotation.x) * 0.025;
+    ico.rotation.y += (mouse3.x * 0.3 - ico.rotation.y) * 0.025;
+    icoSolid.rotation.copy(ico.rotation);
+    // continuous slow spin
+    ico.rotation.y += 0.004;
+    icoSolid.rotation.y += 0.004;
+    // torus knot
+    tk.rotation.x = t * 0.7;
+    tk.rotation.y = t * 0.5;
+    tkWire.rotation.copy(tk.rotation);
+    // orbiting sphere
+    orb.position.x = Math.cos(t * 1.2) * 2.2;
+    orb.position.y = Math.sin(t * 0.9) * 1.4;
+    orb.position.z = Math.sin(t * 1.1) * 1.0;
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+
+/* ─── THREE.JS STATS GLOBE ─── */
+(function initStatsThree() {
+  const canvas = document.getElementById('three-stats');
+  if (!canvas || !window.THREE) return;
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0x000000, 0);
+  renderer.setSize(340, 340, false);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+  camera.position.set(0, 0, 4);
+
+  // globe wireframe
+  const globeMat = new THREE.MeshBasicMaterial({ color: 0xb8975a, wireframe: true, transparent: true, opacity: 0.14 });
+  const globe = new THREE.Mesh(new THREE.SphereGeometry(1.2, 18, 12), globeMat);
+  scene.add(globe);
+
+  // octahedron inside
+  const oct = new THREE.Mesh(
+    new THREE.OctahedronGeometry(0.7, 0),
+    new THREE.MeshPhongMaterial({ color: 0xb8975a, transparent: true, opacity: 0.5, wireframe: false, shininess: 80 })
+  );
+  scene.add(oct);
+  const octWire = new THREE.Mesh(
+    new THREE.OctahedronGeometry(0.72, 0),
+    new THREE.MeshBasicMaterial({ color: 0xd4af7a, wireframe: true, transparent: true, opacity: 0.3 })
+  );
+  scene.add(octWire);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+  const pl = new THREE.PointLight(0xb8975a, 3, 10);
+  pl.position.set(2, 2, 2);
+  scene.add(pl);
+
+  let t2 = 0;
+  function animate2() {
+    requestAnimationFrame(animate2);
+    t2 += 0.008;
+    globe.rotation.y = t2 * 0.4;
+    globe.rotation.x = t2 * 0.15;
+    oct.rotation.y = -t2 * 0.6;
+    oct.rotation.x = t2 * 0.4;
+    octWire.rotation.copy(oct.rotation);
+    renderer.render(scene, camera);
+  }
+  animate2();
+
+  // Only show when stats section in view
+  const observer = new IntersectionObserver(entries => {
+    canvas.style.opacity = entries[0].isIntersecting ? '0.55' : '0';
+  }, { threshold: 0.1 });
+  observer.observe(canvas.parentElement);
+})();
 
 /* ─── CANVAS PARTICLE FIELD ─── */
 const cvs = document.getElementById('cvs');
