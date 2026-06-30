@@ -258,5 +258,51 @@ document.querySelectorAll('a, button').forEach(el => {
 });
 window.addEventListener('scroll', () => document.getElementById('nav').classList.toggle('scrolled', scrollY > 50));
 </script>
+
+<script>
+// ── SECTION PARTICLE BACKGROUNDS ────────────────────────────────────────────
+(function sectionParticles() {
+  document.querySelectorAll('.anim-section').forEach(function(section) {
+    var canvas = document.createElement('canvas');
+    canvas.className = 'section-canvas';
+    section.prepend(canvas);
+    var ctx = canvas.getContext('2d');
+    var N = 55, W, H, pts = [];
+    function resize() { W = canvas.width = section.offsetWidth; H = canvas.height = section.offsetHeight; }
+    function init() {
+      resize();
+      pts = [];
+      for (var i = 0; i < N; i++) {
+        pts.push({ x: Math.random()*W, y: Math.random()*H, r: .5+Math.random()*1.2,
+          vx: (Math.random()-.5)*.22, vy: (Math.random()-.5)*.22, a: .08+Math.random()*.28 });
+      }
+    }
+    function draw() {
+      ctx.clearRect(0,0,W,H);
+      for (var i = 0; i < N; i++) {
+        var p = pts[i];
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+        if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(184,151,90,'+p.a+')'; ctx.fill();
+      }
+      for (var i = 0; i < N; i++) {
+        for (var j = i+1; j < N; j++) {
+          var dx = pts[i].x-pts[j].x, dy = pts[i].y-pts[j].y, d = Math.sqrt(dx*dx+dy*dy);
+          if (d < 90) {
+            ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y);
+            ctx.strokeStyle = 'rgba(184,151,90,'+(0.05*(1-d/90))+')'; ctx.lineWidth = .5; ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+    new ResizeObserver(function(){ resize(); }).observe(section);
+    init(); draw();
+  });
+})();
+</script>
+
 </body>
 </html>
