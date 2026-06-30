@@ -106,10 +106,15 @@
     @media(max-width:1024px){.ft-grid{grid-template-columns:1fr 1fr}}
     @media(max-width:768px){footer{padding:48px 24px}.ft-grid{grid-template-columns:1fr}.ft-bot{flex-direction:column;gap:8px;text-align:center}}
 
+    
+
     /* ANIMATED SECTION BACKGROUNDS */
-    .anim-section{position:relative;overflow:hidden;}
-    .anim-section canvas.section-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.75;z-index:0;}
-    .anim-section > *:not(canvas){position:relative;z-index:1;}
+    .anim-section { position: relative; overflow: hidden; }
+    .anim-section canvas.section-canvas {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      pointer-events: none; opacity: .8; z-index: 0;
+    }
+    .anim-section > *:not(canvas) { position: relative; z-index: 1; }
   </style>
 </head>
 <body>
@@ -304,6 +309,9 @@ gsap.utils.toArray('.reveal').forEach(el=>{
   </div>
 </footer>
 
+
+
+
 <script>
 // ── SECTION PARTICLE BACKGROUNDS ────────────────────────────────────────────
 (function sectionParticles() {
@@ -312,22 +320,24 @@ gsap.utils.toArray('.reveal').forEach(el=>{
     canvas.className = 'section-canvas';
     section.prepend(canvas);
     var ctx = canvas.getContext('2d');
-    var N = 90, W, H, pts = [];
-    function resize() { W = canvas.width = section.offsetWidth; H = canvas.height = section.offsetHeight; }
+    var N = 55, W = 1, H = 1, pts = [], rafId;
+    function resize() {
+      W = canvas.width  = section.offsetWidth  || 1;
+      H = canvas.height = section.offsetHeight || 1;
+    }
     function init() {
       resize();
       pts = [];
       for (var i = 0; i < N; i++) {
-        pts.push({
-          x: Math.random()*W, y: Math.random()*H,
-          r: 1 + Math.random()*2.5,
-          vx: (Math.random()-.5)*.4, vy: (Math.random()-.5)*.4,
-          a: .2 + Math.random()*.55
-        });
+        pts.push({ x: Math.random()*W, y: Math.random()*H,
+          r: 1 + Math.random()*2,
+          vx: (Math.random()-.5)*.35, vy: (Math.random()-.5)*.35,
+          a: .25 + Math.random()*.5 });
       }
     }
     function draw() {
-      ctx.clearRect(0,0,W,H);
+      rafId = requestAnimationFrame(draw);
+      ctx.clearRect(0, 0, W, H);
       for (var i = 0; i < N; i++) {
         var p = pts[i];
         p.x += p.vx; p.y += p.vy;
@@ -338,18 +348,25 @@ gsap.utils.toArray('.reveal').forEach(el=>{
       }
       for (var i = 0; i < N; i++) {
         for (var j = i+1; j < N; j++) {
-          var dx = pts[i].x-pts[j].x, dy = pts[i].y-pts[j].y, d = Math.sqrt(dx*dx+dy*dy);
-          if (d < 120) {
+          var dx = pts[i].x-pts[j].x, dy = pts[i].y-pts[j].y;
+          var d2 = dx*dx + dy*dy;
+          if (d2 < 10000) {
+            var d = Math.sqrt(d2);
             ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y);
-            ctx.strokeStyle = 'rgba(184,151,90,'+(0.18*(1-d/120))+')';
-            ctx.lineWidth = .8; ctx.stroke();
+            ctx.strokeStyle = 'rgba(184,151,90,'+(0.2*(1-d/100))+')';
+            ctx.lineWidth = .6; ctx.stroke();
           }
         }
       }
-      requestAnimationFrame(draw);
     }
-    new ResizeObserver(function(){ resize(); }).observe(section);
-    init(); draw();
+    // Only run when visible
+    var io = new IntersectionObserver(function(entries) {
+      if (entries[0].isIntersecting) { if (!rafId) draw(); }
+      else { cancelAnimationFrame(rafId); rafId = null; }
+    }, { threshold: 0 });
+    io.observe(section);
+    new ResizeObserver(function() { resize(); }).observe(section);
+    init();
   });
 })();
 </script>
