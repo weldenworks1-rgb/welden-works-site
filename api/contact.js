@@ -1,7 +1,7 @@
 import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const NOTIFY_EMAIL = 'welden.work1@gmail.com';
+const NOTIFY_EMAIL = 'contact@weldenworks.com';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
