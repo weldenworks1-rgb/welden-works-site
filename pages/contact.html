@@ -102,6 +102,10 @@ body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
       pointer-events: none; opacity: .8; z-index: 0;
     }
     .anim-section > *:not(canvas) { position: relative; z-index: 1; }
+  
+    /* Honeypot — hidden from humans */
+    .hp-field { position: absolute; left: -9999px; opacity: 0; height: 0; overflow: hidden; }
+
   </style>
 </head>
 <body>
@@ -187,6 +191,13 @@ body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
                 <label class="form-label">Tell Us About Your Business</label>
                 <textarea name="message" placeholder="What do you do, where are you located, and what's your biggest challenge right now?"></textarea>
               </div>
+                            <!-- Honeypot: bots fill this, humans don't see it -->
+              <div class="hp-field" aria-hidden="true">
+                <label for="website">Website (leave blank)</label>
+                <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+              </div>
+              <!-- Timing token: set by JS on page load -->
+              <input type="hidden" name="_t" id="_t" value="" />
               <button type="submit" class="form-submit">Send My Free Preview Request</button>
               <p class="form-note">No spam. No pressure. Just a preview and a conversation.</p>
             </form>
@@ -364,6 +375,12 @@ document.querySelectorAll('a, button, .faq-q, .nav-cta').forEach(el => {
     init();
   });
 })();
+</script>
+
+
+<script>
+// Set form-load timestamp for bot timing check
+document.getElementById('_t').value = Date.now();
 </script>
 
 </body>
