@@ -260,7 +260,7 @@ footer{background:rgba(255,255,255,.015);border-top:1px solid var(--rule);paddin
 
     /* ── SECTION ANIMATED BACKGROUNDS ── */
     .anim-section{position:relative;overflow:hidden;}
-    .anim-section canvas.section-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.45;z-index:0;}
+    .anim-section canvas.section-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.8;z-index:0;}
     .anim-section > *:not(canvas){position:relative;z-index:1;}
 </style>
 </head>
@@ -875,6 +875,7 @@ document.querySelectorAll('.faq-q').forEach(q => {
 </script>
 
 
+
 <script>
 // ── SECTION PARTICLE BACKGROUNDS ────────────────────────────────────────────
 (function sectionParticles() {
@@ -883,14 +884,18 @@ document.querySelectorAll('.faq-q').forEach(q => {
     canvas.className = 'section-canvas';
     section.prepend(canvas);
     var ctx = canvas.getContext('2d');
-    var N = 55, W, H, pts = [];
+    var N = 90, W, H, pts = [];
     function resize() { W = canvas.width = section.offsetWidth; H = canvas.height = section.offsetHeight; }
     function init() {
       resize();
       pts = [];
       for (var i = 0; i < N; i++) {
-        pts.push({ x: Math.random()*W, y: Math.random()*H, r: .5+Math.random()*1.2,
-          vx: (Math.random()-.5)*.22, vy: (Math.random()-.5)*.22, a: .08+Math.random()*.28 });
+        pts.push({
+          x: Math.random()*W, y: Math.random()*H,
+          r: 1 + Math.random()*2.5,
+          vx: (Math.random()-.5)*.4, vy: (Math.random()-.5)*.4,
+          a: .2 + Math.random()*.55
+        });
       }
     }
     function draw() {
@@ -906,9 +911,10 @@ document.querySelectorAll('.faq-q').forEach(q => {
       for (var i = 0; i < N; i++) {
         for (var j = i+1; j < N; j++) {
           var dx = pts[i].x-pts[j].x, dy = pts[i].y-pts[j].y, d = Math.sqrt(dx*dx+dy*dy);
-          if (d < 90) {
+          if (d < 120) {
             ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y);
-            ctx.strokeStyle = 'rgba(184,151,90,'+(0.05*(1-d/90))+')'; ctx.lineWidth = .5; ctx.stroke();
+            ctx.strokeStyle = 'rgba(184,151,90,'+(0.18*(1-d/120))+')';
+            ctx.lineWidth = .8; ctx.stroke();
           }
         }
       }

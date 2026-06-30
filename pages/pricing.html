@@ -403,22 +403,7 @@ tr:hover td{background:rgba(184,151,90,.03)}
 </section>
 
 <!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <div class="footer-brand-name">Welden Works</div>
-      <div class="footer-brand-tag">Digital Agency</div>
-    </div>
-    <div class="footer-mid">
-      <span class="footer-copy">© 2026 Welden Works LLC. All rights reserved.</span>
-    </div>
-    <div class="footer-right">
-      <a href="mailto:contact@weldenworks.com">contact@weldenworks.com</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="contact.html">Contact</a>
-    </div>
-  </div>
-</footer>
+
 
 <script>
 // CURSOR
@@ -457,6 +442,40 @@ document.querySelectorAll('.faq-q').forEach(q => {
 </script>
 
 
+<footer>
+  <div class="ft-grid">
+    <div>
+      <div class="ft-brand-name">Welden Works</div>
+      <div class="ft-brand-tag">Digital Agency</div>
+      <div class="ft-brand-desc">Premium websites and AI receptionists for local businesses across Florida and beyond.</div>
+    </div>
+    <div class="ft-col">
+      <h4>Services</h4>
+      <a href="services.html">Business Websites</a>
+      <a href="services.html">AI Receptionist</a>
+      <a href="services.html">Local SEO</a>
+    </div>
+    <div class="ft-col">
+      <h4>Company</h4>
+      <a href="about.html">About Us</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="ft-col">
+      <h4>Get Started</h4>
+      <a href="contact.html">Free Preview</a>
+      <a href="contact.html">Book a Call</a>
+    </div>
+  </div>
+  <div class="ft-bot">
+    <span class="ft-copy">© 2026 Welden Works LLC. All rights reserved.</span>
+    <div class="ft-bot-links">
+      <a href="mailto:contact@weldenworks.com">contact@weldenworks.com</a>
+      <a href="privacy.html">Privacy</a>
+    </div>
+  </div>
+</footer>
+
 <script>
 // ── SECTION PARTICLE BACKGROUNDS ────────────────────────────────────────────
 (function sectionParticles() {
@@ -465,14 +484,18 @@ document.querySelectorAll('.faq-q').forEach(q => {
     canvas.className = 'section-canvas';
     section.prepend(canvas);
     var ctx = canvas.getContext('2d');
-    var N = 55, W, H, pts = [];
+    var N = 90, W, H, pts = [];
     function resize() { W = canvas.width = section.offsetWidth; H = canvas.height = section.offsetHeight; }
     function init() {
       resize();
       pts = [];
       for (var i = 0; i < N; i++) {
-        pts.push({ x: Math.random()*W, y: Math.random()*H, r: .5+Math.random()*1.2,
-          vx: (Math.random()-.5)*.22, vy: (Math.random()-.5)*.22, a: .08+Math.random()*.28 });
+        pts.push({
+          x: Math.random()*W, y: Math.random()*H,
+          r: 1 + Math.random()*2.5,
+          vx: (Math.random()-.5)*.4, vy: (Math.random()-.5)*.4,
+          a: .2 + Math.random()*.55
+        });
       }
     }
     function draw() {
@@ -488,9 +511,10 @@ document.querySelectorAll('.faq-q').forEach(q => {
       for (var i = 0; i < N; i++) {
         for (var j = i+1; j < N; j++) {
           var dx = pts[i].x-pts[j].x, dy = pts[i].y-pts[j].y, d = Math.sqrt(dx*dx+dy*dy);
-          if (d < 90) {
+          if (d < 120) {
             ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y);
-            ctx.strokeStyle = 'rgba(184,151,90,'+(0.05*(1-d/90))+')'; ctx.lineWidth = .5; ctx.stroke();
+            ctx.strokeStyle = 'rgba(184,151,90,'+(0.18*(1-d/120))+')';
+            ctx.lineWidth = .8; ctx.stroke();
           }
         }
       }

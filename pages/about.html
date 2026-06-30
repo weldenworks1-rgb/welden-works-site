@@ -83,19 +83,32 @@
     .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(184,151,90,.3);}
     /* FOOTER */
     }
-    footer{background:var(--ink-2);border-top:1px solid var(--rule);padding:36px 60px;}
-    .footer-inner{max-width:1160px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
-    .footer-brand-name{font-family:'Cormorant Garamond',serif;color:rgba(255,255,255,.55);font-size:1rem;font-weight:600;line-height:1;}
-    .footer-brand-tag{font-size:.54rem;letter-spacing:3px;text-transform:uppercase;color:rgba(184,151,90,.5);margin-top:4px;}
-    .footer-copy{font-size:.65rem;color:rgba(255,255,255,.18);letter-spacing:.5px;}
-    .footer-right{display:flex;gap:28px;align-items:center;}
     .footer-right a{font-size:.65rem;color:rgba(255,255,255,.28);text-decoration:none;letter-spacing:.5px;transition:color .2s;}
     .footer-right a:hover{color:var(--gold);}
-    @media(max-width:768px){footer{padding:32px 24px;}.footer-inner{flex-direction:column;gap:16px;text-align:center;}.footer-right{flex-wrap:wrap;justify-content:center;}}
+    @media(max-width:768px){}
 
-    /* ── SECTION ANIMATED BACKGROUNDS ── */
+    
+
+    /* FOOTER */
+    footer{background:rgba(255,255,255,.015);border-top:1px solid var(--rule);padding:60px}
+    .ft-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:1px solid var(--rule)}
+    .ft-brand-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;color:var(--cream)}
+    .ft-brand-tag{font-size:.54rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin:3px 0 16px}
+    .ft-brand-desc{font-size:.8rem;color:rgba(255,255,255,.28);line-height:1.8;font-weight:300}
+    .ft-col h4{font-size:.56rem;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:18px}
+    .ft-col a{display:block;font-size:.8rem;color:rgba(255,255,255,.35);text-decoration:none;margin-bottom:8px;transition:color .2s;font-weight:300}
+    .ft-col a:hover{color:var(--gold)}
+    .ft-bot{max-width:1200px;margin:24px auto 0;display:flex;justify-content:space-between;align-items:center}
+    .ft-bot-links{display:flex;gap:28px;align-items:center}
+    .ft-bot-links a{font-size:.65rem;color:rgba(255,255,255,.25);text-decoration:none;letter-spacing:.5px;transition:color .2s}
+    .ft-bot-links a:hover{color:var(--gold)}
+    .ft-copy{font-size:.68rem;color:rgba(255,255,255,.18)}
+    @media(max-width:1024px){.ft-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:768px){footer{padding:48px 24px}.ft-grid{grid-template-columns:1fr}.ft-bot{flex-direction:column;gap:8px;text-align:center}}
+
+    /* ANIMATED SECTION BACKGROUNDS */
     .anim-section{position:relative;overflow:hidden;}
-    .anim-section canvas.section-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.55;z-index:0;}
+    .anim-section canvas.section-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.75;z-index:0;}
     .anim-section > *:not(canvas){position:relative;z-index:1;}
   </style>
 </head>
@@ -233,22 +246,7 @@
   <a href="contact.html" class="btn-primary reveal">Get Your Free Preview →</a>
 </section>
 
-<footer>
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <div class="footer-brand-name">Welden Works</div>
-      <div class="footer-brand-tag">Digital Agency</div>
-    </div>
-    <div class="footer-mid">
-      <span class="footer-copy">© 2026 Welden Works LLC. All rights reserved.</span>
-    </div>
-    <div class="footer-right">
-      <a href="mailto:contact@weldenworks.com">contact@weldenworks.com</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="contact.html">Contact</a>
-    </div>
-  </div>
-</footer>
+
 
 <script>
 // CURSOR
@@ -272,6 +270,40 @@ gsap.utils.toArray('.reveal').forEach(el=>{
 </script>
 
 
+<footer>
+  <div class="ft-grid">
+    <div>
+      <div class="ft-brand-name">Welden Works</div>
+      <div class="ft-brand-tag">Digital Agency</div>
+      <div class="ft-brand-desc">Premium websites and AI receptionists for local businesses across Florida and beyond.</div>
+    </div>
+    <div class="ft-col">
+      <h4>Services</h4>
+      <a href="services.html">Business Websites</a>
+      <a href="services.html">AI Receptionist</a>
+      <a href="services.html">Local SEO</a>
+    </div>
+    <div class="ft-col">
+      <h4>Company</h4>
+      <a href="about.html">About Us</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="ft-col">
+      <h4>Get Started</h4>
+      <a href="contact.html">Free Preview</a>
+      <a href="contact.html">Book a Call</a>
+    </div>
+  </div>
+  <div class="ft-bot">
+    <span class="ft-copy">© 2026 Welden Works LLC. All rights reserved.</span>
+    <div class="ft-bot-links">
+      <a href="mailto:contact@weldenworks.com">contact@weldenworks.com</a>
+      <a href="privacy.html">Privacy</a>
+    </div>
+  </div>
+</footer>
+
 <script>
 // ── SECTION PARTICLE BACKGROUNDS ────────────────────────────────────────────
 (function sectionParticles() {
@@ -280,14 +312,18 @@ gsap.utils.toArray('.reveal').forEach(el=>{
     canvas.className = 'section-canvas';
     section.prepend(canvas);
     var ctx = canvas.getContext('2d');
-    var N = 55, W, H, pts = [];
+    var N = 90, W, H, pts = [];
     function resize() { W = canvas.width = section.offsetWidth; H = canvas.height = section.offsetHeight; }
     function init() {
       resize();
       pts = [];
       for (var i = 0; i < N; i++) {
-        pts.push({ x: Math.random()*W, y: Math.random()*H, r: .5+Math.random()*1.2,
-          vx: (Math.random()-.5)*.22, vy: (Math.random()-.5)*.22, a: .08+Math.random()*.28 });
+        pts.push({
+          x: Math.random()*W, y: Math.random()*H,
+          r: 1 + Math.random()*2.5,
+          vx: (Math.random()-.5)*.4, vy: (Math.random()-.5)*.4,
+          a: .2 + Math.random()*.55
+        });
       }
     }
     function draw() {
@@ -303,9 +339,10 @@ gsap.utils.toArray('.reveal').forEach(el=>{
       for (var i = 0; i < N; i++) {
         for (var j = i+1; j < N; j++) {
           var dx = pts[i].x-pts[j].x, dy = pts[i].y-pts[j].y, d = Math.sqrt(dx*dx+dy*dy);
-          if (d < 90) {
+          if (d < 120) {
             ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y);
-            ctx.strokeStyle = 'rgba(184,151,90,'+(0.05*(1-d/90))+')'; ctx.lineWidth = .5; ctx.stroke();
+            ctx.strokeStyle = 'rgba(184,151,90,'+(0.18*(1-d/120))+')';
+            ctx.lineWidth = .8; ctx.stroke();
           }
         }
       }
