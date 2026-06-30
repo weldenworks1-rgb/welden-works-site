@@ -82,17 +82,21 @@
     .btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--gold);color:var(--ink);padding:15px 34px;font-size:.7rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;text-decoration:none;transition:all .3s;cursor:none;}
     .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(184,151,90,.3);}
     /* FOOTER */
-    footer{background:var(--ink-2);border-top:1px solid var(--rule);padding:48px 60px;}
-    .footer-inner{max-width:1160px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
-    .footer-brand{font-family:'Cormorant Garamond',serif;color:var(--cream);font-size:1.2rem;font-weight:600;}
-    .footer-brand span{display:block;font-family:'Inter',sans-serif;font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-top:3px;}
-    .footer-links{display:flex;gap:24px;align-items:center;}
-    .footer-links a{font-size:.68rem;color:rgba(255,255,255,.25);text-decoration:none;letter-spacing:1px;transition:color .2s;}
-    .footer-links a:hover{color:var(--gold);}
-    .footer-copy{font-size:.68rem;color:rgba(255,255,255,.18);}
-    /* REVEAL */
-    .reveal{opacity:0;transform:translateY(24px);}
-    @media(max-width:768px){nav{padding:0 24px;}.nav-r a:not(.nav-cta){display:none;}.page-header{padding:120px 24px 60px;}.section-wrap{padding:60px 24px;}.mission-grid,.diff-grid{grid-template-columns:1fr;gap:40px;}.values-grid,.testimonial-grid{grid-template-columns:1fr;}footer{padding:32px 24px;}.footer-inner{flex-direction:column;gap:16px;text-align:center;}}
+    }
+    footer{background:var(--ink-2);border-top:1px solid var(--rule);padding:36px 60px;}
+    .footer-inner{max-width:1160px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+    .footer-brand-name{font-family:'Cormorant Garamond',serif;color:rgba(255,255,255,.55);font-size:1rem;font-weight:600;line-height:1;}
+    .footer-brand-tag{font-size:.54rem;letter-spacing:3px;text-transform:uppercase;color:rgba(184,151,90,.5);margin-top:4px;}
+    .footer-copy{font-size:.65rem;color:rgba(255,255,255,.18);letter-spacing:.5px;}
+    .footer-right{display:flex;gap:28px;align-items:center;}
+    .footer-right a{font-size:.65rem;color:rgba(255,255,255,.28);text-decoration:none;letter-spacing:.5px;transition:color .2s;}
+    .footer-right a:hover{color:var(--gold);}
+    @media(max-width:768px){footer{padding:32px 24px;}.footer-inner{flex-direction:column;gap:16px;text-align:center;}.footer-right{flex-wrap:wrap;justify-content:center;}}
+
+    /* ── SECTION ANIMATED BACKGROUNDS ── */
+    .anim-section{position:relative;overflow:hidden;}
+    .anim-section canvas.section-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.55;z-index:0;}
+    .anim-section > *:not(canvas){position:relative;z-index:1;}
   </style>
 </head>
 <body>
@@ -113,7 +117,7 @@
   </div>
 </nav>
 
-<div class="page-header">
+<div class="page-header anim-section">
   <div class="page-header-inner">
     <div class="eyebrow">About Welden Works</div>
     <h1>Built for the Business Owner,<br/>Not the Algorithm</h1>
@@ -151,7 +155,7 @@
 </section>
 
 <!-- VALUES -->
-<section class="section-wrap" style="background:var(--ink-2);">
+<section class="section-wrap" style="background:var(--ink-2);" class="anim-section">
   <div class="section-inner">
     <div class="section-label reveal">What We Stand For</div>
     <h2 class="reveal">Our Values</h2>
@@ -196,7 +200,7 @@
 </section>
 
 <!-- TESTIMONIALS -->
-<section class="section-wrap" style="background:var(--ink-2);">
+<section class="section-wrap" style="background:var(--ink-2);" class="anim-section">
   <div class="section-inner">
     <div class="section-label reveal">Client Results</div>
     <h2 class="reveal">What Our Clients Say</h2>
@@ -222,7 +226,7 @@
 </section>
 
 <!-- CTA -->
-<section class="cta-section">
+<section class="cta-section anim-section">
   <div class="eyebrow reveal" style="justify-content:center;">Start Today</div>
   <h2 class="reveal">Ready to See What We Can Build<br/>for Your Business?</h2>
   <p class="reveal">No commitment. No cost. Just a fully custom website preview delivered to your inbox.</p>
@@ -232,15 +236,17 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">
-      Welden Works
-      <span>Digital Agency</span>
+      <div class="footer-brand-name">Welden Works</div>
+      <div class="footer-brand-tag">Digital Agency</div>
     </div>
-    <div class="footer-links">
+    <div class="footer-mid">
+      <span class="footer-copy">© 2026 Welden Works LLC. All rights reserved.</span>
+    </div>
+    <div class="footer-right">
       <a href="mailto:contact@weldenworks.com">contact@weldenworks.com</a>
-      <a href="privacy.html">Privacy Policy</a>
+      <a href="privacy.html">Privacy</a>
       <a href="contact.html">Contact</a>
     </div>
-    <span class="footer-copy">© 2026 Welden Works LLC. All rights reserved.</span>
   </div>
 </footer>
 
@@ -264,5 +270,68 @@ gsap.utils.toArray('.reveal').forEach(el=>{
   gsap.to(el,{opacity:1,y:0,duration:.8,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 88%',toggleActions:'play none none none'}});
 });
 </script>
+
+// ── SECTION PARTICLE BACKGROUNDS ────────────────────────────────────────────
+(function sectionParticles() {
+  document.querySelectorAll('.anim-section').forEach(section => {
+    const canvas = document.createElement('canvas');
+    canvas.className = 'section-canvas';
+    section.prepend(canvas);
+    const ctx = canvas.getContext('2d');
+    const N = 60;
+    let W, H, pts = [];
+
+    function resize() {
+      W = canvas.width  = section.offsetWidth;
+      H = canvas.height = section.offsetHeight;
+    }
+
+    function init() {
+      resize();
+      pts = Array.from({length: N}, () => ({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: .5 + Math.random() * 1.2,
+        vx: (Math.random() - .5) * .25,
+        vy: (Math.random() - .5) * .25,
+        a: .1 + Math.random() * .35
+      }));
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      pts.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+        if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(184,151,90,${p.a})`;
+        ctx.fill();
+      });
+      // Draw faint connecting lines between close particles
+      for (let i = 0; i < N; i++) {
+        for (let j = i+1; j < N; j++) {
+          const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < 100) {
+            ctx.beginPath();
+            ctx.moveTo(pts[i].x, pts[i].y);
+            ctx.lineTo(pts[j].x, pts[j].y);
+            ctx.strokeStyle = `rgba(184,151,90,${.06 * (1 - dist/100)})`;
+            ctx.lineWidth = .5;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+
+    const ro = new ResizeObserver(() => { resize(); });
+    ro.observe(section);
+    init(); draw();
+  });
+})();
+
 </body>
 </html>
