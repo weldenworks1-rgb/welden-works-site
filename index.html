@@ -603,9 +603,9 @@ footer{background:rgba(255,255,255,.015);border-top:1px solid var(--rule);paddin
   </div>
   <div class="ft-bot">
     <span class="ft-copy">© 2026 Welden Works LLC. All rights reserved.</span>
-    <div style="display:flex;gap:20px">
+    <div style="display:flex;gap:20px;align-items:center">
+      <a href="mailto:contact@weldenworks.com" style="font-size:.68rem;color:rgba(255,255,255,.25);text-decoration:none;transition:color .2s" onmouseover="this.style.color='#b8975a'" onmouseout="this.style.color='rgba(255,255,255,.25)'">contact@weldenworks.com</a>
       <a href="pages/privacy.html" style="font-size:.68rem;color:rgba(255,255,255,.25);text-decoration:none;transition:color .2s" onmouseover="this.style.color='#b8975a'" onmouseout="this.style.color='rgba(255,255,255,.25)'">Privacy Policy</a>
-      <span class="ft-copy">Built for local businesses.</span>
     </div>
   </div>
 </footer>
@@ -622,6 +622,8 @@ window.addEventListener('mousemove', e => {
   cy = e.clientY;
   document.body.classList.add('has-cursor');
 }, { passive: true });
+document.addEventListener('mouseleave', () => { document.body.classList.remove('has-cursor'); });
+document.addEventListener('mouseenter', () => { document.body.classList.add('has-cursor'); });
 
 (function cursorLoop() {
   rx += (cx - rx) * 0.12;

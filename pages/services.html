@@ -3,79 +3,88 @@
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Services — Welden Works</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    :root{--off-white:#faf9f7;--warm-white:#f5f3ef;--parchment:#ede8df;--ink:#1a1714;--ink-mid:#3d3830;--ink-soft:#6b6459;--gold:#b8975a;--gold-dark:#9a7d46;--gold-pale:#f7f1e6;--rule:#ddd8cf;--white:#ffffff;}
-    html{scroll-behavior:smooth;}body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--off-white);overflow-x:hidden;}
-    .reveal{opacity:0;transform:translateY(20px);transition:opacity .8s ease,transform .8s ease;}.reveal.visible{opacity:1;transform:translateY(0);}
-    .rd1{transition-delay:.1s}.rd2{transition-delay:.2s}.rd3{transition-delay:.3s}
-    nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:76px;display:flex;justify-content:space-between;align-items:center;padding:0 64px;background:rgba(250,249,247,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);}
-    .nav-logo{text-decoration:none;}.nav-logo-main{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:600;color:var(--ink);letter-spacing:.5px;display:block;}.nav-logo-sub{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:500;display:block;}
-    .nav-links{display:flex;align-items:center;gap:0;}
-    .nav-links a{color:var(--ink-soft);text-decoration:none;font-size:.78rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;padding:10px 18px;transition:color .2s;}
-    .nav-links a:hover,.nav-links a.active{color:var(--ink);}
-    .nav-links .nav-cta{margin-left:16px;border:1px solid var(--ink);color:var(--ink);padding:10px 24px;transition:background .25s,color .25s;}
-    .nav-links .nav-cta:hover{background:var(--ink);color:var(--off-white);}
-    .page-header{padding:160px 64px 80px;background:var(--ink);background-image:url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23b8975a' fill-opacity='0.04'%3E%3Cpath d='M50 50v-10h-2v10h-10v2h10v10h2v-10h10v-2H50zM10 10V0H8v10H0v2h8v10h2V12h10v-2H10z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
+    :root{--ink:#0d0b09;--ink-2:#1a1714;--ink-3:#2c2822;--ink-soft:#6b6459;--cream:#faf9f7;--gold:#b8975a;--gold-light:#d4af7a;--gold-dark:#8a6e3e;--rule:rgba(184,151,90,.14);}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--cream);overflow-x:hidden;cursor:none;}
+    #cur{position:fixed;top:0;left:0;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;opacity:0;will-change:transform;transition:width .2s,height .2s,opacity .3s}
+    #cur-ring{position:fixed;top:0;left:0;width:36px;height:36px;border:1px solid rgba(184,151,90,.5);border-radius:50%;pointer-events:none;z-index:9998;opacity:0;will-change:transform;transition:width .25s,height .25s,border-color .25s,opacity .3s}
+    body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:0 60px;height:78px;background:rgba(13,11,9,.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--rule);transition:background .5s;}
+    nav.scrolled{background:rgba(13,11,9,.97);}
+    .logo{text-decoration:none;display:flex;flex-direction:column;gap:1px;}
+    .logo-name{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:var(--cream);letter-spacing:.3px;line-height:1;}
+    .logo-tag{font-size:.58rem;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);font-weight:500;}
+    .nav-r{display:flex;align-items:center;gap:4px;}
+    .nav-r a{color:rgba(255,255,255,.45);text-decoration:none;font-size:.72rem;letter-spacing:1.8px;text-transform:uppercase;font-weight:500;padding:10px 16px;transition:color .2s;cursor:none;}
+    .nav-r a:hover,.nav-r a.active{color:var(--gold);}
+    .nav-cta{border:1px solid rgba(184,151,90,.35)!important;color:var(--gold)!important;margin-left:8px;transition:all .25s!important;}
+    .nav-cta:hover{background:var(--gold)!important;color:var(--ink)!important;border-color:var(--gold)!important;}
+    .page-header{padding:160px 60px 90px;border-bottom:1px solid var(--rule);}
     .page-header-inner{max-width:1160px;margin:0 auto;}
-    .eyebrow{font-size:.62rem;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:18px;display:flex;align-items:center;gap:12px;}
-    .eyebrow::before{content:'';width:28px;height:1px;background:var(--gold);}
-    .page-header h1{font-family:'Cormorant Garamond',serif;font-size:3.8rem;font-weight:600;color:white;letter-spacing:-.5px;line-height:1.08;margin-bottom:20px;}
-    .page-header p{color:rgba(255,255,255,.45);font-size:.92rem;max-width:460px;line-height:1.9;font-weight:300;}
-    .section-wrap{padding:100px 64px;}.section-inner{max-width:1160px;margin:0 auto;}
-    h2{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:600;color:var(--ink);line-height:1.12;letter-spacing:-.3px;margin-bottom:18px;}
+    .eyebrow{display:inline-flex;align-items:center;gap:14px;font-size:.6rem;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:30px;}
+    .eyebrow::before{content:'';width:32px;height:1px;background:var(--gold);flex-shrink:0;}
+    .page-header h1{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,5vw,5.2rem);font-weight:600;line-height:1.04;letter-spacing:-.3px;color:var(--cream);margin-bottom:24px;}
+    .page-header p{font-size:.9rem;line-height:1.9;color:rgba(255,255,255,.38);max-width:500px;font-weight:300;}
+    .section-wrap{padding:100px 60px;}
+    .section-inner{max-width:1160px;margin:0 auto;}
+    h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3.5vw,3.2rem);font-weight:600;color:var(--cream);line-height:1.1;letter-spacing:-.3px;margin-bottom:20px;}
     /* SERVICE BLOCKS */
     .svc-block{display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:center;padding:80px 0;border-bottom:1px solid var(--rule);}
     .svc-block:last-child{border-bottom:none;}
     .svc-block.flip .svc-visual{order:-1;}
-    .svc-num{font-family:'Cormorant Garamond',serif;font-size:6rem;font-weight:400;color:var(--parchment);line-height:1;margin-bottom:4px;}
-    .svc-block h3{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:600;color:var(--ink);margin-bottom:16px;line-height:1.15;}
-    .svc-block p{font-size:.88rem;color:var(--ink-soft);line-height:1.9;margin-bottom:18px;font-weight:300;}
+    .svc-num{font-family:'Cormorant Garamond',serif;font-size:5rem;font-weight:300;color:rgba(184,151,90,.12);line-height:1;margin-bottom:4px;}
+    .svc-block h3{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:600;color:var(--cream);margin-bottom:16px;line-height:1.15;}
+    .svc-price{display:inline-flex;align-items:center;gap:10px;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:20px;}
+    .svc-block p{font-size:.85rem;color:rgba(255,255,255,.4);line-height:1.9;margin-bottom:16px;font-weight:300;}
     .svc-list{list-style:none;margin-bottom:36px;border-top:1px solid var(--rule);}
-    .svc-list li{font-size:.82rem;color:var(--ink-soft);padding:10px 0;border-bottom:1px solid var(--rule);display:flex;gap:12px;font-weight:300;}
+    .svc-list li{font-size:.8rem;color:rgba(255,255,255,.38);padding:10px 0;border-bottom:1px solid var(--rule);display:flex;gap:12px;font-weight:300;}
     .svc-list li::before{content:'—';color:var(--gold);flex-shrink:0;}
-    .btn-dark{background:var(--ink);color:var(--off-white);padding:14px 32px;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:500;text-decoration:none;transition:background .25s;display:inline-block;}
-    .btn-dark:hover{background:var(--ink-mid);}
-    .svc-visual{background:white;border:1px solid var(--rule);box-shadow:0 16px 60px rgba(26,23,20,.07);}
-    .sv-top{padding:24px 28px;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;}
-    .sv-top-label{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink-soft);font-weight:500;}
-    .sv-badge{font-size:.62rem;font-weight:600;color:#15803d;background:#f0fdf4;border:1px solid #bbf7d0;padding:3px 10px;}
-    .sv-body{padding:24px 28px;}
+    .btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--gold);color:var(--ink);padding:14px 32px;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;text-decoration:none;transition:all .3s;cursor:none;}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(184,151,90,.3);}
+    /* SERVICE CARD */
+    .svc-visual{background:var(--ink-2);border:1px solid var(--rule);}
+    .sv-top{padding:20px 26px;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;}
+    .sv-top-label{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);}
+    .sv-badge{font-size:.6rem;font-weight:600;color:#4ade80;display:flex;align-items:center;gap:5px;}
+    .sv-body{padding:20px 26px;}
     .sv-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--rule);}
     .sv-row:last-child{border-bottom:none;}
-    .sv-row-label{font-size:.78rem;color:var(--ink);font-weight:500;}
-    .sv-row-sub{font-size:.7rem;color:var(--ink-soft);margin-top:2px;}
-    .sv-tag{font-size:.65rem;font-weight:600;padding:3px 10px;}
-    .sv-tag.green{background:#f0fdf4;color:#15803d;}
-    .sv-tag.gold{background:var(--gold-pale);color:var(--gold-dark);}
+    .sv-row-label{font-size:.78rem;color:rgba(255,255,255,.6);font-weight:400;}
+    .sv-row-sub{font-size:.68rem;color:rgba(255,255,255,.25);margin-top:3px;}
+    .sv-tag{font-size:.62rem;font-weight:600;padding:3px 10px;}
+    .sv-tag.green{background:rgba(74,222,128,.1);color:#4ade80;}
+    .sv-tag.gold{background:rgba(184,151,90,.12);color:var(--gold);}
     /* CTA */
-    .cta-section{background:var(--ink);padding:120px 64px;text-align:center;position:relative;overflow:hidden;}
-    .cta-section::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:500px;border-radius:50%;border:1px solid rgba(184,151,90,.08);}
-    .cta-section h2{color:white;max-width:540px;margin:0 auto 18px;}
-    .cta-section p{color:rgba(255,255,255,.4);font-size:.9rem;max-width:400px;margin:0 auto 48px;line-height:1.85;font-weight:300;}
-    .btn-gold{background:var(--gold);color:white;padding:16px 40px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;font-weight:500;text-decoration:none;transition:background .25s;display:inline-block;}
-    .btn-gold:hover{background:var(--gold-dark);}
-    footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.07);padding:40px 64px;}
-    .footer-inner{max-width:1160px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
-    .footer-brand{font-family:'Cormorant Garamond',serif;color:white;font-size:1.2rem;font-weight:600;}
-    footer p{color:rgba(255,255,255,.2);font-size:.75rem;}
-    @media(max-width:768px){nav{padding:0 24px;}.nav-links a:not(.nav-cta){display:none;}.page-header{padding:120px 24px 60px;}.page-header h1{font-size:2.6rem;}.section-wrap{padding:64px 24px;}.svc-block{grid-template-columns:1fr;gap:48px;}.svc-block.flip .svc-visual{order:0;}footer{padding:32px 24px;}.footer-inner{flex-direction:column;gap:12px;text-align:center;}}
-  
-/* CURSOR */
-#cur{position:fixed;top:0;left:0;width:10px;height:10px;background:#b8975a;border-radius:50%;pointer-events:none;z-index:9999;opacity:0;will-change:transform}
-#cur-ring{position:fixed;top:0;left:0;width:36px;height:36px;border:1px solid rgba(184,151,90,.5);border-radius:50%;pointer-events:none;z-index:9998;opacity:0;will-change:transform;transition:width .25s,height .25s}
-body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
-    body{cursor:none}
+    .cta-section{padding:120px 60px;text-align:center;background:var(--ink-2);border-top:1px solid var(--rule);}
+    .cta-section h2{max-width:520px;margin:0 auto 18px;}
+    .cta-section p{font-size:.88rem;color:rgba(255,255,255,.35);max-width:400px;margin:0 auto 48px;line-height:1.9;font-weight:300;}
+    footer{background:var(--ink-2);border-top:1px solid var(--rule);padding:48px 60px;}
+    .footer-inner{max-width:1160px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+    .footer-brand{font-family:'Cormorant Garamond',serif;color:var(--cream);font-size:1.2rem;font-weight:600;}
+    .footer-brand span{display:block;font-family:'Inter',sans-serif;font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-top:3px;}
+    .footer-links{display:flex;gap:24px;align-items:center;}
+    .footer-links a{font-size:.68rem;color:rgba(255,255,255,.25);text-decoration:none;letter-spacing:1px;transition:color .2s;}
+    .footer-links a:hover{color:var(--gold);}
+    .footer-copy{font-size:.68rem;color:rgba(255,255,255,.18);}
+    .reveal{opacity:0;transform:translateY(24px);}
+    @media(max-width:768px){nav{padding:0 24px;}.nav-r a:not(.nav-cta){display:none;}.page-header{padding:120px 24px 60px;}.section-wrap{padding:60px 24px;}.svc-block{grid-template-columns:1fr;gap:48px;}.svc-block.flip .svc-visual{order:0;}footer{padding:32px 24px;}.footer-inner{flex-direction:column;gap:16px;text-align:center;}}
   </style>
 </head>
 <body>
-<!-- Cursor -->
 <div id="cur"></div>
 <div id="cur-ring"></div>
-<nav>
-  <a href="../index.html" class="nav-logo"><span class="nav-logo-main">Welden Works</span><span class="nav-logo-sub">Digital Agency</span></a>
-  <div class="nav-links">
+
+<nav id="nav">
+  <a href="../index.html" class="logo">
+    <span class="logo-name">Welden Works</span>
+    <span class="logo-tag">Digital Agency</span>
+  </a>
+  <div class="nav-r">
     <a href="services.html" class="active">Services</a>
     <a href="pricing.html">Pricing</a>
     <a href="about.html">About</a>
@@ -83,6 +92,7 @@ body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
     <a href="contact.html" class="nav-cta">Get Started</a>
   </div>
 </nav>
+
 <div class="page-header">
   <div class="page-header-inner">
     <div class="eyebrow">Our Services</div>
@@ -90,15 +100,16 @@ body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
     <p>Three services. One complete system. Built for local businesses that are serious about growth.</p>
   </div>
 </div>
+
 <section class="section-wrap">
   <div class="section-inner">
     <div class="svc-block reveal">
       <div>
         <div class="svc-num">01</div>
         <h3>Premium Business Website</h3>
-        <p style="display:inline-flex;align-items:center;gap:10px;font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dark);font-weight:600;margin-bottom:14px">Starter: $497 + $99/mo &nbsp;·&nbsp; Advanced: $997 + $199/mo</p>
+        <div class="svc-price">Starter: $497 + $99/mo &nbsp;·&nbsp; Advanced: $997 + $199/mo</div>
         <p>Your website is your most important salesperson — and it never takes a day off. We design and build custom, mobile-first websites that make your business look world-class and convert visitors into customers.</p>
-        <p>Not a template you piece together. Not a builder with a monthly fee you don't understand. A real, bespoke website crafted specifically for your business, your services, and your customers.</p>
+        <p>Not a template you piece together. A real, bespoke website crafted specifically for your business, your services, and your customers.</p>
         <ul class="svc-list">
           <li>Custom design built around your brand</li>
           <li>Mobile-first, fully responsive layout</li>
@@ -107,9 +118,9 @@ body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
           <li>Fast-loading, SEO-ready from day one</li>
           <li>You own it — no platform lock-in</li>
         </ul>
-        <a href="contact.html" class="btn-dark">Get Your Free Preview</a>
+        <a href="contact.html" class="btn-primary">Get Your Free Preview →</a>
       </div>
-      <div class="svc-visual reveal rd2">
+      <div class="svc-visual reveal">
         <div class="sv-top"><span class="sv-top-label">Your New Website</span><span class="sv-badge">● Live</span></div>
         <div class="sv-body">
           <div class="sv-row"><div><div class="sv-row-label">Mobile Responsive</div><div class="sv-row-sub">Looks great on every device</div></div><span class="sv-tag green">Active</span></div>
@@ -124,9 +135,9 @@ body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
       <div>
         <div class="svc-num">02</div>
         <h3>24/7 AI Receptionist</h3>
-        <p style="display:inline-flex;align-items:center;gap:10px;font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dark);font-weight:600;margin-bottom:14px">AI Receptionist: $1,497 + $299/mo &nbsp;·&nbsp; SMS Add-on: $399 + $89/mo</p>
+        <div class="svc-price">AI Receptionist: $1,497 + $299/mo &nbsp;·&nbsp; SMS Add-on: $399 + $89/mo</div>
         <p>Most local businesses miss 40–70% of inbound calls. The owner is on a job site, with a client, or simply unavailable. Every missed call is a missed job — often worth thousands.</p>
-        <p>Our AI receptionist answers every call professionally, qualifies the lead, books the appointment, and sends a follow-up message — even at midnight on a Sunday.</p>
+        <p>Our AI receptionist answers every call professionally, qualifies the lead, books the appointment, and sends a follow-up — even at midnight on a Sunday.</p>
         <ul class="svc-list">
           <li>Answers every inbound call, 24 hours a day</li>
           <li>Qualifies leads by asking the right questions</li>
@@ -135,9 +146,9 @@ body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
           <li>Website chat handled in real time</li>
           <li>Urgent calls escalated to you instantly</li>
         </ul>
-        <a href="contact.html" class="btn-dark">Add AI Receptionist</a>
+        <a href="contact.html" class="btn-primary">Add AI Receptionist →</a>
       </div>
-      <div class="svc-visual reveal rd2">
+      <div class="svc-visual reveal">
         <div class="sv-top"><span class="sv-top-label">AI Receptionist — Live</span><span class="sv-badge">● Active</span></div>
         <div class="sv-body">
           <div class="sv-row"><div><div class="sv-row-label">Calls Answered Today</div><div class="sv-row-sub">8 inbound calls handled</div></div><span class="sv-tag green">+8</span></div>
@@ -152,7 +163,7 @@ body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
       <div>
         <div class="svc-num">03</div>
         <h3>Local SEO &amp; Google Presence</h3>
-        <p style="display:inline-flex;align-items:center;gap:10px;font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dark);font-weight:600;margin-bottom:14px">Included in Growth ($1,997 + $399/mo) &amp; Pro ($2,497 + $499/mo)</p>
+        <div class="svc-price">Included in Growth ($1,997 + $399/mo) &amp; Pro ($2,497 + $499/mo)</div>
         <p>A beautiful website means nothing if no one can find it. Local SEO is what gets your business appearing at the top of Google when people in your area search for what you do.</p>
         <p>We optimize your site, build out your Google Business Profile, and create content that generates consistent organic traffic — month after month.</p>
         <ul class="svc-list">
@@ -163,9 +174,9 @@ body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
           <li>Citation building across local directories</li>
           <li>Monthly ranking & traffic reports</li>
         </ul>
-        <a href="contact.html" class="btn-dark">Boost My Visibility</a>
+        <a href="contact.html" class="btn-primary">Boost My Visibility →</a>
       </div>
-      <div class="svc-visual reveal rd2">
+      <div class="svc-visual reveal">
         <div class="sv-top"><span class="sv-top-label">SEO Dashboard</span><span class="sv-badge">● Tracking</span></div>
         <div class="sv-body">
           <div class="sv-row"><div><div class="sv-row-label">Google Ranking</div><div class="sv-row-sub">"contractor near me" — #4</div></div><span class="sv-tag green">↑ 12</span></div>
@@ -178,35 +189,44 @@ body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
     </div>
   </div>
 </section>
-<div class="cta-section">
+
+<section class="cta-section">
   <div class="eyebrow reveal" style="justify-content:center;">Get Started</div>
-  <h2 class="reveal rd1">Ready to See What's Possible?</h2>
-  <p class="reveal rd2">We build a custom site preview for your business — free, no commitment, no strings.</p>
-  <a href="contact.html" class="btn-gold reveal rd3">Request Free Preview</a>
-</div>
-<footer><div class="footer-inner"><div class="footer-brand">Welden Works</div><div style="display:flex;gap:20px;align-items:center"><a href="privacy.html" style="color:rgba(255,255,255,.25);font-size:.72rem;text-decoration:none">Privacy Policy</a><p>© 2026 Welden Works LLC. All rights reserved.</p></div></div></footer>
+  <h2 class="reveal">Ready to See What's Possible?</h2>
+  <p class="reveal">We build a custom site preview for your business — free, no commitment, no strings.</p>
+  <a href="contact.html" class="btn-primary reveal">Request Free Preview →</a>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      Welden Works
+      <span>Digital Agency</span>
+    </div>
+    <div class="footer-links">
+      <a href="mailto:contact@weldenworks.com">contact@weldenworks.com</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <span class="footer-copy">© 2026 Welden Works LLC. All rights reserved.</span>
+  </div>
+</footer>
+
 <script>
-  const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target);}}),{threshold:.1,rootMargin:'0px 0px -40px 0px'});
-  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-</script>
-<script>
-/* CURSOR */
-const cur  = document.getElementById('cur');
-const ring = document.getElementById('cur-ring');
-let cx = -200, cy = -200, rx = -200, ry = -200;
-window.addEventListener('mousemove', e => {
-  cx = e.clientX; cy = e.clientY;
-  document.body.classList.add('has-cursor');
-}, { passive: true });
-(function loop() {
-  rx += (cx - rx) * 0.12; ry += (cy - ry) * 0.12;
-  cur.style.transform  = `translate(${cx - 5}px, ${cy - 5}px)`;
-  ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
-  requestAnimationFrame(loop);
-})();
-document.querySelectorAll('a, button, .faq-q, .nav-cta').forEach(el => {
-  el.addEventListener('mouseenter', () => { cur.style.width='16px'; cur.style.height='16px'; ring.style.width='54px'; ring.style.height='54px'; });
-  el.addEventListener('mouseleave', () => { cur.style.width='10px'; cur.style.height='10px'; ring.style.width='36px'; ring.style.height='36px'; });
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+let cx=-200,cy=-200,rx=-200,ry=-200;
+window.addEventListener('mousemove',e=>{cx=e.clientX;cy=e.clientY;document.body.classList.add('has-cursor');},{passive:true});
+document.addEventListener('mouseleave',()=>{document.body.classList.remove('has-cursor');});
+document.addEventListener('mouseenter',()=>{document.body.classList.add('has-cursor');});
+(function loop(){rx+=(cx-rx)*.12;ry+=(cy-ry)*.12;cur.style.transform=`translate(${cx-5}px,${cy-5}px)`;ring.style.transform=`translate(${rx-18}px,${ry-18}px)`;requestAnimationFrame(loop);})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='16px';cur.style.height='16px';ring.style.width='54px';ring.style.height='54px';ring.style.borderColor='rgba(184,151,90,.25)';});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';ring.style.width='36px';ring.style.height='36px';ring.style.borderColor='rgba(184,151,90,.5)';});
+});
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>50));
+gsap.registerPlugin(ScrollTrigger);
+gsap.utils.toArray('.reveal').forEach(el=>{
+  gsap.to(el,{opacity:1,y:0,duration:.8,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 88%',toggleActions:'play none none none'}});
 });
 </script>
 </body>

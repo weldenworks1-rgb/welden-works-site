@@ -410,12 +410,17 @@ footer{background:rgba(255,255,255,.012);border-top:1px solid var(--rule);paddin
 
 <!-- FOOTER -->
 <footer>
-  <div class="ft-bot">
-    <span class="ft-copy">© 2026 Welden Works LLC. All rights reserved.</span>
-    <div class="ft-links">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      Welden Works
+      <span>Digital Agency</span>
+    </div>
+    <div class="footer-links">
+      <a href="mailto:contact@weldenworks.com">contact@weldenworks.com</a>
       <a href="privacy.html">Privacy Policy</a>
       <a href="contact.html">Contact</a>
     </div>
+    <span class="footer-copy">© 2026 Welden Works LLC. All rights reserved.</span>
   </div>
 </footer>
 
@@ -428,6 +433,8 @@ window.addEventListener('mousemove', e => {
   cx = e.clientX; cy = e.clientY;
   document.body.classList.add('has-cursor');
 }, { passive: true });
+document.addEventListener('mouseleave',()=>{document.body.classList.remove('has-cursor');});
+document.addEventListener('mouseenter',()=>{document.body.classList.add('has-cursor');});
 (function loop() {
   rx += (cx - rx) * 0.12; ry += (cy - ry) * 0.12;
   cur.style.transform  = `translate(${cx - 5}px, ${cy - 5}px)`;

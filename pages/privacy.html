@@ -136,7 +136,7 @@ footer{background:rgba(255,255,255,.015);border-top:1px solid var(--rule);paddin
 
     <h2>1. Who We Are</h2>
     <p>Welden Works LLC ("Welden Works," "we," "us," or "our") is a digital agency providing website design, AI receptionist, and local SEO services to local businesses, primarily in Florida. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or engage our services.</p>
-    <p>If you have questions about this policy, contact us at: <a href="mailto:hello@weldenworks.com">hello@weldenworks.com</a></p>
+    <p>If you have questions about this policy, contact us at: <a href="mailto:contact@weldenworks.com">contact@weldenworks.com</a></p>
 
     <h2>2. Information We Collect</h2>
     <p>We collect information in the following ways:</p>
@@ -179,7 +179,7 @@ footer{background:rgba(255,255,255,.015);border-top:1px solid var(--rule);paddin
 
     <h2>5. Data Retention</h2>
     <p>We retain your personal information for as long as your account or business relationship is active, and for a reasonable period afterward to fulfill legal and contractual obligations (typically 3–5 years for financial records).</p>
-    <p>You may request deletion of your data at any time by contacting <a href="mailto:hello@weldenworks.com">hello@weldenworks.com</a>. We will honor deletion requests except where retention is required by law.</p>
+    <p>You may request deletion of your data at any time by contacting <a href="mailto:contact@weldenworks.com">contact@weldenworks.com</a>. We will honor deletion requests except where retention is required by law.</p>
 
     <h2>6. Cookies &amp; Tracking</h2>
     <p>Our website uses standard cookies and analytics tools to understand how visitors interact with our site. These may include:</p>
@@ -202,7 +202,7 @@ footer{background:rgba(255,255,255,.015);border-top:1px solid var(--rule);paddin
       <li><strong style="color:rgba(255,255,255,.6)">Portability:</strong> Request a machine-readable copy of your data.</li>
       <li><strong style="color:rgba(255,255,255,.6)">Opt-out of marketing:</strong> Unsubscribe from any marketing communications at any time via the unsubscribe link in our emails.</li>
     </ul>
-    <p>To exercise any of these rights, email us at <a href="mailto:hello@weldenworks.com">hello@weldenworks.com</a>. We will respond within 30 days.</p>
+    <p>To exercise any of these rights, email us at <a href="mailto:contact@weldenworks.com">contact@weldenworks.com</a>. We will respond within 30 days.</p>
 
     <h2>9. Children's Privacy</h2>
     <p>Our services are intended for business owners and are not directed at children under 13. We do not knowingly collect personal information from children. If we become aware that we have inadvertently collected such information, we will delete it promptly.</p>
@@ -218,7 +218,7 @@ footer{background:rgba(255,255,255,.015);border-top:1px solid var(--rule);paddin
     <p>If you have any questions, concerns, or requests regarding this Privacy Policy or how we handle your data, please contact us:</p>
     <div class="highlight-box">
       <strong>Welden Works LLC</strong><br/>
-      Email: <a href="mailto:hello@weldenworks.com">hello@weldenworks.com</a><br/>
+      Email: <a href="mailto:contact@weldenworks.com">contact@weldenworks.com</a><br/>
       Website: <a href="https://weldenworks.com">weldenworks.com</a>
     </div>
 
@@ -226,12 +226,17 @@ footer{background:rgba(255,255,255,.015);border-top:1px solid var(--rule);paddin
 </div>
 
 <footer>
-  <div class="ft-bot">
-    <span class="ft-copy">© 2026 Welden Works LLC. All rights reserved.</span>
-    <div class="ft-links">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      Welden Works
+      <span>Digital Agency</span>
+    </div>
+    <div class="footer-links">
+      <a href="mailto:contact@weldenworks.com">contact@weldenworks.com</a>
       <a href="privacy.html">Privacy Policy</a>
       <a href="contact.html">Contact</a>
     </div>
+    <span class="footer-copy">© 2026 Welden Works LLC. All rights reserved.</span>
   </div>
 </footer>
 
@@ -243,6 +248,8 @@ window.addEventListener('mousemove', e => {
   cx = e.clientX; cy = e.clientY;
   document.body.classList.add('has-cursor');
 }, { passive: true });
+document.addEventListener('mouseleave',()=>{document.body.classList.remove('has-cursor');});
+document.addEventListener('mouseenter',()=>{document.body.classList.add('has-cursor');});
 (function loop() {
   rx += (cx - rx) * 0.12; ry += (cy - ry) * 0.12;
   cur.style.transform  = `translate(${cx - 5}px, ${cy - 5}px)`;
