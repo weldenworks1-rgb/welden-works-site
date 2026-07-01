@@ -1,21 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="320" height="80">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 72" width="360" height="72">
   <!-- Background -->
-  <rect width="320" height="80" fill="#0d0b09"/>
+  <rect width="360" height="72" fill="#0d0b09"/>
   <!-- Outer border -->
-  <rect x="4" y="4" width="312" height="72" fill="none" stroke="#b8975a" stroke-width="0.75" opacity="0.6"/>
+  <rect x="3" y="3" width="354" height="66" fill="none" stroke="#b8975a" stroke-width="0.8" opacity="0.55"/>
 
-  <!-- Main wordmark -->
-  <text x="160" y="36" font-family="Cormorant Garamond, Georgia, serif" font-size="28" font-weight="700"
-        fill="#f5f0e8" text-anchor="middle" letter-spacing="0.5">Welden Works</text>
+  <!-- Main wordmark — bigger, cream, high contrast -->
+  <text x="180" y="33"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="30" font-weight="700"
+        fill="#f0ebe0" text-anchor="middle" letter-spacing="1">Welden Works</text>
 
-  <!-- Divider line left -->
-  <line x1="52" y1="47" x2="144" y2="47" stroke="#b8975a" stroke-width="0.6" opacity="0.7"/>
-  <!-- Center dot -->
-  <circle cx="160" cy="47" r="2" fill="#b8975a" opacity="0.9"/>
-  <!-- Divider line right -->
-  <line x1="176" y1="47" x2="268" y2="47" stroke="#b8975a" stroke-width="0.6" opacity="0.7"/>
+  <!-- Divider -->
+  <line x1="58"  y1="42" x2="158" y2="42" stroke="#b8975a" stroke-width="0.7"/>
+  <circle cx="180" cy="42" r="2.2" fill="#b8975a"/>
+  <line x1="202" y1="42" x2="302" y2="42" stroke="#b8975a" stroke-width="0.7"/>
 
-  <!-- Tagline -->
-  <text x="160" y="63" font-family="Inter, Arial, sans-serif" font-size="7.5" font-weight="500"
-        fill="#b8975a" text-anchor="middle" letter-spacing="2.5">WEB DESIGN | AI RECEPTIONISTS</text>
+  <!-- Tagline — wider tracking, gold, legible size -->
+  <text x="180" y="60"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="8.5" font-weight="600"
+        fill="#b8975a" text-anchor="middle" letter-spacing="3">WEB DESIGN · AI RECEPTIONISTS</text>
 </svg>
