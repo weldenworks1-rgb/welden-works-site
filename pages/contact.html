@@ -66,10 +66,9 @@
     }
   
 /* CURSOR */
-#cur{position:fixed;top:0;left:0;width:10px;height:10px;background:#b8975a;border-radius:50%;pointer-events:none;z-index:9999;opacity:0;will-change:transform}
-#cur-ring{position:fixed;top:0;left:0;width:36px;height:36px;border:1px solid rgba(184,151,90,.5);border-radius:50%;pointer-events:none;z-index:9998;opacity:0;will-change:transform;transition:width .25s,height .25s}
-body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
-    body{cursor:none}
+
+
+
     .footer-right a{font-size:.65rem;color:rgba(255,255,255,.28);text-decoration:none;letter-spacing:.5px;transition:color .2s;}
     .footer-right a:hover{color:var(--gold);}
     @media(max-width:768px){}
@@ -106,6 +105,30 @@ body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
     /* Honeypot — hidden from humans */
     .hp-field { display: none !important; }
 
+      #cur{
+      position:fixed;top:0;left:0;
+      width:10px;height:10px;
+      background:#b8975a !important;
+      border-radius:50%;
+      pointer-events:none;
+      z-index:99999;
+      opacity:0;
+      will-change:transform;
+      box-shadow:0 0 6px rgba(184,151,90,.6);
+    }
+    #cur-ring{
+      position:fixed;top:0;left:0;
+      width:36px;height:36px;
+      border:1.5px solid rgba(184,151,90,.6);
+      border-radius:50%;
+      pointer-events:none;
+      z-index:99998;
+      opacity:0;
+      will-change:transform;
+      transition:width .25s,height .25s,border-color .25s;
+    }
+    body.has-cursor #cur  { opacity:1 !important; }
+    body.has-cursor #cur-ring { opacity:1 !important; }
   </style>
 </head>
 <body>
@@ -266,7 +289,12 @@ const ring = document.getElementById('cur-ring');
 let cx = -200, cy = -200, rx = -200, ry = -200;
 window.addEventListener('mousemove', e => {
   cx = e.clientX; cy = e.clientY;
-  document.body.classList.add('has-cursor');
+  if (!document.body.classList.contains('has-cursor')) {
+    document.body.classList.add('has-cursor');
+    // Force immediate position so dot doesn't jump from 0,0
+    cur.style.transform  = 'translate(' + (cx - 5) + 'px,' + (cy - 5) + 'px)';
+    ring.style.transform = 'translate(' + (rx - 18) + 'px,' + (ry - 18) + 'px)';
+  }
 }, { passive: true });
 (function loop() {
   rx += (cx - rx) * 0.12; ry += (cy - ry) * 0.12;
