@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Our Process — John Boone Construction</title>
+  <link rel="icon" type="image/png" href="../assets/favicon.png?v=1"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <style>
+    :root{--ink:#0e0e0e;--ink2:#161616;--ink3:#1f1f1f;--rust:#c87941;--rust-l:#e09060;--cream:#f5f2ee;--muted:#6b6b6b;--muted-l:#909090;--rule2:rgba(255,255,255,.06);--r:8px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--ink);color:var(--cream);font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none}
+    #cur-dot,#cur-ring{position:fixed;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
+    #cur-dot{width:8px;height:8px;background:var(--rust);transition:opacity .2s}
+    #cur-ring{width:36px;height:36px;border:1.5px solid rgba(200,121,65,.6);transition:opacity .2s}
+    #scroll-prog{position:fixed;top:0;left:0;height:2px;background:var(--rust);z-index:600;width:0}
+    nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:0 60px;height:76px;display:flex;align-items:center;justify-content:space-between;background:rgba(14,14,14,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--rule2)}
+    .nav-logo{display:flex;align-items:center;gap:14px;text-decoration:none}
+    .nav-logo-mark{width:40px;height:40px;background:var(--rust);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem;color:#fff;flex-shrink:0}
+    .nav-brand{display:flex;flex-direction:column}
+    .nav-brand-name{font-family:'Space Grotesk',sans-serif;font-size:.8rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--cream)}
+    .nav-brand-sub{font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+    .nav-links{display:flex;align-items:center;gap:36px}
+    .nav-links a{font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-l);text-decoration:none;transition:color .2s}
+    .nav-links a:hover,.nav-links a.active{color:var(--cream)}
+    .nav-cta{background:var(--rust);color:#fff;padding:10px 22px;border-radius:4px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;text-decoration:none}
+    .page-header{padding:160px 60px 80px;background:var(--ink2);border-bottom:1px solid var(--rule2)}
+    .section-eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+    .section-eyebrow::before{content:'';display:block;width:24px;height:1px;background:var(--rust)}
+    .section-eyebrow span{font-family:'Space Grotesk',sans-serif;font-size:.6rem;letter-spacing:3.5px;text-transform:uppercase;color:var(--rust)}
+    .page-h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.4rem,4vw,4rem);font-weight:700;line-height:1.05;margin-bottom:20px}
+    .page-sub{font-size:1rem;line-height:1.7;color:rgba(245,242,238,.6);max-width:560px}
+    section{padding:100px 60px}
+    .section-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,3vw,2.6rem);font-weight:700;margin-bottom:16px}
+    .timeline{display:flex;flex-direction:column;gap:0;margin-top:60px;position:relative}
+    .timeline::before{content:'';position:absolute;left:39px;top:0;bottom:0;width:1px;background:rgba(200,121,65,.2)}
+    .tl-item{display:grid;grid-template-columns:80px 1fr;gap:40px;padding:48px 0;border-bottom:1px solid var(--rule2);position:relative}
+    .tl-item:last-child{border-bottom:none}
+    .tl-circle{width:80px;height:80px;border-radius:50%;background:var(--ink2);border:2px solid rgba(200,121,65,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:1}
+    .tl-circle.active{background:var(--rust);border-color:var(--rust)}
+    .tl-n{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.2rem;color:var(--rust)}
+    .tl-circle.active .tl-n{color:#fff}
+    .tl-content{padding-top:16px}
+    .tl-content h3{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:12px}
+    .tl-content p{font-size:.9rem;line-height:1.7;color:var(--muted-l);max-width:600px;margin-bottom:16px}
+    .tl-time{font-family:'Space Grotesk',sans-serif;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--rust);background:rgba(200,121,65,.1);padding:4px 12px;border-radius:20px;display:inline-block}
+    .promise-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule2);border:1px solid var(--rule2);border-radius:var(--r);overflow:hidden;margin-top:60px}
+    .pg{background:var(--ink2);padding:36px 28px}
+    .pg h3{font-family:'Space Grotesk',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:10px;color:var(--rust)}
+    .pg p{font-size:.85rem;line-height:1.6;color:var(--muted-l)}
+    .cta-section{background:var(--rust);padding:100px 60px;text-align:center}
+    .cta-section h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;color:#fff;margin-bottom:16px}
+    .cta-section p{color:rgba(255,255,255,.75);margin-bottom:40px}
+    .btn-white{background:#fff;color:#a0612e;padding:14px 32px;border-radius:4px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+    footer{background:var(--ink2);padding:80px 60px 40px;border-top:1px solid var(--rule2)}
+    .ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:60px;margin-bottom:60px}
+    .ft-brand p{font-size:.85rem;line-height:1.7;color:var(--muted);margin-top:16px;max-width:280px}
+    .ft-col h4{font-family:'Space Grotesk',sans-serif;font-size:.62rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--rust);margin-bottom:20px}
+    .ft-col a{display:block;font-size:.82rem;color:var(--muted);text-decoration:none;margin-bottom:10px;transition:color .2s}
+    .ft-bot{border-top:1px solid var(--rule2);padding-top:28px;display:flex;justify-content:space-between;align-items:center}
+    .ft-copy{font-size:.75rem;color:var(--muted)}
+    .ft-bot-links{display:flex;gap:24px}
+    .ft-bot-links a{font-size:.72rem;color:var(--muted);text-decoration:none}
+    .ft-logo{display:flex;align-items:center;gap:12px}
+    .ft-logo-mark{width:36px;height:36px;background:var(--rust);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.9rem;color:#fff}
+    .ft-logo-name{font-family:'Space Grotesk',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--cream)}
+    .g-up{opacity:0;transform:translateY(28px)}
+    .ham{display:none;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;background:none;border:none;cursor:pointer;padding:4px;z-index:600}
+    .ham span{display:block;width:24px;height:1.5px;background:var(--rust);transition:transform .3s,opacity .3s;transform-origin:center}
+    .ham.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+    .ham.open span:nth-child(2){opacity:0}
+    .ham.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+    .mobile-menu{display:none;position:fixed;inset:0;top:76px;background:rgba(14,14,14,.97);backdrop-filter:blur(24px);z-index:499;flex-direction:column;justify-content:center;align-items:center;padding:32px 0}
+    .mobile-menu.open{display:flex}
+    .mobile-menu a{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:600;color:rgba(245,242,238,.5);text-decoration:none;padding:18px 40px;width:100%;text-align:center;border-bottom:1px solid rgba(200,121,65,.08);transition:color .2s}
+    .mobile-menu a:hover{color:var(--rust)}
+    .mobile-menu .mob-cta{margin-top:20px;background:var(--rust);color:#fff!important;font-size:.9rem;font-weight:600;padding:16px 40px;border-bottom:none}
+    @media(max-width:768px){
+      nav{padding:0 20px!important}.ham{display:flex}.nav-links,.nav-cta{display:none!important}
+      .page-header,.cta-section{padding:110px 20px 52px!important}
+      section{padding:60px 20px!important}
+      .tl-item{grid-template-columns:1fr!important;gap:16px!important}
+      .timeline::before{display:none}
+      .tl-circle{width:56px;height:56px}
+      .promise-grid{grid-template-columns:1fr!important}
+      .ft-grid{grid-template-columns:1fr!important;gap:36px!important}
+      .ft-bot{flex-direction:column;gap:12px;text-align:center}
+    }
+  </style>
+</head>
+<body>
+<div id="cur-dot"></div><div id="cur-ring"></div><div id="scroll-prog"></div>
+<nav>
+  <a href="../index.html" class="nav-logo"><div class="nav-logo-mark">JB</div><div class="nav-brand"><span class="nav-brand-name">John Boone</span><span class="nav-brand-sub">Construction, LLC</span></div></a>
+  <div class="nav-links"><a href="../index.html">Home</a><a href="services.html">Services</a><a href="process.html" class="active">Process</a><a href="portfolio.html">Portfolio</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+  <a href="contact.html" class="nav-cta">Free Estimate</a>
+  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-menu" id="mob-menu">
+  <a href="../index.html">Home</a><a href="services.html">Services</a><a href="process.html">Process</a><a href="portfolio.html">Portfolio</a><a href="about.html">About</a><a href="contact.html">Contact</a>
+  <a href="contact.html" class="mob-cta">Free Estimate →</a>
+</div>
+
+<div class="page-header">
+  <div class="section-eyebrow g-up"><span>How We Work</span></div>
+  <h1 class="page-h1 g-up">A Simple Process.<br>No Runaround.</h1>
+  <p class="page-sub g-up">From first call to final walkthrough — here's exactly what working with John Boone Construction looks like.</p>
+</div>
+
+<section style="background:var(--ink)">
+  <div class="section-eyebrow g-up"><span>Step by Step</span></div>
+  <h2 class="section-title g-up">The Full Client Journey</h2>
+  <div class="timeline">
+    <div class="tl-item g-up">
+      <div class="tl-circle active"><span class="tl-n">01</span></div>
+      <div class="tl-content">
+        <h3>You Call or Text</h3>
+        <p>Reach us by phone, text, or the contact form. We respond fast — typically same day. Tell us what you're dealing with and we'll schedule a visit.</p>
+        <span class="tl-time">Same day response</span>
+      </div>
+    </div>
+    <div class="tl-item g-up">
+      <div class="tl-circle"><span class="tl-n">02</span></div>
+      <div class="tl-content">
+        <h3>Free On-Site Estimate</h3>
+        <p>John visits your property, assesses the damage or scope, and gives you a written quote — no pressure, no obligation. Most estimates happen within 1–3 business days.</p>
+        <span class="tl-time">1–3 business days</span>
+      </div>
+    </div>
+    <div class="tl-item g-up">
+      <div class="tl-circle"><span class="tl-n">03</span></div>
+      <div class="tl-content">
+        <h3>Scope Review & Scheduling</h3>
+        <p>We walk you through the written scope, answer every question, and agree on a schedule. No surprises. What we quote is what you pay.</p>
+        <span class="tl-time">1–2 days after estimate</span>
+      </div>
+    </div>
+    <div class="tl-item g-up">
+      <div class="tl-circle"><span class="tl-n">04</span></div>
+      <div class="tl-content">
+        <h3>The Work Begins</h3>
+        <p>John and his crew arrive on time, set up properly, and get to work. The site is kept clean throughout. You're updated on progress.</p>
+        <span class="tl-time">Per project scope</span>
+      </div>
+    </div>
+    <div class="tl-item g-up">
+      <div class="tl-circle"><span class="tl-n">05</span></div>
+      <div class="tl-content">
+        <h3>Final Walkthrough & Sign-Off</h3>
+        <p>When the work is done, we walk the job with you. Full cleanup. We don't leave until you're satisfied. Follow-up is always available.</p>
+        <span class="tl-time">Job complete</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--ink2)">
+  <div class="section-eyebrow g-up"><span>Our Promises</span></div>
+  <h2 class="section-title g-up">What You Can Expect,<br>Every Time</h2>
+  <div class="promise-grid">
+    <div class="pg g-up"><h3>Show Up On Time</h3><p>We schedule and we stick to it. If something changes, we communicate immediately — not after the fact.</p></div>
+    <div class="pg g-up"><h3>Written Quotes Only</h3><p>Every estimate is in writing before work begins. No verbal agreements, no scope creep, no surprise invoices.</p></div>
+    <div class="pg g-up"><h3>Clean Worksite Daily</h3><p>We clean up at the end of every workday. Your property is respected throughout the project.</p></div>
+    <div class="pg g-up"><h3>Answer the Phone</h3><p>John answers texts and calls. You won't be stuck leaving voicemails and wondering what's happening with your project.</p></div>
+    <div class="pg g-up"><h3>Finish What We Start</h3><p>We don't abandon projects. We've even been called in to complete jobs other contractors left unfinished.</p></div>
+    <div class="pg g-up"><h3>Honest Pricing</h3><p>No inflated quotes to negotiate down from. We give you the real number the first time.</p></div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="g-up">
+    <h2>Ready to Get Started?</h2>
+    <p>Step one is a free estimate. Call or fill out the form — we'll take it from there.</p>
+    <a href="contact.html" class="btn-white">Request Free Estimate →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="ft-grid">
+    <div class="ft-brand"><div class="ft-logo"><div class="ft-logo-mark">JB</div><span class="ft-logo-name">John Boone Construction</span></div><p>North Port's top-rated stucco contractor. Expert repair, restoration, and new construction stucco — done right, priced honest.</p></div>
+    <div class="ft-col"><h4>Services</h4><a href="services.html">Stucco Repair</a><a href="services.html">Skim Coat</a><a href="services.html">Hurricane Damage</a><a href="services.html">New Construction</a></div>
+    <div class="ft-col"><h4>Company</h4><a href="about.html">About Us</a><a href="process.html">Our Process</a><a href="portfolio.html">Portfolio</a><a href="faq.html">FAQ</a></div>
+    <div class="ft-col"><h4>Contact</h4><a href="tel:9412377762">(941) 237-7762</a><a href="contact.html">Free Estimate</a><a href="#">North Port, FL 34288</a><a href="#">Mon–Fri 7am–5pm</a></div>
+  </div>
+  <div class="ft-bot"><span class="ft-copy">© 2026 John Boone Construction, LLC.</span><div class="ft-bot-links"><a href="privacy.html">Privacy</a><a href="contact.html">Contact</a></div></div>
+</footer>
+<script>
+window.addEventListener('load',()=>{
+  gsap.registerPlugin(ScrollTrigger);
+  const dot=document.getElementById('cur-dot'),ring=document.getElementById('cur-ring');
+  const dX=gsap.quickTo(dot,'x',{duration:.1}),dY=gsap.quickTo(dot,'y',{duration:.1});
+  const rX=gsap.quickTo(ring,'x',{duration:.18}),rY=gsap.quickTo(ring,'y',{duration:.18});
+  document.addEventListener('mousemove',e=>{dX(e.clientX);dY(e.clientY);rX(e.clientX);rY(e.clientY);});
+  document.addEventListener('mouseleave',()=>{dot.style.opacity='0';ring.style.opacity='0';});
+  document.addEventListener('mouseenter',()=>{dot.style.opacity='1';ring.style.opacity='1';});
+  const prog=document.getElementById('scroll-prog');
+  window.addEventListener('scroll',()=>{prog.style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%';});
+  gsap.utils.toArray('.g-up').forEach(el=>{gsap.to(el,{opacity:1,y:0,duration:.9,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 85%',toggleActions:'play none none none'}});});
+  const ham=document.getElementById('ham'),menu=document.getElementById('mob-menu');
+  ham.addEventListener('click',()=>{ham.classList.toggle('open');menu.classList.toggle('open');document.body.style.overflow=menu.classList.contains('open')?'hidden':'';});
+  menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{ham.classList.remove('open');menu.classList.remove('open');document.body.style.overflow='';}));
+});
+</script>
+</body>
+</html>
