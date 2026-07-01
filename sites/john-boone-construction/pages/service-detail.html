@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hurricane Damage Repair — John Boone Construction</title>
+  <link rel="icon" type="image/png" href="../assets/favicon.png?v=1"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <style>
+    :root{--ink:#0e0e0e;--ink2:#161616;--ink3:#1f1f1f;--rust:#c87941;--rust-l:#e09060;--rust-d:#a0612e;--cream:#f5f2ee;--muted:#6b6b6b;--muted-l:#909090;--rule:rgba(200,121,65,.15);--rule2:rgba(255,255,255,.06);--r:8px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--ink);color:var(--cream);font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none}
+    #cur-dot,#cur-ring{position:fixed;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
+    #cur-dot{width:8px;height:8px;background:var(--rust);transition:opacity .2s}
+    #cur-ring{width:36px;height:36px;border:1.5px solid rgba(200,121,65,.6);transition:opacity .2s}
+    #scroll-prog{position:fixed;top:0;left:0;height:2px;background:var(--rust);z-index:600;width:0}
+    nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:0 60px;height:76px;display:flex;align-items:center;justify-content:space-between;background:rgba(14,14,14,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--rule2)}
+    .nav-logo{display:flex;align-items:center;gap:14px;text-decoration:none}
+    .nav-logo-mark{width:40px;height:40px;background:var(--rust);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem;color:#fff;flex-shrink:0}
+    .nav-brand{display:flex;flex-direction:column}
+    .nav-brand-name{font-family:'Space Grotesk',sans-serif;font-size:.8rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--cream)}
+    .nav-brand-sub{font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+    .nav-links{display:flex;align-items:center;gap:36px}
+    .nav-links a{font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-l);text-decoration:none;transition:color .2s}
+    .nav-links a:hover,.nav-links a.active{color:var(--cream)}
+    .nav-cta{background:var(--rust);color:#fff;padding:10px 22px;border-radius:4px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;text-decoration:none}
+    .page-header{padding:160px 60px 80px;background:var(--ink2);border-bottom:1px solid var(--rule2)}
+    .breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:24px;font-size:.72rem;color:var(--muted)}
+    .breadcrumb a{color:var(--rust);text-decoration:none}
+    .breadcrumb span{color:var(--muted)}
+    .section-eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+    .section-eyebrow::before{content:'';display:block;width:24px;height:1px;background:var(--rust)}
+    .section-eyebrow span{font-family:'Space Grotesk',sans-serif;font-size:.6rem;letter-spacing:3.5px;text-transform:uppercase;color:var(--rust)}
+    .page-h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.2rem,4vw,3.8rem);font-weight:700;line-height:1.05;margin-bottom:20px}
+    .page-sub{font-size:1rem;line-height:1.7;color:rgba(245,242,238,.6);max-width:560px}
+    section{padding:100px 60px}
+    .section-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,3vw,2.6rem);font-weight:700;margin-bottom:16px}
+    /* DETAIL LAYOUT */
+    .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+    .detail-body{font-size:.95rem;line-height:1.8;color:rgba(245,242,238,.7)}
+    .detail-body p{margin-bottom:20px}
+    .detail-body strong{color:var(--cream)}
+    .detail-steps{display:flex;flex-direction:column;gap:0;margin-top:32px}
+    .ds{display:flex;gap:20px;padding:24px 0;border-bottom:1px solid var(--rule2)}
+    .ds:last-child{border-bottom:none}
+    .ds-num{font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;color:rgba(200,121,65,.3);flex-shrink:0;width:36px}
+    .ds h4{font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:600;margin-bottom:6px}
+    .ds p{font-size:.82rem;line-height:1.6;color:var(--muted-l)}
+    /* CASE STUDY */
+    .case-card{background:var(--ink2);border:1px solid var(--rule2);border-radius:var(--r);padding:40px;position:sticky;top:100px}
+    .case-label{font-family:'Space Grotesk',sans-serif;font-size:.58rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--rust);margin-bottom:16px}
+    .case-card h3{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:12px}
+    .case-card p{font-size:.85rem;line-height:1.65;color:var(--muted-l);margin-bottom:20px}
+    .case-stat{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--rule2)}
+    .case-stat:last-of-type{border-bottom:none}
+    .case-stat-label{font-size:.75rem;color:var(--muted)}
+    .case-stat-val{font-family:'Space Grotesk',sans-serif;font-size:.85rem;font-weight:600;color:var(--rust)}
+    .case-quote{background:var(--ink3);border-left:3px solid var(--rust);padding:16px 20px;margin-top:20px;font-size:.85rem;font-style:italic;color:rgba(245,242,238,.7);line-height:1.6}
+    /* WHY SECTION */
+    .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule2);border:1px solid var(--rule2);border-radius:var(--r);overflow:hidden;margin-top:60px}
+    .why-card{background:var(--ink2);padding:36px 28px}
+    .why-card h3{font-family:'Space Grotesk',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:10px;color:var(--rust)}
+    .why-card p{font-size:.82rem;line-height:1.6;color:var(--muted-l)}
+    /* CTA */
+    .cta-section{background:var(--rust);padding:100px 60px;text-align:center}
+    .cta-section h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;color:#fff;margin-bottom:16px}
+    .cta-section p{font-size:1rem;color:rgba(255,255,255,.75);margin-bottom:40px}
+    .btn-white{background:#fff;color:var(--rust-d);padding:14px 32px;border-radius:4px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+    footer{background:var(--ink2);padding:80px 60px 40px;border-top:1px solid var(--rule2)}
+    .ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:60px;margin-bottom:60px}
+    .ft-brand p{font-size:.85rem;line-height:1.7;color:var(--muted);margin-top:16px;max-width:280px}
+    .ft-col h4{font-family:'Space Grotesk',sans-serif;font-size:.62rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--rust);margin-bottom:20px}
+    .ft-col a{display:block;font-size:.82rem;color:var(--muted);text-decoration:none;margin-bottom:10px;transition:color .2s}
+    .ft-col a:hover{color:var(--cream)}
+    .ft-bot{border-top:1px solid var(--rule2);padding-top:28px;display:flex;justify-content:space-between;align-items:center}
+    .ft-copy{font-size:.75rem;color:var(--muted)}
+    .ft-bot-links{display:flex;gap:24px}
+    .ft-bot-links a{font-size:.72rem;color:var(--muted);text-decoration:none}
+    .ft-logo{display:flex;align-items:center;gap:12px}
+    .ft-logo-mark{width:36px;height:36px;background:var(--rust);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.9rem;color:#fff}
+    .ft-logo-name{font-family:'Space Grotesk',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--cream)}
+    .g-up{opacity:0;transform:translateY(28px)}
+    .ham{display:none;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;background:none;border:none;cursor:pointer;padding:4px;z-index:600}
+    .ham span{display:block;width:24px;height:1.5px;background:var(--rust);transition:transform .3s,opacity .3s;transform-origin:center}
+    .ham.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+    .ham.open span:nth-child(2){opacity:0}
+    .ham.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+    .mobile-menu{display:none;position:fixed;inset:0;top:76px;background:rgba(14,14,14,.97);backdrop-filter:blur(24px);z-index:499;flex-direction:column;justify-content:center;align-items:center;padding:32px 0}
+    .mobile-menu.open{display:flex}
+    .mobile-menu a{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:600;color:rgba(245,242,238,.5);text-decoration:none;padding:18px 40px;width:100%;text-align:center;border-bottom:1px solid rgba(200,121,65,.08);transition:color .2s}
+    .mobile-menu a:hover{color:var(--rust)}
+    .mobile-menu .mob-cta{margin-top:20px;background:var(--rust);color:#fff!important;font-size:.9rem;font-weight:600;padding:16px 40px;border-bottom:none}
+    @media(max-width:768px){
+      nav{padding:0 20px!important}.ham{display:flex}.nav-links,.nav-cta{display:none!important}
+      .page-header,.cta-section{padding:110px 20px 52px!important}
+      section{padding:60px 20px!important}
+      .detail-grid{grid-template-columns:1fr!important;gap:40px!important}
+      .case-card{position:static}
+      .why-grid{grid-template-columns:1fr!important}
+      .ft-grid{grid-template-columns:1fr!important;gap:36px!important}
+      .ft-bot{flex-direction:column;gap:12px;text-align:center}
+    }
+  </style>
+</head>
+<body>
+<div id="cur-dot"></div><div id="cur-ring"></div><div id="scroll-prog"></div>
+<nav>
+  <a href="../index.html" class="nav-logo"><div class="nav-logo-mark">JB</div><div class="nav-brand"><span class="nav-brand-name">John Boone</span><span class="nav-brand-sub">Construction, LLC</span></div></a>
+  <div class="nav-links"><a href="../index.html">Home</a><a href="services.html" class="active">Services</a><a href="process.html">Process</a><a href="portfolio.html">Portfolio</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+  <a href="contact.html" class="nav-cta">Free Estimate</a>
+  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-menu" id="mob-menu">
+  <a href="../index.html">Home</a><a href="services.html">Services</a><a href="process.html">Process</a><a href="portfolio.html">Portfolio</a><a href="about.html">About</a><a href="contact.html">Contact</a>
+  <a href="contact.html" class="mob-cta">Free Estimate →</a>
+</div>
+
+<div class="page-header">
+  <div class="breadcrumb g-up"><a href="services.html">Services</a><span>/</span><span>Hurricane Damage Repair</span></div>
+  <div class="section-eyebrow g-up"><span>Flagship Service</span></div>
+  <h1 class="page-h1 g-up">Hurricane & Storm<br>Damage Repair</h1>
+  <p class="page-sub g-up">North Port's most experienced stucco team for post-storm restoration. We've helped hundreds of homeowners get back to normal after Hurricane Ian and beyond.</p>
+</div>
+
+<section style="background:var(--ink)">
+  <div class="detail-grid">
+    <div>
+      <div class="section-eyebrow g-up"><span>The Service</span></div>
+      <h2 class="section-title g-up">Complete Storm<br>Restoration Process</h2>
+      <div class="detail-body g-up">
+        <p>After a major storm, stucco damage goes beyond what's visible. Water intrusion, structural movement, and impact damage can compromise large sections of your exterior — even when it looks fine on the surface.</p>
+        <p><strong>We don't just patch what we see.</strong> We assess the full scope, identify underlying issues, and restore your exterior to pre-storm condition — or better.</p>
+      </div>
+      <div class="detail-steps">
+        <div class="ds g-up"><div class="ds-num">1</div><div><h4>Initial Assessment</h4><p>We inspect your exterior for visible and hidden damage — including water infiltration, cracked lath, and compromised bonding layers.</p></div></div>
+        <div class="ds g-up"><div class="ds-num">2</div><div><h4>Damage Mapping</h4><p>We document all affected areas and provide a written scope of work with clear pricing before anything starts.</p></div></div>
+        <div class="ds g-up"><div class="ds-num">3</div><div><h4>Demo & Prep</h4><p>Damaged stucco removed to solid substrate. Moisture barrier and lath repaired or replaced as needed.</p></div></div>
+        <div class="ds g-up"><div class="ds-num">4</div><div><h4>Multi-Coat Application</h4><p>Scratch coat, brown coat, and finish coat applied in sequence. No shortcuts. Industry-standard cure times respected.</p></div></div>
+        <div class="ds g-up"><div class="ds-num">5</div><div><h4>Texture Match & Blend</h4><p>Final finish matched to your existing texture — knockdown, sand, smooth, or custom. Seamless from any angle.</p></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="case-card g-up">
+        <div class="case-label">Case Study</div>
+        <h3>Post-Ian Exterior Restoration — North Port, FL</h3>
+        <p>A homeowner in North Port sustained major stucco damage across three exterior walls after Hurricane Ian. A previous contractor had abandoned the project mid-job, leaving exposed substrate for months.</p>
+        <div class="case-stat"><span class="case-stat-label">Previous Quote</span><span class="case-stat-val">$8,400</span></div>
+        <div class="case-stat"><span class="case-stat-label">John Boone Quote</span><span class="case-stat-val">$3,900</span></div>
+        <div class="case-stat"><span class="case-stat-label">Timeline</span><span class="case-stat-val">4 days</span></div>
+        <div class="case-stat"><span class="case-stat-label">Result</span><span class="case-stat-val">Seamless texture match</span></div>
+        <div class="case-quote">"John did a great job finishing a stucco job that another contractor left unfinished after being paid. He matched the finish perfectly." — Angi Review</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--ink2)">
+  <div class="section-eyebrow g-up"><span>Why Choose Us</span></div>
+  <h2 class="section-title g-up">The John Boone Difference</h2>
+  <div class="why-grid">
+    <div class="why-card g-up"><h3>Honest Assessment</h3><p>We tell you what your home actually needs — not what maximizes our invoice. Many clients save 40–50% vs. other quotes.</p></div>
+    <div class="why-card g-up"><h3>Storm Experience</h3><p>We've handled dozens of post-Ian restorations in Sarasota and Charlotte County. We know what to look for.</p></div>
+    <div class="why-card g-up"><h3>Texture Perfection</h3><p>Our specialty. We don't leave patchwork. Every repair blends seamlessly with your existing exterior.</p></div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="g-up">
+    <h2>Storm Damage? We Can Help.</h2>
+    <p>Get a free assessment and written quote — usually within 48 hours.</p>
+    <a href="contact.html" class="btn-white">Request Free Assessment →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="ft-grid">
+    <div class="ft-brand"><div class="ft-logo"><div class="ft-logo-mark">JB</div><span class="ft-logo-name">John Boone Construction</span></div><p>North Port's top-rated stucco contractor. Expert repair, restoration, and new construction stucco — done right, priced honest.</p></div>
+    <div class="ft-col"><h4>Services</h4><a href="services.html">Stucco Repair</a><a href="services.html">Skim Coat</a><a href="services.html">Hurricane Damage</a><a href="services.html">New Construction</a></div>
+    <div class="ft-col"><h4>Company</h4><a href="about.html">About Us</a><a href="process.html">Our Process</a><a href="portfolio.html">Portfolio</a><a href="faq.html">FAQ</a></div>
+    <div class="ft-col"><h4>Contact</h4><a href="tel:9412377762">(941) 237-7762</a><a href="contact.html">Free Estimate</a><a href="#">North Port, FL 34288</a><a href="#">Mon–Fri 7am–5pm</a></div>
+  </div>
+  <div class="ft-bot"><span class="ft-copy">© 2026 John Boone Construction, LLC.</span><div class="ft-bot-links"><a href="privacy.html">Privacy</a><a href="contact.html">Contact</a></div></div>
+</footer>
+<script>
+window.addEventListener('load',()=>{
+  gsap.registerPlugin(ScrollTrigger);
+  const dot=document.getElementById('cur-dot'),ring=document.getElementById('cur-ring');
+  const dX=gsap.quickTo(dot,'x',{duration:.1}),dY=gsap.quickTo(dot,'y',{duration:.1});
+  const rX=gsap.quickTo(ring,'x',{duration:.18}),rY=gsap.quickTo(ring,'y',{duration:.18});
+  document.addEventListener('mousemove',e=>{dX(e.clientX);dY(e.clientY);rX(e.clientX);rY(e.clientY);});
+  document.addEventListener('mouseleave',()=>{dot.style.opacity='0';ring.style.opacity='0';});
+  document.addEventListener('mouseenter',()=>{dot.style.opacity='1';ring.style.opacity='1';});
+  const prog=document.getElementById('scroll-prog');
+  window.addEventListener('scroll',()=>{prog.style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%';});
+  gsap.utils.toArray('.g-up').forEach(el=>{gsap.to(el,{opacity:1,y:0,duration:.9,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 85%',toggleActions:'play none none none'}});});
+  const ham=document.getElementById('ham'),menu=document.getElementById('mob-menu');
+  ham.addEventListener('click',()=>{ham.classList.toggle('open');menu.classList.toggle('open');document.body.style.overflow=menu.classList.contains('open')?'hidden':'';});
+  menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{ham.classList.remove('open');menu.classList.remove('open');document.body.style.overflow='';}));
+});
+</script>
+</body>
+</html>
