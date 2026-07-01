@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAQ — John Boone Construction</title>
+  <link rel="icon" type="image/png" href="../assets/favicon.png?v=1"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <style>
+    :root{--ink:#0e0e0e;--ink2:#161616;--ink3:#1f1f1f;--rust:#c87941;--rust-l:#e09060;--cream:#f5f2ee;--muted:#6b6b6b;--muted-l:#909090;--rule2:rgba(255,255,255,.06);--r:8px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--ink);color:var(--cream);font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none}
+    #cur-dot,#cur-ring{position:fixed;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
+    #cur-dot{width:8px;height:8px;background:var(--rust);transition:opacity .2s}
+    #cur-ring{width:36px;height:36px;border:1.5px solid rgba(200,121,65,.6);transition:opacity .2s}
+    #scroll-prog{position:fixed;top:0;left:0;height:2px;background:var(--rust);z-index:600;width:0}
+    nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:0 60px;height:76px;display:flex;align-items:center;justify-content:space-between;background:rgba(14,14,14,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--rule2)}
+    .nav-logo{display:flex;align-items:center;gap:14px;text-decoration:none}
+    .nav-logo-mark{width:40px;height:40px;background:var(--rust);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem;color:#fff;flex-shrink:0}
+    .nav-brand{display:flex;flex-direction:column}
+    .nav-brand-name{font-family:'Space Grotesk',sans-serif;font-size:.8rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--cream)}
+    .nav-brand-sub{font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+    .nav-links{display:flex;align-items:center;gap:36px}
+    .nav-links a{font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-l);text-decoration:none;transition:color .2s}
+    .nav-links a:hover,.nav-links a.active{color:var(--cream)}
+    .nav-cta{background:var(--rust);color:#fff;padding:10px 22px;border-radius:4px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;text-decoration:none}
+    .page-header{padding:160px 60px 80px;background:var(--ink2);border-bottom:1px solid var(--rule2)}
+    .section-eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+    .section-eyebrow::before{content:'';display:block;width:24px;height:1px;background:var(--rust)}
+    .section-eyebrow span{font-family:'Space Grotesk',sans-serif;font-size:.6rem;letter-spacing:3.5px;text-transform:uppercase;color:var(--rust)}
+    .page-h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.4rem,4vw,4rem);font-weight:700;line-height:1.05;margin-bottom:20px}
+    .page-sub{font-size:1rem;line-height:1.7;color:rgba(245,242,238,.6);max-width:560px}
+    section{padding:100px 60px}
+    .section-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,3vw,2.6rem);font-weight:700;margin-bottom:16px}
+    .faq-search{width:100%;max-width:500px;background:var(--ink2);border:1px solid var(--rule2);border-radius:4px;padding:14px 20px;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:.9rem;margin-bottom:40px;outline:none;transition:border-color .2s}
+    .faq-search:focus{border-color:var(--rust)}
+    .faq-search::placeholder{color:var(--muted)}
+    .cat-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:40px}
+    .cat-tab{background:none;border:1px solid var(--rule2);color:var(--muted-l);font-family:'Space Grotesk',sans-serif;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;padding:8px 18px;border-radius:4px;cursor:pointer;transition:all .2s}
+    .cat-tab.active,.cat-tab:hover{background:var(--rust);border-color:var(--rust);color:#fff}
+    .faq-list{display:flex;flex-direction:column;gap:0;border:1px solid var(--rule2);border-radius:var(--r);overflow:hidden}
+    .faq-item{border-bottom:1px solid var(--rule2);background:var(--ink2)}
+    .faq-item:last-child{border-bottom:none}
+    .faq-item.hidden{display:none}
+    .faq-q{width:100%;background:none;border:none;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:500;text-align:left;padding:22px 28px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px}
+    .faq-q span{color:var(--muted);font-size:1.1rem;transition:transform .3s;flex-shrink:0}
+    .faq-q.open span{transform:rotate(45deg);color:var(--rust)}
+    .faq-a{overflow:hidden;height:0;transition:height .35s ease}
+    .faq-a-inner{padding:0 28px 22px;font-size:.85rem;line-height:1.7;color:var(--muted-l)}
+    .no-results{padding:40px;text-align:center;color:var(--muted);font-size:.9rem;display:none}
+    .cta-section{background:var(--rust);padding:100px 60px;text-align:center}
+    .cta-section h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;color:#fff;margin-bottom:16px}
+    .cta-section p{color:rgba(255,255,255,.75);margin-bottom:40px}
+    .btn-white{background:#fff;color:#a0612e;padding:14px 32px;border-radius:4px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+    footer{background:var(--ink2);padding:80px 60px 40px;border-top:1px solid var(--rule2)}
+    .ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:60px;margin-bottom:60px}
+    .ft-brand p{font-size:.85rem;line-height:1.7;color:var(--muted);margin-top:16px;max-width:280px}
+    .ft-col h4{font-family:'Space Grotesk',sans-serif;font-size:.62rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--rust);margin-bottom:20px}
+    .ft-col a{display:block;font-size:.82rem;color:var(--muted);text-decoration:none;margin-bottom:10px;transition:color .2s}
+    .ft-bot{border-top:1px solid var(--rule2);padding-top:28px;display:flex;justify-content:space-between;align-items:center}
+    .ft-copy{font-size:.75rem;color:var(--muted)}
+    .ft-bot-links{display:flex;gap:24px}
+    .ft-bot-links a{font-size:.72rem;color:var(--muted);text-decoration:none}
+    .ft-logo{display:flex;align-items:center;gap:12px}
+    .ft-logo-mark{width:36px;height:36px;background:var(--rust);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.9rem;color:#fff}
+    .ft-logo-name{font-family:'Space Grotesk',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--cream)}
+    .g-up{opacity:0;transform:translateY(28px)}
+    .ham{display:none;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;background:none;border:none;cursor:pointer;padding:4px;z-index:600}
+    .ham span{display:block;width:24px;height:1.5px;background:var(--rust);transition:transform .3s,opacity .3s;transform-origin:center}
+    .ham.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+    .ham.open span:nth-child(2){opacity:0}
+    .ham.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+    .mobile-menu{display:none;position:fixed;inset:0;top:76px;background:rgba(14,14,14,.97);backdrop-filter:blur(24px);z-index:499;flex-direction:column;justify-content:center;align-items:center;padding:32px 0}
+    .mobile-menu.open{display:flex}
+    .mobile-menu a{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:600;color:rgba(245,242,238,.5);text-decoration:none;padding:18px 40px;width:100%;text-align:center;border-bottom:1px solid rgba(200,121,65,.08);transition:color .2s}
+    .mobile-menu a:hover{color:var(--rust)}
+    .mobile-menu .mob-cta{margin-top:20px;background:var(--rust);color:#fff!important;font-size:.9rem;font-weight:600;padding:16px 40px;border-bottom:none}
+    @media(max-width:768px){
+      nav{padding:0 20px!important}.ham{display:flex}.nav-links,.nav-cta{display:none!important}
+      .page-header,.cta-section{padding:110px 20px 52px!important}
+      section{padding:60px 20px!important}
+      .ft-grid{grid-template-columns:1fr!important;gap:36px!important}
+      .ft-bot{flex-direction:column;gap:12px;text-align:center}
+    }
+  </style>
+</head>
+<body>
+<div id="cur-dot"></div><div id="cur-ring"></div><div id="scroll-prog"></div>
+<nav>
+  <a href="../index.html" class="nav-logo"><div class="nav-logo-mark">JB</div><div class="nav-brand"><span class="nav-brand-name">John Boone</span><span class="nav-brand-sub">Construction, LLC</span></div></a>
+  <div class="nav-links"><a href="../index.html">Home</a><a href="services.html">Services</a><a href="process.html">Process</a><a href="portfolio.html">Portfolio</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+  <a href="contact.html" class="nav-cta">Free Estimate</a>
+  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-menu" id="mob-menu">
+  <a href="../index.html">Home</a><a href="services.html">Services</a><a href="process.html">Process</a><a href="portfolio.html">Portfolio</a><a href="about.html">About</a><a href="contact.html">Contact</a>
+  <a href="contact.html" class="mob-cta">Free Estimate →</a>
+</div>
+<div class="page-header">
+  <div class="section-eyebrow g-up"><span>FAQ</span></div>
+  <h1 class="page-h1 g-up">Common Questions,<br>Straight Answers.</h1>
+  <p class="page-sub g-up">Everything you want to know about working with John Boone Construction — before you even pick up the phone.</p>
+</div>
+<section style="background:var(--ink)">
+  <input type="text" class="faq-search g-up" id="faq-search" placeholder="Search questions..."/>
+  <div class="cat-tabs g-up">
+    <button class="cat-tab active" data-cat="all">All</button>
+    <button class="cat-tab" data-cat="general">General</button>
+    <button class="cat-tab" data-cat="pricing">Pricing</button>
+    <button class="cat-tab" data-cat="process">Process</button>
+    <button class="cat-tab" data-cat="technical">Technical</button>
+  </div>
+  <div class="faq-list g-up" id="faq-list">
+    <div class="faq-item" data-cat="general"><button class="faq-q">Are you licensed and insured? <span>+</span></button><div class="faq-a"><div class="faq-a-inner">Yes. John Boone Construction, LLC is fully licensed and bonded in Florida. We carry all required insurance for residential and commercial stucco work.</div></div></div>
+    <div class="faq-item" data-cat="general"><button class="faq-q">What areas do you serve? <span>+</span></button><div class="faq-a"><div class="faq-a-inner">We're based in North Port, FL and serve Sarasota and Charlotte County including Venice, Port Charlotte, Englewood, and surrounding communities.</div></div></div>
+    <div class="faq-item" data-cat="general"><button class="faq-q">How do I contact you? <span>+</span></button><div class="faq-a"><div class="faq-a-inner">Call or text (941) 237-7762, or use the contact form on this site. John responds to texts and calls quickly — usually same day.</div></div></div>
+    <div class="faq-item" data-cat="pricing"><button class="faq-q">Is the estimate really free? <span>+</span></button><div class="faq-a"><div class="faq-a-inner">100% free. John visits your property, assesses the work, and provides a written estimate at no charge. No obligation, no pressure.</div></div></div>
+    <div class="faq-item" data-cat="pricing"><button class="faq-q">Why are your prices lower than competitors? <span>+</span></button><div class="faq-a"><div class="faq-a-inner">We keep overhead low and don't mark up aggressively. Customers consistently tell us our quotes are 30–50% below competing bids, with higher quality work.</div></div></div>
+    <div class="faq-item" data-cat="pricing"><button class="faq-q">Will the final bill match the quote? <span>+</span></button><div class="faq-a"><div class="faq-a-inner">Yes. What we quote in writing is what you pay. No surprise invoices or scope creep unless you request additional work.</div></div></div>
+    <div class="faq-item" data-cat="pricing"><button class="faq-q">Do you work with insurance claims? <span>+</span></button><div class="faq-a"><div class="faq-a-inner">Yes, especially for hurricane and storm damage. We provide documentation and photos to support your homeowner's insurance claim.</div></div></div>
+    <div class="faq-item" data-cat="process"><button class="faq-q">How quickly can I get an estimate? <span>+</span></button><div class="faq-a"><div class="faq-a-inner">Usually within 1–3 business days. Same-week visits are often available. Written quotes are delivered within 24 hours of the site visit.</div></div></div>
+    <div class="faq-item" data-cat="process"><button class="faq-q">Who will be on the job? <span>+</span></button><div class="faq-a"><div class="faq-a-inner">John Boone is on every project. No unsupervised crews, no subcontractors. You get the same skilled team from estimate to completion.</div></div></div>
+    <div class="faq-item" data-cat="process"><button class="faq-q">How long does a typical job take? <span>+</span></button><div class="faq-a"><div class="faq-a-inner">Spot repairs can often be done in a day. Section repairs typically take 2–4 days. Full exterior or new construction stucco varies by scope — we'll give you a timeline in your estimate.</div></div></div>
+    <div class="faq-item" data-cat="technical"><button class="faq-q">Can you match my existing stucco texture? <span>+</span></button><div class="faq-a"><div class="faq-a-inner">Texture matching is our specialty. We match knockdown, sand finish, smooth coat, Venetian, and custom textures seamlessly — indistinguishable from the original.</div></div></div>
+    <div class="faq-item" data-cat="technical"><button class="faq-q">Do you do hurricane damage repairs? <span>+</span></button><div class="faq-a"><div class="faq-a-inner">Absolutely. Post-hurricane stucco restoration is a major part of our work. We've completed dozens of post-Ian restorations in North Port and surrounding areas.</div></div></div>
+    <div class="faq-item" data-cat="technical"><button class="faq-q">What stucco finishes do you work with? <span>+</span></button><div class="faq-a"><div class="faq-a-inner">Knockdown, smooth, sand finish, Venetian, dash, lace, and custom textures. If it's stucco, we work with it.</div></div></div>
+    <div class="faq-item" data-cat="technical"><button class="faq-q">Do you do commercial stucco? <span>+</span></button><div class="faq-a"><div class="faq-a-inner">Yes. We handle warehouses, storefronts, privacy walls, and commercial buildings. We scale our crew to match the scope.</div></div></div>
+  </div>
+  <div class="no-results" id="no-results">No questions match your search.</div>
+</section>
+<section class="cta-section">
+  <div class="g-up">
+    <h2>Still Have Questions?</h2>
+    <p>Just call or text — John will answer directly.</p>
+    <a href="contact.html" class="btn-white">Contact Us →</a>
+  </div>
+</section>
+<footer>
+  <div class="ft-grid">
+    <div class="ft-brand"><div class="ft-logo"><div class="ft-logo-mark">JB</div><span class="ft-logo-name">John Boone Construction</span></div><p>North Port's top-rated stucco contractor. Expert repair, restoration, and new construction stucco — done right, priced honest.</p></div>
+    <div class="ft-col"><h4>Services</h4><a href="services.html">Stucco Repair</a><a href="services.html">Skim Coat</a><a href="services.html">Hurricane Damage</a><a href="services.html">New Construction</a></div>
+    <div class="ft-col"><h4>Company</h4><a href="about.html">About Us</a><a href="process.html">Our Process</a><a href="portfolio.html">Portfolio</a><a href="faq.html">FAQ</a></div>
+    <div class="ft-col"><h4>Contact</h4><a href="tel:9412377762">(941) 237-7762</a><a href="contact.html">Free Estimate</a><a href="#">North Port, FL 34288</a><a href="#">Mon–Fri 7am–5pm</a></div>
+  </div>
+  <div class="ft-bot"><span class="ft-copy">© 2026 John Boone Construction, LLC.</span><div class="ft-bot-links"><a href="privacy.html">Privacy</a><a href="contact.html">Contact</a></div></div>
+</footer>
+<script>
+window.addEventListener('load',()=>{
+  gsap.registerPlugin(ScrollTrigger);
+  const dot=document.getElementById('cur-dot'),ring=document.getElementById('cur-ring');
+  const dX=gsap.quickTo(dot,'x',{duration:.1}),dY=gsap.quickTo(dot,'y',{duration:.1});
+  const rX=gsap.quickTo(ring,'x',{duration:.18}),rY=gsap.quickTo(ring,'y',{duration:.18});
+  document.addEventListener('mousemove',e=>{dX(e.clientX);dY(e.clientY);rX(e.clientX);rY(e.clientY);});
+  document.addEventListener('mouseleave',()=>{dot.style.opacity='0';ring.style.opacity='0';});
+  document.addEventListener('mouseenter',()=>{dot.style.opacity='1';ring.style.opacity='1';});
+  const prog=document.getElementById('scroll-prog');
+  window.addEventListener('scroll',()=>{prog.style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%';});
+  gsap.utils.toArray('.g-up').forEach(el=>{gsap.to(el,{opacity:1,y:0,duration:.9,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 85%',toggleActions:'play none none none'}});});
+  // Accordion
+  document.querySelectorAll('.faq-q').forEach(btn=>{btn.addEventListener('click',()=>{const a=btn.nextElementSibling;const isOpen=btn.classList.contains('open');document.querySelectorAll('.faq-q.open').forEach(b=>{b.classList.remove('open');b.nextElementSibling.style.height='0';});if(!isOpen){btn.classList.add('open');a.style.height=a.scrollHeight+'px';}});});
+  // Category filter
+  document.querySelectorAll('.cat-tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');const c=tab.dataset.cat;document.querySelectorAll('.faq-item').forEach(i=>{i.classList.toggle('hidden',c!=='all'&&i.dataset.cat!==c);});});});
+  // Search
+  document.getElementById('faq-search').addEventListener('input',function(){const q=this.value.toLowerCase();let found=0;document.querySelectorAll('.faq-item').forEach(i=>{const txt=i.querySelector('.faq-q').textContent.toLowerCase()+i.querySelector('.faq-a-inner').textContent.toLowerCase();const show=txt.includes(q);i.classList.toggle('hidden',!show);if(show)found++;});document.getElementById('no-results').style.display=found?'none':'block';});
+  const ham=document.getElementById('ham'),menu=document.getElementById('mob-menu');
+  ham.addEventListener('click',()=>{ham.classList.toggle('open');menu.classList.toggle('open');document.body.style.overflow=menu.classList.contains('open')?'hidden':'';});
+  menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{ham.classList.remove('open');menu.classList.remove('open');document.body.style.overflow='';}));
+});
+</script>
+</body>
+</html>
