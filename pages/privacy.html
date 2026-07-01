@@ -24,7 +24,9 @@ body.has-cursor #cur,body.has-cursor #cur-ring{opacity:1}
 
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:500;height:76px;display:flex;justify-content:space-between;align-items:center;padding:0 60px;background:rgba(13,11,9,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--rule)}
-.logo{text-decoration:none;line-height:1;display:flex;align-items:center}
+.logo{text-decoration:none;display:flex;align-items:center}
+    .nav-logo-svg { height: 44px; width: auto; display: block; }
+    
 .logo-name{display:block;font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:600;color:var(--cream);letter-spacing:.3px}
 .logo-tag{display:block;font-size:.55rem;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);margin-top:2px}
 .nav-links{display:flex;align-items:center;gap:2px}
@@ -110,8 +112,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:76px;display:flex;jus
 
 <nav>
   <a href="../index.html" class="logo">
-    <img src="../logo-mark.png" alt="W" style="width:30px;height:30px;border-radius:3px;object-fit:cover;margin-right:10px;vertical-align:middle;display:inline-block;"><span class="logo-name">Welden Works</span>
-    <span class="logo-tag">Digital Agency</span>
+    <img src="../logo.svg" alt="Welden Works" class="nav-logo-svg">
   </a>
   <div class="nav-links">
     <a href="services.html">Services</a>
